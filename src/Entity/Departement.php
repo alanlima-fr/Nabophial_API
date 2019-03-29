@@ -24,7 +24,7 @@ class Departement
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Region")
      */
-    private $id_region;
+    private $region;
 
     public function getId(): ?int
     {
@@ -43,14 +43,14 @@ class Departement
         return $this;
     }
 
-    public function getIdRegion(): ?Region
+    public function getRegion(): ?Region
     {
-        return $this->id_region;
+        return $this->region;
     }
 
-    public function setIdRegion(?Region $id_region): self
+    public function setRegion(?Region $region): self
     {
-        $this->id_region = $id_region;
+        $this->region = $region;
 
         return $this;
     }
