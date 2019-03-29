@@ -16,4 +16,12 @@ class UserController extends AbstractController
             'controller_name' => 'UserController',
         ]);
     }
+
+    public function getUser() 
+    {
+        return array(
+            'message' => 'Welcome to your new controller!',
+            'path' => 'src/Controller/UserController.php',
+        );
+    }
 }
