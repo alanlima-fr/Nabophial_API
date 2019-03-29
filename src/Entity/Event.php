@@ -10,6 +10,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Event
 {
     /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+    
+    /**
      * @ORM\Column(type="string", length=45, nullable=true)
      */
     private $nom;
