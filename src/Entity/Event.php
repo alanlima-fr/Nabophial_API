@@ -15,7 +15,7 @@ class Event
      * @ORM\Column(type="integer")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(type="string", length=45, nullable=true)
      */
@@ -29,12 +29,12 @@ class Event
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $begin_time;
+    private $beginTime;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $end_date;
+    private $endDate;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -44,7 +44,7 @@ class Event
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $nbr_max;
+    private $nbrMax;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -54,17 +54,12 @@ class Event
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $private_event;
+    private $privateEvent;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $status;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $eventcol;
 
     public function getId(): ?int
     {
@@ -109,24 +104,24 @@ class Event
 
     public function getBeginTime(): ?\DateTimeInterface
     {
-        return $this->begin_time;
+        return $this->beginTime;
     }
 
-    public function setBeginTime(?\DateTimeInterface $begin_time): self
+    public function setBeginTime(?\DateTimeInterface $beginTime): self
     {
-        $this->begin_time = $begin_time;
+        $this->beginTime = $beginTime;
 
         return $this;
     }
 
     public function getEndDate(): ?\DateTimeInterface
     {
-        return $this->end_date;
+        return $this->endDate;
     }
 
-    public function setEndDate(?\DateTimeInterface $end_date): self
+    public function setEndDate(?\DateTimeInterface $endDate): self
     {
-        $this->end_date = $end_date;
+        $this->endDate = $endDate;
 
         return $this;
     }
@@ -145,12 +140,12 @@ class Event
 
     public function getNbrMax(): ?bool
     {
-        return $this->nbr_max;
+        return $this->nbrMax;
     }
 
-    public function setNbrMax(?bool $nbr_max): self
+    public function setNbrMax(?bool $nbrMax): self
     {
-        $this->nbr_max = $nbr_max;
+        $this->nbrMax = $nbrMax;
 
         return $this;
     }
@@ -169,12 +164,12 @@ class Event
 
     public function getPrivateEvent(): ?int
     {
-        return $this->private_event;
+        return $this->privateEvent;
     }
 
-    public function setPrivateEvent(?int $private_event): self
+    public function setPrivateEvent(?int $privateEvent): self
     {
-        $this->private_event = $private_event;
+        $this->privateEvent = $privateEvent;
 
         return $this;
     }
@@ -187,18 +182,6 @@ class Event
     public function setStatus(?int $status): self
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getEventcol(): ?string
-    {
-        return $this->eventcol;
-    }
-
-    public function setEventcol(?string $eventcol): self
-    {
-        $this->eventcol = $eventcol;
 
         return $this;
     }

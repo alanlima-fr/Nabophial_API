@@ -19,12 +19,12 @@ class Commentary
     /**
      * @ORM\Column(type="integer")
      */
-    private $id_event;
+    private $event;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $id_user;
+    private $user;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -34,33 +34,33 @@ class Commentary
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date_horaire;
+    private $dateHoraire;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdEvent(): ?int
+    public function getEvent(): ?int
     {
-        return $this->id_event;
+        return $this->event;
     }
 
-    public function setIdEvent(int $id_event): self
+    public function setEvent(int $event): self
     {
-        $this->id_event = $id_event;
+        $this->event = $event;
 
         return $this;
     }
 
-    public function getIdUser(): ?int
+    public function getUser(): ?int
     {
-        return $this->id_user;
+        return $this->user;
     }
 
-    public function setIdUser(int $id_user): self
+    public function setUser(int $user): self
     {
-        $this->id_user = $id_user;
+        $this->user = $user;
 
         return $this;
     }
@@ -79,12 +79,12 @@ class Commentary
 
     public function getDateHoraire(): ?\DateTimeInterface
     {
-        return $this->date_horaire;
+        return $this->dateHoraire;
     }
 
-    public function setDateHoraire(\DateTimeInterface $date_horaire): self
+    public function setDateHoraire(\DateTimeInterface $dateHoraire): self
     {
-        $this->date_horaire = $date_horaire;
+        $this->dateHoraire = $dateHoraire;
 
         return $this;
     }
