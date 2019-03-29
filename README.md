@@ -52,3 +52,22 @@ What type of relationship is this?
 Relation type? [ManyToOne, OneToMany, ManyToMany, OneToOne]:
  > 
  ```
+
+ ---
+
+# NORME
+ 
+## Code :
+```php
+    class City  // 1ere lettre en majuscule
+{
+    private $id;
+    private $name;
+    private $departement;
+    private $exampleAttributEnCamelCase; /* 1ere lettre en minuscule puis majuscule pour séparer les mots */
+}
+```
+## Base de donnée :
+```sql
+    example_attribut -- Tout en minuscule et _ pour séparer les mots
+```
