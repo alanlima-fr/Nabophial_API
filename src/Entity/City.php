@@ -24,7 +24,7 @@ class City
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Departement")
      */
-    private $id_departement;
+    private $departement;
 
     public function getId(): ?int
     {
@@ -43,14 +43,14 @@ class City
         return $this;
     }
 
-    public function getIdDepartement(): ?Departement
+    public function getDepartement(): ?Departement
     {
-        return $this->id_departement;
+        return $this->departement;
     }
 
-    public function setIdDepartement(?Departement $id_departement): self
+    public function setDepartement(?Departement $departement): self
     {
-        $this->id_departement = $id_departement;
+        $this->departement = $departement;
 
         return $this;
     }
