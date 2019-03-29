@@ -18,3 +18,37 @@ php bin/console make:entity
 ```
 Attention, l'attribut ID est automatiquement créer par symofny.
 par défaut, l'ID 
+
+
+Pour ajouter une relation, cela peut se faire pendant la création de l'entité si l'autre entité de la relation est deja créée.
+Sinon il faudra revenir le faire plus tard.
+```
+ New property name (press <return> to stop adding fields):
+ > exampleRelation
+
+ Field type (enter ? to see all types) [string]:
+ > relation
+
+What class should this entity be related to?:
+ > AutreEntity
+ 
+What type of relationship is this?
+ ------------ ----------------------------------------------------------------- 
+  Type         Description                                                      
+ ------------ ----------------------------------------------------------------- 
+  ManyToOne    Each Test relates to (has) one Event.                            
+               Each Event can relate to (can have) many Test objects            
+                                                                                
+  OneToMany    Each Test can relate to (can have) many Event objects.           
+               Each Event relates to (has) one Test                             
+                                                                                
+  ManyToMany   Each Test can relate to (can have) many Event objects.           
+               Each Event can also relate to (can also have) many Test objects  
+                                                                                
+  OneToOne     Each Test relates to (has) exactly one Event.                    
+               Each Event also relates to (has) exactly one Test.               
+ ------------ ----------------------------------------------------------------- 
+
+Relation type? [ManyToOne, OneToMany, ManyToMany, OneToOne]:
+ > 
+ ```
