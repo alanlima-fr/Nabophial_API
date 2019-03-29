@@ -21,6 +21,11 @@ class City
      */
     private $name;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Departement")
+     */
+    private $id_departement;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +39,18 @@ class City
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getIdDepartement(): ?Departement
+    {
+        return $this->id_departement;
+    }
+
+    public function setIdDepartement(?Departement $id_departement): self
+    {
+        $this->id_departement = $id_departement;
 
         return $this;
     }
