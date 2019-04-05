@@ -2,7 +2,9 @@ Première chose à faire quand on clone le repository :
 ```
 composer install
 ```
-Si cette commande échoue 
+Si cette commande échoue :
+
+Sous windows => C'est que composer n'est pas installé. Allez sur https://getcomposer.org/download/ pour le télécharger et l'installer. Ensuite redémarrer le terminal/IDE et répéter la commande.
 
 Ensuite vérifier que PHP est bien installé sur la machine
 ```
