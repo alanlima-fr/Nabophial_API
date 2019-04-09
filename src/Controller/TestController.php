@@ -80,8 +80,86 @@ class TestController extends AbstractController
             return $form;
     }
 
+    /**
+     * Mise a jour complete de la ressource
+     * 
+     * @Rest\View()
+     * @Rest\Put("/test/{id}")
+     */
+    public function put(Request $request)
+    {
+        return $this->update($request, true);
+    }    
+    
+    /**
+     * Mise a jour partielle de la ressource
+     * 
+     * @Rest\View()
+     * @Rest\Patch("/test/{id}")
+     */
+    public function patch(Request $request)
+    {
+        return $this->update($request, false);
+    }
+    
+    protected function update($request, $clearMissing)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $test = $this->findOne($request->get('id'));
+
+        if (empty($test))
+            return $this->resourceNotFound();  
+        
+        $form = $this->createForm($this->namespaceType, $test);
+
+        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
+        // entité si l'utilisateur n'en fournit pas une dans sa requête
+        $form->submit($request->request->all(), $clearMissing); // Validation des données
+        
+        if($form->isSubmitted() && $form->isValid())
+        {
+            // l'entité vient de la base, donc le merge n'est pas nécessaire.
+            // il est utilisé juste par soucis de clarté
+            $em->merge($test);
+            $em->flush();
+
+            return $test;
+        }
+        else
+            return $form;
+    }
+    
+    /**
+     * Suppression de la ressource
+     * 
+     * @Rest\View()
+     * @Rest\Delete("/test/{id}")
+     */
+    public function delete($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $test = $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
+        
+        if($test)
+        {
+            $em->remove($test);
+            $em->flush();
+        }
+        else
+            resourceNotFound();
+    }
+
     protected function resourceNotFound()
     {
         throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found');
+    }
+
+    protected function findOne($id)
+    {
+        return $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
     }
 }
