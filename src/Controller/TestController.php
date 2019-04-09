@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Test;
 
 class TestController extends AbstractController
 {
@@ -14,9 +15,8 @@ class TestController extends AbstractController
      */
     public function getTest()
     {
-        return array(
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/TestController.php',
-        );
+        return $tests =  $this->getDoctrine()
+        ->getRepository(Test::class)
+        ->findAll();
     }
 }
