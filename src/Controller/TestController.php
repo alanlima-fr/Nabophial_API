@@ -146,7 +146,7 @@ class TestController extends AbstractController
             $em->flush();
         }
         else
-            resourceNotFound();
+            $this->resourceNotFound();
     }
 
     /**
