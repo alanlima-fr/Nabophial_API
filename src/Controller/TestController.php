@@ -24,7 +24,7 @@ class TestController extends AbstractController
             ->findAll();
 
         if (!$tests)
-            return resourceNotFound();
+            $this->resourceNotFound();
 
         return $tests;
     }
@@ -37,12 +37,10 @@ class TestController extends AbstractController
      */
     public function getOneTest($id)
     {
-        $test = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
+        $test = $this->findOne($id);
 
         if (!$test)
-            return resourceNotFound();
+            $this->resourceNotFound();
 
         return $test;
     }
@@ -73,7 +71,7 @@ class TestController extends AbstractController
             $em->flush();
 
             // succes : on renvoie la ressource que l'on vient de creer
-            return $resource;
+            return $test;
         }
         else
             // echec : on renvoie le formulaire et les messages d'erreurs 
@@ -81,7 +79,7 @@ class TestController extends AbstractController
     }
 
     /**
-     * Mise a jour complete de la ressource
+     * Update complete the resource
      * 
      * @Rest\View()
      * @Rest\Put("/test/{id}")
@@ -92,7 +90,7 @@ class TestController extends AbstractController
     }    
     
     /**
-     * Mise a jour partielle de la ressource
+     * Update partial the resource
      * 
      * @Rest\View()
      * @Rest\Patch("/test/{id}")
@@ -108,7 +106,7 @@ class TestController extends AbstractController
         $test = $this->findOne($request->get('id'));
 
         if (empty($test))
-            return $this->resourceNotFound();  
+            $this->resourceNotFound();  
         
         $form = $this->createForm($this->namespaceType, $test);
 
@@ -130,7 +128,7 @@ class TestController extends AbstractController
     }
     
     /**
-     * Suppression de la ressource
+     * Delete the resource
      * 
      * @Rest\View()
      * @Rest\Delete("/test/{id}")
@@ -151,11 +149,17 @@ class TestController extends AbstractController
             resourceNotFound();
     }
 
+    /**
+     * Return Error in case of a not found.
+     */
     protected function resourceNotFound()
     {
         throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found');
     }
 
+    /**
+     * Return a resource by his id.
+     */
     protected function findOne($id)
     {
         return $this->getDoctrine()
