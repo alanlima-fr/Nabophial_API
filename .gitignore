@@ -7,6 +7,8 @@
 /var/
 /vendor/
 .env
+src/Migrations
+src/Migrations/*
 ###< symfony/framework-bundle ###
 
 ###> symfony/web-server-bundle ###
