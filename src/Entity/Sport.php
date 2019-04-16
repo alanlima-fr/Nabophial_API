@@ -21,11 +21,6 @@ class Sport
      */
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $type;
-
     public function getId(): ?int
     {
         return $this->id;
