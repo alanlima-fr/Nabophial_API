@@ -24,12 +24,12 @@ class Performance
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $TypePerformance;
+    private $typePerformance;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $Sport;
+    private $sport;
 
     public function getId(): ?int
     {
