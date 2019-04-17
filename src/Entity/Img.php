@@ -22,7 +22,7 @@ class Img
     private $photo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\user")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     private $user;
 
