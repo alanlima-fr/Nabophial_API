@@ -1,8 +1,10 @@
-Première chose à faire quand on clone le repository :
+# Première chose à faire quand on clone le repository :
 ```
 composer install
 ```
-Si cette commande échoue 
+Si cette commande échoue :
+
+Sous windows => C'est que composer n'est pas installé. Allez sur https://getcomposer.org/download/ pour le télécharger et l'installer. Ensuite redémarrer le terminal/IDE et répéter la commande.
 
 Ensuite vérifier que PHP est bien installé sur la machine
 ```
@@ -12,7 +14,7 @@ Si ce n'est pas le cas (sur windows), installer Wamp ou Xamp ou équivalent qui 
 
 ---
 
-Ensuite la création d'entité :
+## Ensuite la création d'entité :
 ```
 php bin/console make:entity
 ```
@@ -52,6 +54,23 @@ What type of relationship is this?
 Relation type? [ManyToOne, OneToMany, ManyToMany, OneToOne]:
  > 
  ```
+
+## Database
+
+Pour creér la base de donnée :
+- 1ère étape, créer la base sans les tables.
+```
+php bin/console doctrine:database:create
+```
+- 2ème étape, créer le fichier de migration. 
+```
+php bin/console make:migration
+```
+- 3ème étape, après avoir vérifié le fichier de migration il faut l'executer.
+```
+php bin/console doctrine:migrations:migrate
+```
+A la fin de chaque modification de l'entité et donc de la table il faudra recommencer ce processus à partir de l'étape 2. N'oubliez pas de configurer votre .env pour qu'il accède à votre base de donnée.
 
  ---
 
