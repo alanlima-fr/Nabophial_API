@@ -17,14 +17,14 @@ class Img
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
-    private $idUser;
+    private $user;
 
     public function getId(): ?int
     {
@@ -36,21 +36,21 @@ class Img
         return $this->photo;
     }
 
-    public function setPhoto(string $photo): self
+    public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
 
         return $this;
     }
 
-    public function getIdUser(): ?int
+    public function getUser(): ?user
     {
-        return $this->idUser;
+        return $this->user;
     }
 
-    public function setIdUser(?int $idUser): self
+    public function setUser(?user $user): self
     {
-        $this->idUser = $idUser;
+        $this->user = $user;
 
         return $this;
     }
