@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class TypePerformanceController extends AbstractController
+class typePerformanceController extends AbstractController
 {
     /**
      * @Route("/type/performance", name="type_performance")
@@ -13,7 +13,7 @@ class TypePerformanceController extends AbstractController
     public function index()
     {
         return $this->render('type_performance/index.html.twig', [
-            'controller_name' => 'TypePerformanceController',
+            'controller_name' => 'typePerformanceController',
         ]);
     }
 }

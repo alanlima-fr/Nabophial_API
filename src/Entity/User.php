@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -46,6 +48,16 @@ class User
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $gender;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Sport", mappedBy="t")
+     */
+    private $preferance;
+
+    public function __construct()
+    {
+        $this->preferance = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +132,34 @@ class User
     public function setGender(?bool $gender): self
     {
         $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sport[]
+     */
+    public function getPreferance(): Collection
+    {
+        return $this->preferance;
+    }
+
+    public function addPreferance(Sport $preferance): self
+    {
+        if (!$this->preferance->contains($preferance)) {
+            $this->preferance[] = $preferance;
+            $preferance->addT($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreferance(Sport $preferance): self
+    {
+        if ($this->preferance->contains($preferance)) {
+            $this->preferance->removeElement($preferance);
+            $preferance->removeT($this);
+        }
 
         return $this;
     }
