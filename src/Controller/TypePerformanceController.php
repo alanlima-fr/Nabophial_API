@@ -5,10 +5,10 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-class typePerformanceController extends AbstractController
+class TypePerformanceController extends AbstractController
 {
     /**
-     * @Route("/type/performance", name="type_performance")
+     * @Route("/typePerformance", name="type_performance")
      */
     public function index()
     {
