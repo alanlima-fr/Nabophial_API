@@ -22,14 +22,16 @@ class Performance
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\typePerformance)
+     * @ORM\ManyToOne(targetEntity="App\Entity\typePerformance", inversedBy="performances")
+     * @ORM\JoinColumn(nullable=false)
      */
-    #private $ypePerformance;
+    private $typePerformance;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Sport)
+     * @ORM\ManyToOne(targetEntity="App\Entity\typePerformance", inversedBy="perf")
+     * @ORM\JoinColumn(nullable=false)
      */
-    #private $sport;
+    private $sport;
 
     public function getId(): ?int
     {
