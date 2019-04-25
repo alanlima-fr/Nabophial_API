@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TypePerformanceRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\typePerformanceRepository")
  */
-class TypePerformance
+class typePerformance
 {
     /**
      * @ORM\Id()
@@ -17,7 +17,7 @@ class TypePerformance
     private $id;
 
     /**
-     * @ORM\Column(type="simple_array", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name = [];
 
@@ -26,12 +26,12 @@ class TypePerformance
         return $this->id;
     }
 
-    public function getName(): ?array
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(?array $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
