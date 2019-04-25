@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\typePerformanceRepository")
  */
-class typePerformance
+class TypePerformance
 {
     /**
      * @ORM\Id()
@@ -19,7 +19,7 @@ class typePerformance
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name = [];
+    private $name;
 
     public function getId(): ?int
     {
