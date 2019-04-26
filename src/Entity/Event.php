@@ -66,18 +66,6 @@ class Event
         return $this->id;
     }
 
-    public function getIdEvent(): ?string
-    {
-        return $this->idEvent;
-    }
-
-    public function setIdEvent(?string $idEvent): self
-    {
-        $this->idEvent = $idEvent;
-
-        return $this;
-    }
-
     public function getNom(): ?string
     {
         return $this->nom;
