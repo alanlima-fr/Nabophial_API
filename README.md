@@ -78,15 +78,15 @@ A la fin de chaque modification de l'entité et donc de la table il faudra recom
  
 ## Code :
 ```php
-    class City  // 1ere lettre en majuscule
+    class City  // 1ere lettre en majuscule = PASCAL CASE
 {
     private $id;
     private $name;
     private $departement;
-    private $exampleAttributEnCamelCase; /* 1ere lettre en minuscule puis majuscule pour séparer les mots */
+    private $exampleAttributEnCamelCase; /* 1ere lettre en minuscule puis majuscule pour séparer les mots = CAMEL CASE*/
 }
 ```
 ## Base de donnée :
 ```sql
-    example_attribut -- Tout en minuscule et _ pour séparer les mots
+    example_attribut -- Tout en minuscule et _ pour séparer les mots = SNAKE CASE
 ```
