@@ -3,22 +3,14 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 class SportController extends AbstractController
 {
-    /**
-     * @Route("/sport", name="sport")
-     */
-    public function index()
-    {
-        return $this->render('sport/index.html.twig', [
-            'controller_name' => 'SportController',
-        ]);
-    }
-
     protected $entity = 'App\Entity\Sport';
+    
     /**
      * Retrieve all data from one table
      * 
