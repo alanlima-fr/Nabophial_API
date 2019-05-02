@@ -3,22 +3,14 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 class PerformanceController extends AbstractController
 {
-    /**
-     * @Route("/performance", name="performance")
-     */
-    public function index()
-    {
-        return $this->render('performance/index.html.twig', [
-            'controller_name' => 'PerformanceController',
-        ]);
-    }
-
     protected $entity = 'App\Entity\Performance';
+
     /**
      * Recupere tous les donnees de la table Performance
      * 
