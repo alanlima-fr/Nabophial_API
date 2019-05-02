@@ -17,7 +17,11 @@ class TestController extends AbstractController
      * Retrieve all data from one table
      * 
      * @Rest\View()
-     * @Rest\Get("/test")
+     * @Rest\Route(
+     *      name = "_list",
+     *      path = "/test",
+     *      methods = { Request::METHOD_GET }
+     * )
      * 
      * QUERY PARAM ***
      * 
