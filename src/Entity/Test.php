@@ -17,7 +17,7 @@ class Test
     private $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
 
@@ -36,12 +36,12 @@ class Test
         return $this->id;
     }
 
-    public function getName(): ?int
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(?int $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
