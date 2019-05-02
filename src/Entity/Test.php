@@ -21,6 +21,16 @@ class Test
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $age;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\City")
+     */
+    private $city;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +44,30 @@ class Test
     public function setName(?int $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAge(): ?int
+    {
+        return $this->age;
+    }
+
+    public function setAge(?int $age): self
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }
