@@ -5,12 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="app_user")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -40,11 +41,22 @@ class User
     private $email;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="password", type="string", nullable=true)
+     */
+    protected $password;
+
+    protected $plainPassword;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $number;
 
     /**
+     * True = male
+     * False = female
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $gender;
@@ -110,6 +122,39 @@ class User
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * Suppression des données sensibles
+     */
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
     }
 
     public function getNumber(): ?string
