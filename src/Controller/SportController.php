@@ -20,25 +20,27 @@ class SportController extends AbstractController
     */
     public function getSport(ParamFetcher $paramFetcher)
     {
-    $sports = $this->getDoctrine()->getRepository($this->entity);
-    $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
-    /* ---------------
-    if ($ = $paramFetcher->get(''))
-    $qb = $repository->filterWith($qb, $, 'entity.');
+        $sports = $this->getDoctrine()->getRepository($this->entity);
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
 
-    if ($textSearch = $paramFetcher->get('textSearch'))
-    $qb = $repository->prepTextSearch($qb, $textSearch);
+/* ---------------
+if ($ = $paramFetcher->get(''))
+$qb = $repository->filterWith($qb, $, 'entity.');
+
+if ($textSearch = $paramFetcher->get('textSearch'))
+$qb = $repository->prepTextSearch($qb, $textSearch);
 
 
-    --------------- */
-    $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
+--------------- */
 
-    $sports = $qb->getQuery()->getResult();
+        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
-    if (!$sports)
-    $this->resourceNotFound();
+        $sports = $qb->getQuery()->getResult();
 
-    return $sports;
+        if (!$sports)
+            $this->resourceNotFound();
+
+        return $sports;
     }
 
     /**
@@ -49,27 +51,25 @@ class SportController extends AbstractController
     */
     public function getOneSport($id)
     {
-    $sport = $this->findOne($id);
+        $sport = $this->findOne($id);
 
-    if (!$sport)
-    $this->resourceNotFound();
+        if (!$sport)
+            $this->resourceNotFound();
 
-    return $sport;
+        return $sport;
     }
 
 
-    /* ------------
+/* ------------
 
-    A rajouter :
-    - create & persist a resource in db
+A rajouter :
+- create & persist a resource in db
 
-    - update complete the resource
+- update complete the resource
 
-    - update partial the resource
+- update partial the resource
 
-    -------------- */
-
-
+-------------- */
 
 
     /**
@@ -80,17 +80,18 @@ class SportController extends AbstractController
     */
     public function delete($id)
     {
-    $em = $this->getDoctrine()->getManager();
-    $sport = $this->getDoctrine()
-    ->getRepository($this->entity)
-    ->find($id);
-    if($sport)
-    {
-    $em->remove($sport);
-    $em->flush();
-    }
-    else
-    $this->resourceNotFound();
+        $em = $this->getDoctrine()->getManager();
+        $sport = $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
+
+        if($sport)
+        {
+            $em->remove($sport);
+            $em->flush();
+        }
+        else
+            $this->resourceNotFound();
     }
 
     /**
@@ -98,7 +99,7 @@ class SportController extends AbstractController
     */
     protected function resourceNotFound()
     {
-    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found');
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found');
     }
 
     /**
@@ -106,9 +107,9 @@ class SportController extends AbstractController
     */
     protected function findOne($id)
     {
-    return $this->getDoctrine()
-    ->getRepository($this->entity)
-    ->find($id);
+        return $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
     }
 
 }
