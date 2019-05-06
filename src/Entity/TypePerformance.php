@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\typePerformanceRepository")
  */
-class TypePerformance
+class typePerformance
 {
     /**
      * @ORM\Id()
