@@ -3,17 +3,84 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class TypePerformanceController extends AbstractController
 {
+    protected $entity = 'App\Entity\TypePerformance';
+    
     /**
-     * @Route("/type/performance", name="type_performance")
+     * Recupere tous les donnees de la table TypePerformance
+     * 
+     * @Rest\View()
+     * @Rest\Get("/typeperformance")
      */
-    public function index()
+    public function getTypePerformance()
     {
-        return $this->render('type_performance/index.html.twig', [
-            'controller_name' => 'TypePerformanceController',
-        ]);
+        $typePerformances = $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->findAll();
+
+        if (!$typePerformances)
+            $this->resourceNotFound();
+        return $typePerformances;
+    }
+
+    /**
+     * Retrieve one resource from the table
+     * 
+     * @Rest\View()
+     * @Rest\Get("/typeperformance/{id}")
+     */
+    public function getOneTypePerformance($id)
+    {
+        $typePerformance = $this->findOne($id);
+
+        if (!$typePerformance)
+            $this->resourceNotFound();
+
+        return $typePerformance;
+    }
+
+    /**
+     * Delete the resource
+     * 
+     * @Rest\View()
+     * @Rest\Delete("/typeperformance/{id}")
+     */
+    public function delete($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $typePerformance = $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
+        
+        if($typePerformance)
+        {
+            $em->remove($typePerformance);
+            $em->flush();
+        }
+        else
+            $this->resourceNotFound();
+    }
+
+    /**
+     * Return Error in case of a not found.
+     */
+    protected function resourceNotFound()
+    {
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found');
+    }
+
+    /**
+     * Return a resource by his id.
+     */
+    protected function findOne($id)
+    {
+        return $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
     }
 }

@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="app_user")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -38,14 +41,35 @@ class User
     private $email;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="password", type="string", nullable=true)
+     */
+    protected $password;
+
+    protected $plainPassword;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $number;
 
     /**
+     * True = male
+     * False = female
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $gender;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Sport", mappedBy="t")
+     */
+    private $preferance;
+
+    public function __construct()
+    {
+        $this->preferance = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,6 +124,39 @@ class User
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * Suppression des données sensibles
+     */
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
+    }
+
     public function getNumber(): ?string
     {
         return $this->number;
@@ -120,6 +177,34 @@ class User
     public function setGender(?bool $gender): self
     {
         $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Sport[]
+     */
+    public function getPreferance(): Collection
+    {
+        return $this->preferance;
+    }
+
+    public function addPreferance(Sport $preferance): self
+    {
+        if (!$this->preferance->contains($preferance)) {
+            $this->preferance[] = $preferance;
+            $preferance->addT($this);
+        }
+
+        return $this;
+    }
+
+    public function removePreferance(Sport $preferance): self
+    {
+        if ($this->preferance->contains($preferance)) {
+            $this->preferance->removeElement($preferance);
+            $preferance->removeT($this);
+        }
 
         return $this;
     }

@@ -13,6 +13,8 @@ class TestType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('age')
+            ->add('city')
         ;
     }
 
