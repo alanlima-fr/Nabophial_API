@@ -6,10 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Request\ParamFetcher;
 
 class PerformanceController extends AbstractController
 {
     protected $entity = 'App\Entity\Performance';
+    protected $namespaceType = 'App\Form\PerformanceType';
 
     /**
      * Recupere tous les donnees de la table Performance
@@ -17,14 +19,26 @@ class PerformanceController extends AbstractController
      * @Rest\View()
      * @Rest\Get("/performance")
      */
-    public function getPerformance()
+    public function getPerformance(ParamFetcher $paramFetcher)
     {
-        $performances = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->findAll();
+        $performances = $this->getDoctrine()->getRepository($this->entity);
+        $qb - $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
+
+/* ---------------
+if ($ = $paramFetcher->get(''))
+$qb = $repository->filterWith($qb, $, 'entity.');
+
+if ($textSearch = $paramFetcher->get('textSearch'))
+$qb = $repository->prepTextSearch($qb, $textSearch);
+--------------- */
+
+        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
+
+        $performances = $qb->getQuery()->getResult();
 
         if (!$performances)
             $this->resourceNotFound();
+
         return $performances;
     }
 
@@ -43,8 +57,6 @@ class PerformanceController extends AbstractController
         return $performance;
     }
     
-    
-    
 
     /**
      * Update complete the resource
@@ -56,6 +68,21 @@ class PerformanceController extends AbstractController
     {
         return $this->update($request, true);
     }    
+
+    /**
+     * Update partial the resource
+     * 
+     * @Rest\View()
+     * @Rest\Patch("/performance/{id}")
+     */
+    public function patch(Request $request)
+    {
+        return $this->update($request, false);
+    }
+/**
+ *  protected function update
+ */
+
 
     /**
      * Delete the resource
