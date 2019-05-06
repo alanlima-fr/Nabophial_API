@@ -59,18 +59,30 @@ $qb = $repository->prepTextSearch($qb, $textSearch);
         return $sport;
     }
 
-
-/* ------------
-
-A rajouter :
-- create & persist a resource in db
-
-- update complete the resource
-
-- update partial the resource
-
--------------- */
-
+    /**
+     * Update complete the resource
+     * 
+     * @Rest\View()
+     * @Rest\Put("/sport/{id}")
+     */
+    public function put(Request $request)
+    {
+        return $this->update($request, true);
+    }    
+    
+    /**
+     * Update partial the resource
+     * 
+     * @Rest\View()
+     * @Rest\Patch("/sport/{id}")
+     */
+    public function patch(Request $request)
+    {
+        return $this->update($request, false);
+    }
+/**
+ *  protected function update
+ */
 
     /**
     * Delete the resource
