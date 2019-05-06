@@ -2,26 +2,32 @@
 
 namespace App\Form;
 
-use App\Entity\Test;
+use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TestType extends AbstractType
+class EventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('age')
-            ->add('city')
+            ->add('nom')
+            ->add('lieu')
+            ->add('beginTime')
+            ->add('endDate')
+            ->add('horaire')
+            ->add('nbrMax')
+            ->add('description')
+            ->add('privateEvent')
+            ->add('status')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Test::class,
+            'data_class' => Event::class,
             'csrf_protection' => false,
         ]);
     }

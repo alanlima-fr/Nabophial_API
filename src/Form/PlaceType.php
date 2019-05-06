@@ -2,26 +2,26 @@
 
 namespace App\Form;
 
-use App\Entity\Test;
+use App\Entity\Place;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TestType extends AbstractType
+class PlaceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('age')
-            ->add('city')
+            ->add('positionGps')
+            ->add('adresse')
+            ->add('ville')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Test::class,
+            'data_class' => Place::class,
             'csrf_protection' => false,
         ]);
     }
