@@ -79,9 +79,33 @@ $qb = $repository->prepTextSearch($qb, $textSearch);
     {
         return $this->update($request, false);
     }
-/**
- *  protected function update
- */
+    
+    protected function update($request, $clearMissing)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $typePerformance = $this->findOne($request->get('id'));
+
+        if (empty($typePerformance))
+            $this->resourceNotFound();  
+        
+        $form = $this->createForm($this->namespaceType, $typePerformance);
+
+        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
+        // entité si l'utilisateur n'en fournit pas une dans sa requête
+        $form->submit($request->request->all(), $clearMissing); // Validation des données
+        
+        if($form->isSubmitted() && $form->isValid())
+        {
+            // l'entité vient de la base, donc le merge n'est pas nécessaire.
+            // il est utilisé juste par soucis de clarté
+            $em->merge($typePerformance);
+            $em->flush();
+
+            return $typePerformance;
+        }
+        else
+            return $form;
+    }
 
 
     /**
