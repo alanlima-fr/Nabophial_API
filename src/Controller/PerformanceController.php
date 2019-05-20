@@ -24,13 +24,11 @@ class PerformanceController extends AbstractController
         $performances = $this->getDoctrine()->getRepository($this->entity);
         $qb - $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
 
-/* ---------------
-if ($ = $paramFetcher->get(''))
-$qb = $repository->filterWith($qb, $, 'entity.');
-
-if ($textSearch = $paramFetcher->get('textSearch'))
-$qb = $repository->prepTextSearch($qb, $textSearch);
---------------- */
+        if ($name = $paramFetcher->get('name'))
+            $qb = $repository->filterWith($qb, $name, 'entity.name');
+        
+        if ($textSearch = $paramFetcher->get('textSearch'))
+            $qb = $repository->prepTextSearch($qb, $textSearch);
 
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
@@ -79,9 +77,33 @@ $qb = $repository->prepTextSearch($qb, $textSearch);
     {
         return $this->update($request, false);
     }
-/**
- *  protected function update
- */
+    
+    protected function update($request, $clearMissing)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $performance = $this->findOne($request->get('id'));
+
+        if (empty($performance))
+            $this->resourceNotFound();  
+        
+        $form = $this->createForm($this->namespaceType, $performance);
+
+        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
+        // entité si l'utilisateur n'en fournit pas une dans sa requête
+        $form->submit($request->request->all(), $clearMissing); // Validation des données
+        
+        if($form->isSubmitted() && $form->isValid())
+        {
+            // l'entité vient de la base, donc le merge n'est pas nécessaire.
+            // il est utilisé juste par soucis de clarté
+            $em->merge($performance);
+            $em->flush();
+
+            return $performance;
+        }
+        else
+            return $form;
+    }
 
 
     /**
