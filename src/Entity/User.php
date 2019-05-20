@@ -208,4 +208,14 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getRoles()
+    {
+        return ;
+    }
+
+    public function getusername()
+    {
+        return ;
+    }
 }
