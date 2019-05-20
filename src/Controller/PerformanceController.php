@@ -54,7 +54,40 @@ class PerformanceController extends AbstractController
             $this->resourceNotFound();
         return $performance;
     }
-    
+   
+/**
+     * Create & persist a resource in database
+     * 
+     * @Rest\View()
+     * @Rest\Post("/performance")
+     */
+    public function postPerformance(Request $request)
+    {
+        $performance = new $this->entity();
+
+        // creation d'un formulaire a partir de :
+        // - modele de formulaire (informe la liste des champs du formulaire)
+        // - sur lequelle, on mappe les proprietes de l'entite
+        $form = $this->createForm($this->namespaceType, $performance);
+
+         // on envoie les donnees recuperees dans le corps de la requete HTTP
+        $form->submit($request->request->all()); // Validation des données
+
+        // si le formulaire est valide, on peut persister les donnees en base
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($performance);
+            $em->flush();
+
+            // succes : on renvoie la ressource que l'on vient de creer
+            return $performance;
+        }
+        else
+            // echec : on renvoie le formulaire et les messages d'erreurs 
+            return $form;
+    }
+
 
     /**
      * Update complete the resource
