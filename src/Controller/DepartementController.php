@@ -9,15 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DepartementController extends AbstractController
 {
-    protected $entity = 'App\Entity\City';
+    protected $entity = 'App\Entity\Departement';
     
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Get("/departement")
      */
-    public function getCity()
+    public function getDepartement()
     {
         $departements =  $this->getDoctrine()
             ->getRepository($this->entity)
@@ -32,10 +32,10 @@ class DepartementController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Get("/departement/{id}")
      */
-    public function getOneCity($id)
+    public function getOneDepartement($id)
     {
         $departement = $this->findOne($id);
 
@@ -48,10 +48,10 @@ class DepartementController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Delete("/departement/{id}")
      */
-    public function delete($id)
+    public function deleteDepartement($id)
     {
         $em = $this->getDoctrine()->getManager();
         $departement = $this->getDoctrine()
