@@ -15,7 +15,7 @@ class CityController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Route(
      *      name = "city_list",
      *      path = "/city",
@@ -37,7 +37,7 @@ class CityController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Route(
      *      name = "city_one",
      *      path = "/city/{id}",
@@ -57,7 +57,7 @@ class CityController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Delete("/city/{id}")
      */
     public function delete($id)
