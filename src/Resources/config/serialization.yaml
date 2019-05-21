@@ -1,0 +1,26 @@
+
+App\Entity\City:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+    departement:
+      groups: ['all']
+
+App\Entity\Departement:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+    region:
+      groups: ['all']
+
+App\Entity\Region:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+
