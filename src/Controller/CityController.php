@@ -10,12 +10,17 @@ use Symfony\Component\HttpFoundation\Request;
 class CityController extends AbstractController
 {
     protected $entity = 'App\Entity\City';
+    protected $namespaceType = 'App\Form\CityType';
     
     /**
      * Retrieve all data from one table
      * 
      * @Rest\View()
-     * @Rest\Get("/city")
+     * @Rest\Route(
+     *      name = "city_list",
+     *      path = "/city",
+     *      methods = { Request::METHOD_GET }
+     * )
      */
     public function getCity()
     {
@@ -33,7 +38,11 @@ class CityController extends AbstractController
      * Retrieve one resource from the table
      * 
      * @Rest\View()
-     * @Rest\Get("/city/{id}")
+     * @Rest\Route(
+     *      name = "city_one",
+     *      path = "/city/{id}",
+     *      methods = { Request::METHOD_GET }
+     * )
      */
     public function getOneCity($id)
     {
