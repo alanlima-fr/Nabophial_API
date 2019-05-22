@@ -12,6 +12,7 @@ class SportController extends AbstractController
 {
     protected $entity = 'App\Entity\Sport';
     protected $namespaceType = 'App\Form\SportType';
+    
     /**
     * Retrieve all data from one table
     *
@@ -20,26 +21,15 @@ class SportController extends AbstractController
     */
     public function getSport(ParamFetcher $paramFetcher)
     {
-        $sports = $this->getDoctrine()->getRepository($this->entity);
+        $repository = $this->getDoctrine()->getRepository($this->entity);
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
-
-/* ---------------
-if ($ = $paramFetcher->get(''))
-$qb = $repository->filterWith($qb, $, 'entity.');
-
-if ($textSearch = $paramFetcher->get('textSearch'))
-$qb = $repository->prepTextSearch($qb, $textSearch);
-
-
---------------- */
-
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-
-        $sports = $qb->getQuery()->getResult();
-
+        
         if (!$sports)
             $this->resourceNotFound();
-
+        
+        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
+        $sports = $qb->getQuery()->getResult();
+        
         return $sports;
     }
 
