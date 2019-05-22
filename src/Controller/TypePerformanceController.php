@@ -13,24 +13,72 @@ class TypePerformanceController extends AbstractController
     protected $entity = 'App\Entity\TypePerformance';
     protected $namespace = 'App\Form\TypePerformanceType';
     
-    /**
-     * Recupere tous les donnees de la table TypePerformance
+/**
+     * Retrieve all data from one table
      * 
      * @Rest\View()
-     * @Rest\Get("/typeperformance")
+     * @Rest\Route(
+     *      name = "_list",
+     *      path = "/typeperformance",
+     *      methods = { Request::METHOD_GET }
+     * )
+     * 
+     * QUERY PARAM ***
+     * 
+     *  \|/  SORT   \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="sortBy",
+     *  default="id",
+     *  description="define the sort"
+     * )
+     * @Rest\QueryParam(
+     *  name="sortOrder",
+     *  default="desc",
+     *  description="define the order of the sort"
+     * )
+     * 
+     *  \|/  PAGINATION \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="page",
+     *  requirements="\d+",
+     *  default=1,
+     *  description="Paging start index(depends on the limit)"
+     * )
+     * @Rest\QueryParam(
+     *  name="limit",
+     *  requirements="\d+",
+     *  default=25,
+     *  description="Number of items to display. affects pagination"
+     * )
+     * 
+     *  \|/  FILTER \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="name",
+     *  requirements="\d+",
+     *  description="set the name of the 'typeperformance' you desired"
+     * )
+     * 
+     *  \|/  TEXTSEARCH \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="textSearch",
+     *  description="define the text that we'll look for"
+     * )
      */
+
     public function getTypePerformance(ParamFetcher $paramFetcher)
     {
-        $typePerformances = $this->getDoctrine()->getRepository($this->entity);
-        $qb - $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
+        $repository = $this->getDoctrine()->getRepository($this->entity);
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
 
-/* ---------------
-if ($ = $paramFetcher->get(''))
-$qb = $repository->filterWith($qb, $, 'entity.');
-
-if ($textSearch = $paramFetcher->get('textSearch'))
-$qb = $repository->prepTextSearch($qb, $textSearch);
---------------- */
+        if ($name = $paramFetcher->get('name'))
+            $qb = $repository->filterWith($qb, $name, 'entity.name');
+    
+        if ($textSearch = $paramFetcher->get('textSearch'))
+            $qb = $repository->prepTextSearch($qb, $textSearch);
 
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
