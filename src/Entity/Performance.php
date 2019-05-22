@@ -22,12 +22,12 @@ class Performance
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\typePerformance")
+     * @ORM\ManyToOne(targetEntity="App\Entity\TypePerformance")
      */
     private $typePerformance;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\typePerformance")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sport")
      */
     private $sport;
 

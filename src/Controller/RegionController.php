@@ -46,28 +46,6 @@ class RegionController extends AbstractController
     }
 
     /**
-     * Delete the resource
-     * 
-     * @Rest\View(serializerGroups={"all"})
-     * @Rest\Delete("/region/{id}")
-     */
-    public function delete($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $region = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-        
-        if($region)
-        {
-            $em->remove($region);
-            $em->flush();
-        }
-        else
-            $this->resourceNotFound();
-    }
-
-    /**
      * Return Error in case of a not found.
      */
     protected function resourceNotFound()
