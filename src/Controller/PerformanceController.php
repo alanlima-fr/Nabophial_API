@@ -18,7 +18,7 @@ class PerformanceController extends AbstractController
      * 
      * @Rest\View()
      * @Rest\Route(
-     *      name = "_list",
+     *      name = "performance_list",
      *      path = "/performance",
      *      methods = { Request::METHOD_GET }
      * )

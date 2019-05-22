@@ -13,12 +13,12 @@ class TypePerformanceController extends AbstractController
     protected $entity = 'App\Entity\TypePerformance';
     protected $namespace = 'App\Form\TypePerformanceType';
     
-/**
+    /**
      * Retrieve all data from one table
      * 
      * @Rest\View()
      * @Rest\Route(
-     *      name = "_list",
+     *      name = "typeperformance_list",
      *      path = "/typeperformance",
      *      methods = { Request::METHOD_GET }
      * )

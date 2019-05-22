@@ -18,7 +18,7 @@ class SportController extends AbstractController
      * 
      * @Rest\View()
      * @Rest\Route(
-     *      name = "_list",
+     *      name = "sport_list",
      *      path = "/sport",
      *      methods = { Request::METHOD_GET }
      * )
