@@ -13,16 +13,66 @@ class PerformanceController extends AbstractController
     protected $entity = 'App\Entity\Performance';
     protected $namespaceType = 'App\Form\PerformanceType';
 
-    /**
-     * Recupere tous les donnees de la table Performance
+/**
+     * Retrieve all data from one table
      * 
      * @Rest\View()
-     * @Rest\Get("/performance")
+     * @Rest\Route(
+     *      name = "_list",
+     *      path = "/performance",
+     *      methods = { Request::METHOD_GET }
+     * )
+     * 
+     * QUERY PARAM ***
+     * 
+     *  \|/  SORT   \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="sortBy",
+     *  default="id",
+     *  description="define the sort"
+     * )
+     * @Rest\QueryParam(
+     *  name="sortOrder",
+     *  default="desc",
+     *  description="define the order of the sort"
+     * )
+     * 
+     *  \|/  PAGINATION \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="page",
+     *  requirements="\d+",
+     *  default=1,
+     *  description="Paging start index(depends on the limit)"
+     * )
+     * @Rest\QueryParam(
+     *  name="limit",
+     *  requirements="\d+",
+     *  default=25,
+     *  description="Number of items to display. affects pagination"
+     * )
+     * 
+     *  \|/  FILTER \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="name",
+     *  requirements="\d+",
+     *  description="set the name of the 'performance' you desired"
+     * )
+     * 
+     *  \|/  TEXTSEARCH \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="textSearch",
+     *  description="define the text that we'll look for"
+     * )
      */
+
     public function getPerformance(ParamFetcher $paramFetcher)
     {
-        $performances = $this->getDoctrine()->getRepository($this->entity);
-        $qb - $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
+        $repository = $this->getDoctrine()->getRepository($this->entity);
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
 
         if ($name = $paramFetcher->get('name'))
             $qb = $repository->filterWith($qb, $name, 'entity.name');
