@@ -11,6 +11,7 @@ class EventController extends AbstractController
 {
     protected $entity = 'App\Entity\Event';
     protected $namespaceType = 'App\Form\EventType';
+
     /**
      * Retrieve all data from one table
      * 
@@ -28,6 +29,7 @@ class EventController extends AbstractController
 
         return $event;
     }
+
     /**
      * Retrieve one resource from the table
      * 
@@ -43,6 +45,7 @@ class EventController extends AbstractController
 
         return $event;
     }
+
     /**
      * Create & persist a resource in database
      * 
@@ -76,7 +79,7 @@ class EventController extends AbstractController
             return $form;
     }
 
-        /**
+    /**
      * Update partial the resource
      * 
      * @Rest\View()

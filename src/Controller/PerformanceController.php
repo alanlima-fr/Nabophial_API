@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 class PerformanceController extends AbstractController
 {
     protected $entity = 'App\Entity\Performance';
+    protected $namespaceType = 'App\Form\PerformanceType';
 
     /**
      * Recupere tous les donnees de la table Performance
