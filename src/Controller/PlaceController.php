@@ -11,6 +11,7 @@ class PlaceController extends AbstractController
 {
     protected $entity = 'App\Entity\Place';
     protected $namespaceType = 'App\Form\PlaceType';
+    
     /**
      * Retrieve all data from one table
      * 
