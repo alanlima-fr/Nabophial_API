@@ -27,7 +27,7 @@ class Performance
     private $typePerformance;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TypePerformance")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Sport")
      */
     private $sport;
 
