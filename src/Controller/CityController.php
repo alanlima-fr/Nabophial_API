@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 class CityController extends AbstractController
 {
     protected $entity = 'App\Entity\City';
-    protected $namespaceType = 'App\Form\CityType';
     
     /**
      * Retrieve all data from one table
@@ -52,28 +51,6 @@ class CityController extends AbstractController
             $this->resourceNotFound();
 
         return $city;
-    }
-
-    /**
-     * Delete the resource
-     * 
-     * @Rest\View(serializerGroups={"all"})
-     * @Rest\Delete("/city/{id}")
-     */
-    public function delete($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $city = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-        
-        if($city)
-        {
-            $em->remove($city);
-            $em->flush();
-        }
-        else
-            $this->resourceNotFound();
     }
 
     /**

@@ -46,28 +46,6 @@ class DepartementController extends AbstractController
     }
 
     /**
-     * Delete the resource
-     * 
-     * @Rest\View(serializerGroups={"all"})
-     * @Rest\Delete("/departement/{id}")
-     */
-    public function deleteDepartement($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $departement = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-        
-        if($departement)
-        {
-            $em->remove($departement);
-            $em->flush();
-        }
-        else
-            $this->resourceNotFound();
-    }
-
-    /**
      * Return Error in case of a not found.
      */
     protected function resourceNotFound()
