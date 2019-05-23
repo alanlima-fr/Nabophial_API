@@ -79,6 +79,37 @@ Il n'y a plus qu'a suivre le prompt.
 
  ---
 
+# Interaction Avec L'api
+
+## Inscription
+
+POST https://nabophial.herokuapp.com/signup
+```JSON
+    {
+        "firstname": "your_firstname",
+        "lastname": "your_lastname",
+        "email" : "your_email",
+        "plainPassword": "your_password",
+        "number": "your_telephone_number",
+        "gender": "true = male, false = femelle",
+        "preferance": "donne les IDs des sports favoris"
+    }
+```
+## Connexion
+
+POST  https://nabophial.herokuapp.com/signin
+```JSON
+    {
+        "login" : "your_email",
+        "password": "your_password"
+    }
+```
+## Deconnexion
+
+POST https://nabophial.herokuapp.com/logout/{TOKEN_ID}
+
+Code response expected is 204
+
 # NORME
  
 ## Code :
