@@ -1,4 +1,15 @@
 
+App\Entity\AuthToken:
+  attributes:
+    id:
+      groups: ['auth-token']
+    value:
+      groups: ['auth-token']
+    createdAt:
+      groups: ['auth-token']
+    user:
+      groups: ['auth-token']
+
 App\Entity\City:
   attributes:
     id:
@@ -23,4 +34,24 @@ App\Entity\Region:
       groups: ['all']
     name:
       groups: ['all']
+
+App\Entity\User:
+  attributes:
+    id:
+      groups: ['all', 'auth-token']
+    lastname:
+      groups: ['all']
+    firstname:
+      groups: ['all']
+    birthday:
+      groups: ['all']
+    email:
+      groups: ['all', 'auth-token']
+    number:
+      groups: ['all']
+    gender:
+      groups: ['all']
+    preferance:
+      groups: ['all']
+    
 
