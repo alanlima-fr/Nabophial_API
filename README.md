@@ -70,9 +70,45 @@ php bin/console make:migration
 ```
 php bin/console doctrine:migrations:migrate
 ```
-A la fin de chaque modification de l'entité et donc de la table il faudra recommencer ce processus à partir de l'étape 2. N'oubliez pas de configurer votre .env pour qu'il accède à votre base de donnée.
+
+Pour les **modifications, mise a jour de la base donnée** : 
+```
+php bin/console doctrine:migration:diff
+```
+Il n'y a plus qu'a suivre le prompt.
 
  ---
+
+# Interaction Avec L'api
+
+## Inscription
+
+POST https://nabophial.herokuapp.com/signup
+```JSON
+    {
+        "firstname": "your_firstname",
+        "lastname": "your_lastname",
+        "email" : "your_email",
+        "plainPassword": "your_password",
+        "number": "your_telephone_number",
+        "gender": "true = male, false = femelle",
+        "preferance": "donne les IDs des sports favoris"
+    }
+```
+## Connexion
+
+POST  https://nabophial.herokuapp.com/signin
+```JSON
+    {
+        "login" : "your_email",
+        "password": "your_password"
+    }
+```
+## Deconnexion
+
+POST https://nabophial.herokuapp.com/logout/{TOKEN_ID}
+
+Code response expected is 204
 
 # NORME
  
