@@ -70,7 +70,12 @@ php bin/console make:migration
 ```
 php bin/console doctrine:migrations:migrate
 ```
-A la fin de chaque modification de l'entité et donc de la table il faudra recommencer ce processus à partir de l'étape 2. N'oubliez pas de configurer votre .env pour qu'il accède à votre base de donnée.
+
+Pour les **modifications, mise a jour de la base donnée** : 
+```
+php bin/console doctrine:migration:diff
+```
+Il n'y a plus qu'a suivre le prompt.
 
  ---
 
