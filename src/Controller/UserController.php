@@ -71,7 +71,7 @@ class UserController extends AbstractController
         
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
         
-        $tests = $qb->getQuery()->getResult();
+        $user = $qb->getQuery()->getResult();
 
         if (!$user)
             $this->resourceNotFound();
@@ -79,6 +79,23 @@ class UserController extends AbstractController
         return $user;
     }
 
+    /**
+     * @Rest\View(serializerGroups={"user", "all"})
+     * @Rest\Route(
+     *   path = "/user/{id}",
+     *   methods = { Request::METHOD_GET, Request::METHOD_OPTIONS }
+     * )
+     */
+    public function getUser($id)
+    {
+        $user = $this->findOne($id);
+
+        if (!$user)
+            $this->resourceNotFound();
+
+        return $user;
+    }
+    
     /**
      * @Rest\View(serializerGroups={"user", "all"})
      * @Rest\Route(
@@ -93,9 +110,8 @@ class UserController extends AbstractController
 
         $form->submit($request->request->all());
 
-        if ($form->isSubmitted())
+        if ($form->isSubmitted() && $form->isValid())
         {
-            // le mot de passe en claire est encodé avant la sauvegarde
             $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($encoded);
 
@@ -112,4 +128,87 @@ class UserController extends AbstractController
             return $form;
     }
 
+    /**
+     * Update complete the resource
+     * 
+     * @Rest\View()
+     * @Rest\Put("/user/{id}")
+     */
+    public function put(Request $request)
+    {
+        return $this->update($request, true);
+    }    
+    
+    /**
+     * Update partial the resource
+     * 
+     * @Rest\View()
+     * @Rest\Patch("/user/{id}")
+     */
+    public function patch(Request $request)
+    {
+        return $this->update($request, false);
+    }
+    
+    protected function update($request, $clearMissing)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->findOne($request->get('id'));
+
+        if (empty($user))
+            $this->resourceNotFound();  
+        
+        $form = $this->createForm($this->namespaceType, $user);
+        $form->submit($request->request->all(), $clearMissing);
+        
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $em->merge($user);
+            $em->flush();
+
+            return $user;
+        }
+        else
+            return $form;
+    }
+    
+    /**
+     * Delete the resource
+     * 
+     * @Rest\View()
+     * @Rest\Delete("/user/{id}")
+     */
+    public function delete($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
+        
+        if($user)
+        {
+            $em->remove($user);
+            $em->flush();
+        }
+        else
+            $this->resourceNotFound();
+    }
+
+    /**
+     * Return Error in case of a not found.
+     */
+    protected function resourceNotFound()
+    {
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found');
+    }
+
+    /**
+     * Return a resource by his id.
+     */
+    protected function findOne($id)
+    {
+        return $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
+    }
 }
