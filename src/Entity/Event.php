@@ -19,7 +19,7 @@ class Event
     /**
      * @ORM\Column(type="string", length=45, nullable=true)
      */
-    private $nom;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -42,7 +42,7 @@ class Event
     private $horaire;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $nbrMax;
 
@@ -52,7 +52,7 @@ class Event
     private $description;
 
     /**
-     * @ORM\Column(type="smallint", nullable=true)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $privateEvent;
 
@@ -66,14 +66,14 @@ class Event
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getName(): ?string
     {
-        return $this->nom;
+        return $this->name;
     }
 
-    public function setNom(?string $nom): self
+    public function setName(?string $name): self
     {
-        $this->nom = $nom;
+        $this->name = $name;
 
         return $this;
     }
@@ -126,7 +126,7 @@ class Event
         return $this;
     }
 
-    public function getNbrMax(): ?bool
+    public function getNbrMax(): ?int
     {
         return $this->nbrMax;
     }
@@ -150,7 +150,7 @@ class Event
         return $this;
     }
 
-    public function getPrivateEvent(): ?int
+    public function getPrivateEvent(): ?bool
     {
         return $this->privateEvent;
     }
