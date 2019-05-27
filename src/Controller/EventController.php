@@ -145,7 +145,7 @@ class EventController extends AbstractController
      */
     protected function resourceNotFound()
     {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Event not found');
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Event not found or empty');
     }
 
     /**
