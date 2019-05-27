@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Request\ParamFetcher;
 
 class EventController extends AbstractController
 {
@@ -15,13 +16,92 @@ class EventController extends AbstractController
      * Retrieve all data from one table
      * 
      * @Rest\View()
-     * @Rest\Get("/event")
+     * @Rest\Route(
+     *      name = "event_list",
+     *      path = "/event",
+     *      methods = { Request::METHOD_GET }
+     * )
+     * 
+     *  \|/  SORT   \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="sortBy",
+     *  default="id",
+     *  description="define the sort"
+     * )
+     * @Rest\QueryParam(
+     *  name="sortOrder",
+     *  default="desc",
+     *  description="define the order of the sort"
+     * )
+     * 
+     *  \|/  PAGINATION \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="page",
+     *  requirements="\d+",
+     *  default=1,
+     *  description="Paging start index(depends on the limit)"
+     * )
+     * @Rest\QueryParam(
+     *  name="limit",
+     *  requirements="\d+",
+     *  default=25,
+     *  description="Number of items to display. affects pagination"
+     * )
+     * 
+     *  \|/  FILTER \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="privateEvent",
+     *  requirements="\d+",
+     *  description="set your type of event is private or no"
+     * )
+     * 
+     * @Rest\QueryParam(
+     *  name="lieu",
+     *  description="set your lieu where you looking for"
+     * )
+     * 
+     * @Rest\QueryParam(
+     *  name="nom",
+     *  description="set your nom of event you looking for"
+     * )
+     * 
+     * @Rest\QueryParam(
+     *  name="status",
+     *  description="set your status of event you looking for"
+     * )
+     * 
+     * @Rest\QueryParam(
+     *  name="date",
+     *  description="set your date of event you looking for"
+     * )
      */
-    public function getEvent()
+    public function getEvent(ParamFetcher $paramFetcher)
     {
-        $event =  $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->findAll();
+        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
+
+        if ($privateEvent = $paramFetcher->get('privateEvent'))
+            $qb = $repository->filterWith($qb,$privateEvent, 'entity.privateEvent');
+
+        if ($status = $paramFetcher->get('status'))
+            $qb = $repository->filterWith($qb,$status, 'entity.status');
+        
+        if ($lieu = $paramFetcher->get('lieu'))
+            $qb = $repository->filterWith($qb,$lieu, 'entity.lieu');
+
+        if ($nom = $paramFetcher->get('nom'))
+            $qb = $repository->filterWith($qb,$noms, 'entity.nom');
+            
+        if ($date = $paramFetcher->get('date'))
+            $qb = $repository->filterWith($qb,$date, 'entity.beginTime');
+        
+
+        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
+
+        $event = $qb->getQuery()->getResult();
 
         if (!$event)
             $this->resourceNotFound();
@@ -55,11 +135,14 @@ class EventController extends AbstractController
 
         // creation d'un formulaire a partir de :
         // - modele de formulaire (informe la liste des champs du formulaire)
-        // - sur lequelle, on mappe les proprietes de l'entite
+        // - sur lequelle, on mappe les proprietes de l'entite      
+
         $form = $this->createForm($this->namespaceType, $event);
 
          // on envoie les donnees recuperees dans le corps de la requete HTTP
         $form->submit($request->request->all()); // Validation des données
+
+        //dump($form); die;
 
         // si le formulaire est valide, on peut persister les donnees en base
         if ($form->isSubmitted() && $form->isValid())
