@@ -86,7 +86,7 @@ class UserController extends AbstractController
      *   methods = { Request::METHOD_GET, Request::METHOD_OPTIONS }
      * )
      */
-    public function getUser($id)
+    public function getOneUser($id)
     {
         $user = $this->findOne($id);
 
