@@ -18,7 +18,7 @@ class UserRepository extends ServiceEntityRepository
 
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Test::class);
+        parent::__construct($registry, User::class);
     }
 
     public function findAllSortBy($sortBy = 'id', $sortOrder = 'desc') // par defaut on trie par id par ordre décroissant
