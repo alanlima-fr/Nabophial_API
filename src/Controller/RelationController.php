@@ -11,6 +11,7 @@ class RelationController extends AbstractController
 {
     protected $entity = 'App\Entity\Relation';
     protected $namespaceType = 'App\Form\RelationType';
+
     /**
      * Retrieve all data from one table
      * 
@@ -29,7 +30,7 @@ class RelationController extends AbstractController
         return $relation;
     }
 
-       /**
+    /**
      * Retrieve one resource from the table
      * 
      * @Rest\View()
@@ -154,7 +155,7 @@ class RelationController extends AbstractController
      */
     protected function resourceNotFound()
     {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Relation not found');
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
     }
 
     /**

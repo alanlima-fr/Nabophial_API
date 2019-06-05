@@ -11,6 +11,7 @@ class PlaceController extends AbstractController
 {
     protected $entity = 'App\Entity\Place';
     protected $namespaceType = 'App\Form\PlaceType';
+    
     /**
      * Retrieve all data from one table
      * 
@@ -154,7 +155,7 @@ class PlaceController extends AbstractController
      */
     protected function resourceNotFound()
     {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Place not found');
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
     }
 
     /**

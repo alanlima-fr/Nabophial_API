@@ -18,7 +18,7 @@ class TestController extends AbstractController
      * 
      * @Rest\View()
      * @Rest\Route(
-     *      name = "_list",
+     *      name = "test_list",
      *      path = "/test",
      *      methods = { Request::METHOD_GET }
      * )
@@ -214,7 +214,7 @@ class TestController extends AbstractController
      */
     protected function resourceNotFound()
     {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found');
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
     }
 
     /**

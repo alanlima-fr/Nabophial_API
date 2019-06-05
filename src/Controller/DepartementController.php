@@ -9,15 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DepartementController extends AbstractController
 {
-    protected $entity = 'App\Entity\City';
+    protected $entity = 'App\Entity\Departement';
     
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Get("/departement")
      */
-    public function getCity()
+    public function getDepartement()
     {
         $departements =  $this->getDoctrine()
             ->getRepository($this->entity)
@@ -32,10 +32,10 @@ class DepartementController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Get("/departement/{id}")
      */
-    public function getOneCity($id)
+    public function getOneDepartement($id)
     {
         $departement = $this->findOne($id);
 
@@ -46,33 +46,11 @@ class DepartementController extends AbstractController
     }
 
     /**
-     * Delete the resource
-     * 
-     * @Rest\View()
-     * @Rest\Delete("/departement/{id}")
-     */
-    public function delete($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $departement = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-        
-        if($departement)
-        {
-            $em->remove($departement);
-            $em->flush();
-        }
-        else
-            $this->resourceNotFound();
-    }
-
-    /**
      * Return Error in case of a not found.
      */
     protected function resourceNotFound()
     {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found');
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
     }
 
     /**

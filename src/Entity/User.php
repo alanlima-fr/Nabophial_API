@@ -66,6 +66,11 @@ class User implements UserInterface
      */
     private $preferance;
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $roles = array();
+
     public function __construct()
     {
         $this->preferance = new ArrayCollection();
@@ -132,6 +137,8 @@ class User implements UserInterface
     public function setPlainPassword(?string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
+
+        return $this;
     }
 
     public function getPassword(): ?string
@@ -142,6 +149,8 @@ class User implements UserInterface
     public function setPassword(?string $password): self
     {
         $this->password = $password;
+
+        return $this;
     }
 
     public function getSalt()
@@ -207,5 +216,32 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function getRoles()
+    {
+        if (empty($this->roles))
+            return ['ROLE_USER'];
+
+        return $this->roles;
+    }
+
+    function addRole($role)
+    {
+        $this->roles[] = $role;
+
+        return $this;
+    }
+    
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getusername()
+    {
+        return $this->email;
     }
 }

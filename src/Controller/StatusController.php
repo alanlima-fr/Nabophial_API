@@ -57,6 +57,6 @@ class StatusController extends AbstractController
      */
     protected function resourceNotFound()
     {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Status not found');
+        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
     }
 }

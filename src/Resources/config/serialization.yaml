@@ -1,0 +1,99 @@
+# A
+
+App\Entity\AuthToken:
+  attributes:
+    id:
+      groups: ['auth-token']
+    value:
+      groups: ['auth-token']
+    createdAt:
+      groups: ['auth-token']
+    user:
+      groups: ['auth-token']
+
+# C
+
+App\Entity\City:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+    departement:
+      groups: ['all']
+
+# D
+
+App\Entity\Departement:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+    region:
+      groups: ['all']
+
+
+
+# P
+
+App\Entity\Performance:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+    typePerformance:
+      groups: ['all']
+    sport:
+      groups: ['all']
+
+# R
+
+App\Entity\Region:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+
+# S
+
+App\Entity\Sport:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+
+# T
+
+App\Entity\TypePerformance:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+
+# U
+
+App\Entity\User:
+  attributes:
+    id:
+      groups: ['all', 'auth-token']
+    lastname:
+      groups: ['all']
+    firstname:
+      groups: ['all']
+    birthday:
+      groups: ['all']
+    email:
+      groups: ['all', 'auth-token']
+    number:
+      groups: ['all']
+    gender:
+      groups: ['all']
+    preferance:
+      groups: ['all']
+    
+
