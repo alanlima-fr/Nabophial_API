@@ -44,30 +44,29 @@ class EventRepository extends ServiceEntityRepository
     public function filterWith($qb,$array, $where)
     {
 
-        
-        switch ($where)
+        // On filtre les résultat avec un where qui change selon le array (qui est la condition)
+        switch ($where) 
         {
             
             case 'entity.lieu':
-                $qb->andWhere('entity.lieu = :lieu')->setParameter('lieu', $array);
+                $qb->andWhere('entity.lieu = :lieu')->setParameter('lieu', $array); // Tri selon le lieu de l'évenement 
                 break;
             case 'entity.status':
-                $qb->andWhere('entity.status = :status')->setParameter('status', $array);
+                $qb->andWhere('entity.status = :status')->setParameter('status', $array); //Tri selon le status de l'évenement 
                 break;
             case 'entity.privateEvent':
-                $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', $array);
+                $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', $array); //Tri selon les évenement privé ou public
                 break;
             case 'entity.nom':  
-                $qb->where('entity.nom LIKE :nom')->setParameter('nom', $array.'%');
+                $qb->where('entity.nom LIKE :nom')->setParameter('nom', $array.'%'); //Tri selon un nom évenement. Il n'est pas obligé de recevoir le nom entier ou exacte de l'evenement pour le chercher (recherche comme sur le moteur google lorsque on tape ce que l'on cherche)
                 break;
             case 'entity.beginTime':
-                $qb->where('entity.beginTime >= :beginTime')->setParameter('beginTime', $array);
+                $qb->where('entity.beginTime >= :beginTime')->setParameter('beginTime', $array); // Tri selon la date DE DEBUT de l'évenement. Peut prendre en compte l'heure mais il n'est normalment pas défini
                 break;
         }
 
            return $qb;
 
-        //Doit filter Date,horaire
     }
 
     public function pageLimit($qb, $page, $limit)

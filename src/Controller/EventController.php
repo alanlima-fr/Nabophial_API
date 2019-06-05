@@ -84,19 +84,19 @@ class EventController extends AbstractController
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
 
         if ($privateEvent = $paramFetcher->get('privateEvent'))
-            $qb = $repository->filterWith($qb,$privateEvent, 'entity.privateEvent');
+            $qb = $repository->filterWith($qb,$privateEvent, 'entity.privateEvent'); //Filtre si l'event et privé ou public
 
         if ($status = $paramFetcher->get('status'))
-            $qb = $repository->filterWith($qb,$status, 'entity.status');
+            $qb = $repository->filterWith($qb,$status, 'entity.status');  //Filtre selon le status de l'event 
         
         if ($lieu = $paramFetcher->get('lieu'))
-            $qb = $repository->filterWith($qb,$lieu, 'entity.lieu');
+            $qb = $repository->filterWith($qb,$lieu, 'entity.lieu'); //Filtre selon le lieu de l'évent
 
         if ($nom = $paramFetcher->get('nom'))
-            $qb = $repository->filterWith($qb,$noms, 'entity.nom');
+            $qb = $repository->filterWith($qb,$noms, 'entity.nom'); //Filtre selon le nom de l'évent
             
         if ($date = $paramFetcher->get('date'))
-            $qb = $repository->filterWith($qb,$date, 'entity.beginTime');
+            $qb = $repository->filterWith($qb,$date, 'entity.beginTime'); //Filtre selon la date de DEBUT de l'évent
         
 
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
