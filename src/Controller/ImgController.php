@@ -6,22 +6,63 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Request\ParamFetcher;
 
 class ImgController extends AbstractController
 {
     protected $entity = 'App\Entity\Img';
     protected $namespaceType = 'App\Form\ImgType';
+   
     /**
      * Retrieve all data from one table
      * 
      * @Rest\View()
-     * @Rest\Get("/img")
+     * @Rest\Route(
+     *      name = "img_list",
+     *      path = "/img",
+     *      methods = { Request::METHOD_GET }
+     * )
+     * 
+     * QUERY PARAM ***
+     * 
+     *  \|/  SORT   \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="sortBy",
+     *  default="id",
+     *  description="define the sort"
+     * )
+     * @Rest\QueryParam(
+     *  name="sortOrder",
+     *  default="desc",
+     *  description="define the order of the sort"
+     * )
+     * 
+     *  \|/  PAGINATION \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="page",
+     *  requirements="\d+",
+     *  default=1,
+     *  description="Paging start index(depends on the limit)"
+     * )
+     * @Rest\QueryParam(
+     *  name="limit",
+     *  requirements="\d+",
+     *  default=25,
+     *  description="Number of items to display. affects pagination"
+     * )
+     * 
      */
-    public function getImg()
+    public function getImg(ParamFetcher $paramFetcher)
     {
-        $img =  $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->findAll();
+        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
+        
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
+
+        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
+
+        $img = $qb->getQuery()->getResult();
 
         if (!$img)
             $this->resourceNotFound();
