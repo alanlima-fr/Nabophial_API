@@ -6,23 +6,73 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Request\ParamFetcher;
 
 class RelationController extends AbstractController
 {
     protected $entity = 'App\Entity\Relation';
     protected $namespaceType = 'App\Form\RelationType';
 
-    /**
+/**
      * Retrieve all data from one table
      * 
      * @Rest\View()
-     * @Rest\Get("/relation")
+     * @Rest\Route(
+     *      name = "relation_list",
+     *      path = "/relation",
+     *      methods = { Request::METHOD_GET }
+     * )
+     * 
+     *  \|/  SORT   \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="sortBy",
+     *  default="id",
+     *  description="define the sort"
+     * )
+     * @Rest\QueryParam(
+     *  name="sortOrder",
+     *  default="desc",
+     *  description="define the order of the sort"
+     * )
+     * 
+     *  \|/  PAGINATION \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="page",
+     *  requirements="\d+",
+     *  default=1,
+     *  description="Paging start index(depends on the limit)"
+     * )
+     * @Rest\QueryParam(
+     *  name="limit",
+     *  requirements="\d+",
+     *  default=25,
+     *  description="Number of items to display. affects pagination"
+     * )
+     * 
+     *  \|/  FILTER \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="idUser",
+     *  requirements="\d+",
+     *  description="set your type of event is private or no"
+     * )
+     * 
      */
-    public function getRelation()
+    public function getRelation(ParamFetcher $paramFetcher)
     {
-        $relation =  $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->findAll();
+
+        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
+
+        if ($idUser = $paramFetcher->get('idUser'))
+            $qb = $repository->filterWith($qb,$idUser, 'entity.idUser'); //Filtre pour l'idUser recherché
+
+
+        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
+
+        $relation = $qb->getQuery()->getResult();
 
         if (!$relation)
             $this->resourceNotFound();
