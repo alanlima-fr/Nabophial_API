@@ -14,6 +14,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class RegionRepository extends ServiceEntityRepository
 {
+    private $entity = 'App\Entity\Region';
+
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Region::class);
@@ -27,7 +29,9 @@ class RegionRepository extends ServiceEntityRepository
         // en fonction de ce avec quoi on trie
         switch ($sortBy)
         {
-            case 'test':
+            case 'asc':
+                $sortOrder = 'asc';
+                $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
                 break;
             default:
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
@@ -38,34 +42,14 @@ class RegionRepository extends ServiceEntityRepository
 
     public function filterWith($qb, $array, $where)
     {
-        $or = $qb->expr()->orx();
-        $array = explode(',', $array);
-        foreach ($array as $value)
-            $or->add($qb->expr()->eq($where, $value));
-        $qb->andWhere($or);
+        //Tri selon un nom de region.
+        // Il n'est pas obligé de recevoir le nom entier ou exacte du region pour le chercher
+        // (recherche comme sur le moteur google lorsque on tape ce que l'on cherche)
 
+        $qb->where('entity.name LIKE :name')->setParameter('name', $array.'%'); 
         return $qb;
     }
 
-    public function prepTextSearch($qb, $textSearch)
-    {
-        $qb->leftJoin('entity.region', 'tsRegion');
-
-        return $qb = $this->textSearch($qb,
-            array('entity.id', 'entity.name', 'tsRegion.name'),
-            $textSearch
-        );
-    }
-
-    public function textSearch($qb, array $fields, $value)
-    {
-        $or = $qb->expr()->orx();
-        foreach ($fields as $field)
-            $or->add($qb->expr()->like($field, $qb->expr()->literal('%'.$value.'%')));
-        $qb->andWhere($or);
-
-        return $qb;
-    }
 
     public function pageLimit($qb, $page, $limit)
     {
