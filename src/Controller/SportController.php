@@ -57,16 +57,9 @@ class SportController extends AbstractController
      * 
      * @Rest\QueryParam(
      *  name="name",
-     *  requirements="\d+",
      *  description="set the name of the 'sport' you desired"
      * )
      * 
-     *  \|/  TEXTSEARCH \|/
-     * 
-     * @Rest\QueryParam(
-     *  name="textSearch",
-     *  description="define the text that we'll look for"
-     * )
      */
     public function getSport(ParamFetcher $paramFetcher)
     {
@@ -75,21 +68,15 @@ class SportController extends AbstractController
 
         if ($name = $paramFetcher->get('name'))
             $qb = $repository->filterWith($qb, $name, 'entity.name');
-            
-        if ($textSearch = $paramFetcher->get('textSearch'))
-            $qb = $repository->prepTextSearch($qb, $textSearch);
                     
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
-        $sports = $qb->getQuery()->getResult();
+        $sport = $qb->getQuery()->getResult();
 
-        if (!$sports)
+        if (!$sport)
             $this->resourceNotFound();
-        
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-        $sports = $qb->getQuery()->getResult();
-        
-        return $sports;
+
+        return $sport;
     }
 
     /**

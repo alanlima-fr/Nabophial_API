@@ -29,7 +29,9 @@ class SportRepository extends ServiceEntityRepository
         // en fonction de ce avec quoi on trie 
         switch ($sortBy)
         {
-            case 'sport':
+            case 'asc':
+                $sortOrder = 'asc';
+                $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
                 break;
             default:
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
@@ -50,47 +52,15 @@ class SportRepository extends ServiceEntityRepository
      */
     public function filterWith($qb, $array, $where) 
     {
-        $or = $qb->expr()->orx();
-        $array = explode(',', $array);
-        foreach ($array as $value)
-            $or->add($qb->expr()->eq($where, $value));
-        $qb->andWhere($or);
+        //Tri selon un nom du sport .
+        // Il n'est pas obligé de recevoir le nom entier ou exacte du sport pour le chercher
+        // (recherche comme sur le moteur google lorsque on tape ce que l'on cherche)
+
+        $qb->where('entity.name LIKE :name')->setParameter('name', $array.'%'); 
 
         return $qb;
     }
 
-    /**
-     * Le but de cette fonction est d'ajouter les sous objets dans notre recherche
-     * Puis d'effectuer la recherche avec la fonction textSearch()
-     * 
-     * EXEMPLE : je veux tout les test qui contiennent Paris
-     *  je fais un leftJoin pour regarder dans les sous objets ville departement et region
-     */
-    /* public function prepTextSearch($qb, $textSearch)
-    {
-        $qb->leftJoin('entity.city', 'tsCity')
-                ->leftJoin('tsCity.departement', 'tsDepartement')
-                ->leftJoin('tsDepartement.region', 'tsRegion');
-
-        return $qb = $this->textSearch($qb,
-            array('entity.id', 'entity.name', 'entity.age', 'tsCity.name', 'tsDepartement.name', 'tsRegion.name'),
-            $textSearch
-        );
-    }*/
-
-    /**
-     * fields = la ou on va faire notre recherche
-     * value = la valeur que l'on recherche
-     */
-    public function textSearch($qb, array $fields, $value)
-    {
-        $or = $qb->expr()->orx();
-        foreach ($fields as $field)
-            $or->add($qb->expr()->like($field, $qb->expr()->literal('%'.$value.'%')));
-        $qb->andWhere($or);
-
-        return $qb;
-    }
 
     /**
      * Ici on définit le maximum de resultat retourné ainsi que la pagination
