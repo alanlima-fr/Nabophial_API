@@ -29,10 +29,6 @@ class SportRepository extends ServiceEntityRepository
         // en fonction de ce avec quoi on trie 
         switch ($sortBy)
         {
-            case 'asc':
-                $sortOrder = 'asc';
-                $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
-                break;
             default:
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
                 break;
@@ -52,7 +48,7 @@ class SportRepository extends ServiceEntityRepository
      */
     public function filterWith($qb, $array, $where) 
     {
-        //Tri selon un nom du sport .
+        // Tri selon un nom du sport .
         // Il n'est pas obligé de recevoir le nom entier ou exacte du sport pour le chercher
         // (recherche comme sur le moteur google lorsque on tape ce que l'on cherche)
 
