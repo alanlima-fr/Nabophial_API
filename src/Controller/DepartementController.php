@@ -16,7 +16,7 @@ class DepartementController extends AbstractController
    /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Route(
      *      name = "departement_list",
      *      path = "/departement",

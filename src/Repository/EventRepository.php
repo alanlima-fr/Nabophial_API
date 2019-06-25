@@ -69,6 +69,35 @@ class EventRepository extends ServiceEntityRepository
 
     }
 
+    /**
+     * Le but de cette fonction est d'ajouter les sous objets dans notre recherche
+     * Puis d'effectuer la recherche avec la fonction textSearch()
+     * 
+     * EXEMPLE : je veux tout les test qui contiennent Paris
+     *  je fais un leftJoin pour regarder dans les sous objets ville departement et region
+     */
+    public function prepTextSearch($qb, $textSearch)
+    {
+        return $qb = $this->textSearch($qb,
+            array('entity.id', 'entity.name', 'entity.lieu', 'entity.beginTime', 'entity.endDate', 'entity.horaire', 'entity.nbrMax', 'entity.description', 'entity.privateEvent', 'entity.status'),
+            $textSearch
+        );
+    }
+
+    /**
+     * fields = la ou on va faire notre recherche
+     * value = la valeur que l'on recherche
+     */
+    public function textSearch($qb, array $fields, $value)
+    {
+        $or = $qb->expr()->orx();
+        foreach ($fields as $field)
+            $or->add($qb->expr()->like($field, $qb->expr()->literal('%'.$value.'%')));
+        $qb->andWhere($or);
+
+        return $qb;
+    }
+
     public function pageLimit($qb, $page, $limit)
     {
         $qb->setFirstResult(($page-1) * $limit);
