@@ -16,7 +16,7 @@ class PlaceController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Route(
      *      name = "place_list",
      *      path = "/place",
@@ -80,7 +80,7 @@ class PlaceController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Get("/place/{id}")
      */
     public function getOnePlace($id)
@@ -96,7 +96,7 @@ class PlaceController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Post("/place")
      */
     public function postPlace(Request $request)
@@ -129,7 +129,7 @@ class PlaceController extends AbstractController
     /**
      * Update complete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Put("/place/{id}")
      */
     public function put(Request $request)
@@ -140,7 +140,7 @@ class PlaceController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Patch("/place/{id}")
      */
     public function patch(Request $request)
@@ -178,7 +178,7 @@ class PlaceController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Delete("/place/{id}")
      */
     public function delete($id)

@@ -16,7 +16,7 @@ class RelationController extends AbstractController
 /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Route(
      *      name = "relation_list",
      *      path = "/relation",
@@ -83,7 +83,7 @@ class RelationController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Get("/relation/{id}")
      */
     public function getOneRelation($id)
@@ -99,7 +99,7 @@ class RelationController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Post("/relation")
      */
     public function postRelation(Request $request)
@@ -132,7 +132,7 @@ class RelationController extends AbstractController
     /**
      * Update complete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Put("/relation/{id}")
      */
     public function put(Request $request)
@@ -143,7 +143,7 @@ class RelationController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Delete("/relation/{id}")
      */
     public function delete($id)
@@ -165,7 +165,7 @@ class RelationController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Patch("/relation/{id}")
      */
     public function patch(Request $request)

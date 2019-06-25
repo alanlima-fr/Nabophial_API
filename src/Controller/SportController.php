@@ -16,7 +16,7 @@ class SportController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Route(
      *      name = "sport_list",
      *      path = "/sport",
@@ -82,7 +82,7 @@ class SportController extends AbstractController
     /**
     * Retrieve one resource from the table
     *
-    * @Rest\View()
+    * @Rest\View(serializerGroups={"all"})
     * @Rest\Get("/sport/{id}")
     */
     public function getOneSport($id)
@@ -98,7 +98,7 @@ class SportController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Post("/sport")
      */
     public function postSport(Request $request)
@@ -132,7 +132,7 @@ class SportController extends AbstractController
     /**
      * Update complete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Put("/sport/{id}")
      */
     public function put(Request $request)
@@ -143,7 +143,7 @@ class SportController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Patch("/sport/{id}")
      */
     public function patch(Request $request)
@@ -181,7 +181,7 @@ class SportController extends AbstractController
     /**
     * Delete the resource
     *
-    * @Rest\View()
+    * @Rest\View(serializerGroups={"all"})
     * @Rest\Delete("/sport/{id}")
     */
     public function delete($id)
