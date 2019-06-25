@@ -26,10 +26,12 @@ class PerformanceRepository extends ServiceEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder(); // Instanciation de la QueryBuilder
         $qb->select('entity')->from($this->entity, 'entity');  // SELECT FROM, basic simple
 
-        // en fonction de ce avec quoi on trie 
+        // en fonction de ce avec quoi on TRIE 
         switch ($sortBy)
         {
-            case 'performance':
+            case 'sport':
+                $qb->leftJoin('entity.sport', 'sport')
+                    ->orderBy('sport.name', $sortOrder);
                 break;
             default:
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
