@@ -53,14 +53,6 @@ class TypePerformanceController extends AbstractController
      *  description="Number of items to display. affects pagination"
      * )
      * 
-     *  \|/  FILTER \|/
-     * 
-     * @Rest\QueryParam(
-     *  name="name",
-     *  requirements="\d+",
-     *  description="set the name of the 'typeperformance' you desired"
-     * )
-     * 
      *  \|/  TEXTSEARCH \|/
      * 
      * @Rest\QueryParam(
@@ -74,9 +66,6 @@ class TypePerformanceController extends AbstractController
         $repository = $this->getDoctrine()->getRepository($this->entity);
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
 
-        if ($name = $paramFetcher->get('name'))
-            $qb = $repository->filterWith($qb, $name, 'entity.name');
-    
         if ($textSearch = $paramFetcher->get('textSearch'))
             $qb = $repository->prepTextSearch($qb, $textSearch);
 
