@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Request\ParamFetcher;
 
 class PlaceController extends AbstractController
 {
@@ -16,13 +17,59 @@ class PlaceController extends AbstractController
      * Retrieve all data from one table
      * 
      * @Rest\View()
-     * @Rest\Get("/place")
+     * @Rest\Route(
+     *      name = "place_list",
+     *      path = "/place",
+     *      methods = { Request::METHOD_GET }
+     * )
+     * 
+     *  \|/  SORT   \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="sortBy",
+     *  default="id",
+     *  description="define the sort"
+     * )
+     * @Rest\QueryParam(
+     *  name="sortOrder",
+     *  default="desc",
+     *  description="define the order of the sort"
+     * )
+     * 
+     *  \|/  PAGINATION \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="page",
+     *  requirements="\d+",
+     *  default=1,
+     *  description="Paging start index(depends on the limit)"
+     * )
+     * @Rest\QueryParam(
+     *  name="limit",
+     *  requirements="\d+",
+     *  default=25,
+     *  description="Number of items to display. affects pagination"
+     * )
+     * 
+     *  \|/  FILTER \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="adresse",
+     *  description="set your adresse of place you looking for"
+     * )
+     * 
      */
-    public function getPlace()
+    public function getPlace(ParamFetcher $paramFetcher)
     {
-        $place =  $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->findAll();
+        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
+
+        if ($adresse = $paramFetcher->get('adresse'))
+            $qb = $repository->filterWith($qb,$adresse, 'entity.adresse');  //Filtre selon l'adresse recherché
+        
+        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
+
+        $place = $qb->getQuery()->getResult();
 
         if (!$place)
             $this->resourceNotFound();

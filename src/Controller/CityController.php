@@ -6,10 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Request\ParamFetcher;
 
 class CityController extends AbstractController
 {
     protected $entity = 'App\Entity\City';
+    protected $namespaceType = 'App\Form\CityType';
     
     /**
      * Retrieve all data from one table
@@ -20,17 +22,59 @@ class CityController extends AbstractController
      *      path = "/city",
      *      methods = { Request::METHOD_GET }
      * )
+     * 
+     *  \|/  SORT   \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="sortBy",
+     *  default="id",
+     *  description="define the sort"
+     * )
+     * @Rest\QueryParam(
+     *  name="sortOrder",
+     *  default="desc",
+     *  description="define the order of the sort"
+     * )
+     * 
+     *  \|/  PAGINATION \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="page",
+     *  requirements="\d+",
+     *  default=1,
+     *  description="Paging start index(depends on the limit)"
+     * )
+     * @Rest\QueryParam(
+     *  name="limit",
+     *  requirements="\d+",
+     *  default=25,
+     *  description="Number of items to display. affects pagination"
+     * )
+     * 
+     *  \|/  FILTER \|/
+     * 
+     * @Rest\QueryParam(
+     *  name="name",
+     *  description="set your name of city you looking for"
+     * )
+     *  
      */
-    public function getCity()
+    public function getCity(ParamFetcher $paramFetcher)
     {
-        $cities =  $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->findAll();
+        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
 
-        if (!$cities)
+        if ($name = $paramFetcher->get('name'))
+            $qb = $repository->filterWith($qb,$name, 'entity.name');  //Filtre selon le nom de la ville
+
+        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
+
+        $city = $qb->getQuery()->getResult();
+
+        if (!$city)
             $this->resourceNotFound();
 
-        return $cities;
+        return $city;
     }
     
     /**
