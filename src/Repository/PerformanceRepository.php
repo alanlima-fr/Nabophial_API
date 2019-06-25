@@ -29,8 +29,6 @@ class PerformanceRepository extends ServiceEntityRepository
         // en fonction de ce avec quoi on trie 
         switch ($sortBy)
         {
-            case 'performance':
-                break;
             default:
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
                 break;
@@ -48,10 +46,10 @@ class PerformanceRepository extends ServiceEntityRepository
      *  array = 16,17
      *  where = 'entity.age'
      */
-    public function filterWith($qb, $array, $where) 
+    public function filterWith($qb, $values, $where) 
     {
         $or = $qb->expr()->orx();
-        $array = explode(',', $array);
+        $array = explode(',', $values);
         foreach ($array as $value)
             $or->add($qb->expr()->eq($where, $value));
         $qb->andWhere($or);
@@ -68,12 +66,11 @@ class PerformanceRepository extends ServiceEntityRepository
      */
     public function prepTextSearch($qb, $textSearch)
     {
-        $qb->leftJoin('entity.city', 'tsCity')
-                ->leftJoin('tsCity.departement', 'tsDepartement')
-                ->leftJoin('tsDepartement.region', 'tsRegion');
+        $qb->leftJoin('entity.sport', 'tsSport')
+                ;
 
         return $qb = $this->textSearch($qb,
-            array('entity.id', 'entity.name', 'entity.age', 'tsCity.name', 'tsDepartement.name', 'tsRegion.name'),
+            array('entity.id', 'entity.name', 'tsSport.name'),
             $textSearch
         );
     }
@@ -103,7 +100,7 @@ class PerformanceRepository extends ServiceEntityRepository
      *    page=3 (= les 20 suivants resultats)
      *    ect, ... 
      */
-    public function pageLimit($qb, $page, $limit)
+    public function pageLimit($qb, $page = 1, $limit = 25)
     {
         $qb->setFirstResult(($page-1) * $limit);
 
