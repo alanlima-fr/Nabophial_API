@@ -55,10 +55,10 @@ class PerformanceController extends AbstractController
      * 
      *  \|/  FILTER \|/
      * 
+
      * @Rest\QueryParam(
-     *  name="name",
-     *  requirements="\d+",
-     *  description="set the name of the 'performance' you desired"
+     *  name="sport",
+     *  description="Give the ID's of the sport you desired"
      * )
      * 
      *  \|/  TEXTSEARCH \|/
@@ -74,9 +74,9 @@ class PerformanceController extends AbstractController
         $repository = $this->getDoctrine()->getRepository($this->entity);
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
 
-        if ($name = $paramFetcher->get('name'))
-            $qb = $repository->filterWith($qb, $name, 'entity.name');
-        
+        if ($sport = $paramFetcher->get('sport'))
+            $qb = $repository->filterWith($qb, $sport, 'entity.sport');
+
         if ($textSearch = $paramFetcher->get('textSearch'))
             $qb = $repository->prepTextSearch($qb, $textSearch);
 

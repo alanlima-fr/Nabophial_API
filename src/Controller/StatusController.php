@@ -14,7 +14,7 @@ class StatusController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Get("/status")
      */
     public function getStatus()
@@ -31,7 +31,7 @@ class StatusController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Get("/status/{id}")
      */
     public function getOneStatus($id)

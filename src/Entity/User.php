@@ -62,7 +62,7 @@ class User implements UserInterface
     private $gender;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Sport", mappedBy="t")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Sport")
      */
     private $preferance;
 

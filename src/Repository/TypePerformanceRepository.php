@@ -48,10 +48,10 @@ class TypePerformanceRepository extends ServiceEntityRepository
      *  array = 16,17
      *  where = 'entity.age'
      */
-    public function filterWith($qb, $array, $where) 
+    public function filterWith($qb, $values, $where) 
     {
         $or = $qb->expr()->orx();
-        $array = explode(',', $array);
+        $array = explode(',', $values);
         foreach ($array as $value)
             $or->add($qb->expr()->eq($where, $value));
         $qb->andWhere($or);

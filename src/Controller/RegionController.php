@@ -16,7 +16,7 @@ class RegionController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Route(
      *      name = "region_list",
      *      path = "/region",
@@ -95,7 +95,7 @@ class RegionController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Post("/region")
      */
     public function postRegion(Request $request)
@@ -131,7 +131,7 @@ class RegionController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Patch("/region/{id}")
      */
     public function patch(Request $request)
@@ -169,7 +169,7 @@ class RegionController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all"})
      * @Rest\Delete("/region/{id}")
      */
     public function delete($id)
