@@ -11,7 +11,7 @@ use FOS\RestBundle\Request\ParamFetcher;
 class TypePerformanceController extends AbstractController
 {
     protected $entity = 'App\Entity\TypePerformance';
-    protected $namespace = 'App\Form\TypePerformanceType';
+    protected $namespaceType = 'App\Form\TypePerformanceType';
     
     /**
      * Retrieve all data from one table
@@ -104,6 +104,39 @@ class TypePerformanceController extends AbstractController
             $this->resourceNotFound();
 
         return $typePerformance;
+    }
+
+    /**
+     * Create & persist a resource in database
+     * 
+     * @Rest\View()
+     * @Rest\Post("/typeperformance")
+     */
+    public function postTypePerformance(Request $request)
+    {
+        $typePerformance = new $this->entity();
+
+        // creation d'un formulaire a partir de :
+        // - modele de formulaire (informe la liste des champs du formulaire)
+        // - sur lequelle, on mappe les proprietes de l'entite
+        $form = $this->createForm($this->namespaceType, $typePerformance);
+
+         // on envoie les donnees recuperees dans le corps de la requete HTTP
+        $form->submit($request->request->all()); // Validation des données
+
+        // si le formulaire est valide, on peut persister les donnees en base
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($typePerformance);
+            $em->flush();
+
+            // succes : on renvoie la ressource que l'on vient de creer
+            return $typePerformance;
+        }
+        else
+            // echec : on renvoie le formulaire et les messages d'erreurs 
+            return $form;
     }
 
     /**
