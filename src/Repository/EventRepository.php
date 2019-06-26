@@ -32,8 +32,7 @@ class EventRepository extends ServiceEntityRepository
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
                 break;
         }
-        
-        
+
         return $qb;
     }
 
@@ -47,7 +46,19 @@ class EventRepository extends ServiceEntityRepository
         return $qb;
     }
 
-
+    /**
+     * Fonction qui fait le tri entre les évenements public (false) et privé (true) 
+     */
+    public function checkBoolSql($qb, $array)
+    {
+        if($array === 'true')
+            $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', 1);
+        else
+            $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', 0);
+        
+            //dump($qb->getQuery()); die;
+        return $qb;       
+    }
     /**
      * Le but de cette fonction est d'ajouter les sous objets dans notre recherche
      * Puis d'effectuer la recherche avec la fonction textSearch()
@@ -66,15 +77,12 @@ class EventRepository extends ServiceEntityRepository
                     $textSearch
                     );
                 break;
-            case 'private':
-                $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', $textSearch);
-                return $qb;
-                break;
             
             case 'date':
                 $qb->where('entity.beginTime >= :beginTime')->setParameter('beginTime', $textSearch); // Filtre selon la date DE DEBUT de l'évenement. Peut prendre en compte l'heure mais il n'est normalment pas défini
                 return $qb;
                 break;
+
             default:
                 return $qb = $this->textSearch($qb,
                     array('entity.name', 'entity.horaire', 'entity.nbrMax', 'entity.description'),
@@ -82,7 +90,6 @@ class EventRepository extends ServiceEntityRepository
                     );
                 break;
         }
-        
     }
 
     /**

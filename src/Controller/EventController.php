@@ -92,6 +92,9 @@ class EventController extends AbstractController
         if ($lieu = $paramFetcher->get('date'))
              $qb = $repository->prepTextSearch($qb,$lieu,'date'); //Filtre selon la date de l'évent
         
+        if ($private = $paramFetcher->get('private'))
+             $qb = $repository->checkBoolSql($qb,$private); // Filtre selon le type d'évenment (privé ou public)
+
         if ($status = $paramFetcher->get('status'))
             $qb = $repository->filterWith($qb,$status, 'entity.status'); //Filtre selon le status de l'évenement
         
