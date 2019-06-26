@@ -28,14 +28,6 @@ class EventRepository extends ServiceEntityRepository
         
         switch ($sortBy)
         { 
-            case 'privatetrue':
-                $qb->andWhere('entity.privateEvent <> :privateEvent')->setParameter('privateEvent','' ); //Tri tout les évenements privé
-                break;
-            
-            case 'privatefalse':
-                $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent',''); //Tri tout les évenements public
-                break;
-
             default:
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
                 break;
@@ -74,7 +66,11 @@ class EventRepository extends ServiceEntityRepository
                     $textSearch
                     );
                 break;
-
+            case 'private':
+                $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', $textSearch);
+                return $qb;
+                break;
+            
             case 'date':
                 $qb->where('entity.beginTime >= :beginTime')->setParameter('beginTime', $textSearch); // Filtre selon la date DE DEBUT de l'évenement. Peut prendre en compte l'heure mais il n'est normalment pas défini
                 return $qb;
