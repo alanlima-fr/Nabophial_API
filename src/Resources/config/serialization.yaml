@@ -155,5 +155,3 @@ App\Entity\User:
       groups: ['all']
     preferance:
       groups: ['all']
-    
-

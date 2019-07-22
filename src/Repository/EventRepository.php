@@ -47,7 +47,6 @@ class EventRepository extends ServiceEntityRepository
         // On filtre les résultat avec un where qui change selon le array (qui est la condition)
         switch ($where) 
         {
-            
             case 'entity.lieu':
                 $qb->andWhere('entity.lieu = :lieu')->setParameter('lieu', $array); // Tri selon le lieu de l'évenement 
                 break;
@@ -65,8 +64,16 @@ class EventRepository extends ServiceEntityRepository
                 break;
         }
 
-           return $qb;
+        return $qb;
+        
+        // N'est pas pris en compte le return est avant.
+        $or = $qb->expr()->orx();
+        $array = explode(',', $array);
+        foreach ($array as $value)
+            $or->add($qb->expr()->eq($where, $value));
+        $qb->andWhere($or);
 
+        return $qb;
     }
 
     /**

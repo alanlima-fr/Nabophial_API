@@ -28,10 +28,6 @@ class PlaceRepository extends ServiceEntityRepository
         
         switch ($sortBy)
         {
-            case 'asc':
-                $sortOrder = 'asc';
-                $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
-                break;
             default:
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
                 break;
