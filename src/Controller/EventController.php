@@ -16,7 +16,7 @@ class EventController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Route(
      *      name = "event_list",
      *      path = "/event",
@@ -113,7 +113,7 @@ class EventController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Get("/event/{id}")
      */
     public function getOneEvent($id)
@@ -129,7 +129,7 @@ class EventController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "event"})})
      * @Rest\Post("/event")
      */
     public function postEvent(Request $request)
@@ -165,7 +165,7 @@ class EventController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "event"})})
      * @Rest\Patch("/event/{id}")
      */
     public function patch(Request $request)
@@ -203,7 +203,7 @@ class EventController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Delete("/event/{id}")
      */
     public function delete($id)
