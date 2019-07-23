@@ -26,12 +26,10 @@ class EventRepository extends ServiceEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder(); // Instanciation de la QueryBuilder
         $qb->select('entity')->from($this->entity, 'entity');  // SELECT FROM, basic simple  
         
-        switch ($sortBy)
-        { 
-            default:
-                $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
-                break;
-        }
+        if ($sortBy)
+            $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
+              
+    
 
         return $qb;
     }
@@ -85,7 +83,7 @@ class EventRepository extends ServiceEntityRepository
 
             default:
                 return $qb = $this->textSearch($qb,
-                    array('entity.name', 'entity.horaire', 'entity.nbrMax', 'entity.description'),
+                array('entity.id', 'entity.name', 'entity.lieu', 'entity.horaire', 'entity.description'),
                     $textSearch
                     );
                 break;
