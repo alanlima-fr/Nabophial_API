@@ -16,7 +16,7 @@ class SportController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Route(
      *      name = "sport_list",
      *      path = "/sport",
@@ -53,11 +53,11 @@ class SportController extends AbstractController
      *  description="Number of items to display. affects pagination"
      * )
      * 
-     *  \|/  FILTER \|/
+     *  \|/  TEXTSEARCH \|/
      * 
      * @Rest\QueryParam(
-     *  name="name",
-     *  description="set the name of the 'sport' you desired"
+     *  name="textSearch",
+     *  description="define the text that we'll look for"
      * )
      * 
      */
@@ -66,8 +66,8 @@ class SportController extends AbstractController
         $repository = $this->getDoctrine()->getRepository($this->entity);
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
 
-        if ($name = $paramFetcher->get('name'))
-            $qb = $repository->filterWith($qb, $name, 'entity.name');
+        if ($textSearch = $paramFetcher->get('textSearch'))
+            $qb = $repository->prepTextSearch($qb, $textSearch);
                     
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
@@ -82,7 +82,7 @@ class SportController extends AbstractController
     /**
     * Retrieve one resource from the table
     *
-    * @Rest\View(serializerGroups={"all"})
+    * @Rest\View(serializerGroups={"all", "sport"})
     * @Rest\Get("/sport/{id}")
     */
     public function getOneSport($id)
@@ -98,7 +98,7 @@ class SportController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Post("/sport")
      */
     public function postSport(Request $request)
@@ -132,7 +132,7 @@ class SportController extends AbstractController
     /**
      * Update complete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Put("/sport/{id}")
      */
     public function put(Request $request)
@@ -143,7 +143,7 @@ class SportController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Patch("/sport/{id}")
      */
     public function patch(Request $request)
@@ -181,7 +181,7 @@ class SportController extends AbstractController
     /**
     * Delete the resource
     *
-    * @Rest\View(serializerGroups={"all"})
+    * @Rest\View(serializerGroups={"all", "sport"})
     * @Rest\Delete("/sport/{id}")
     */
     public function delete($id)
