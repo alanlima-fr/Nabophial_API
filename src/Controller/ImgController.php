@@ -16,7 +16,7 @@ class ImgController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "img"})
      * @Rest\Route(
      *      name = "img_list",
      *      path = "/img",
@@ -73,7 +73,7 @@ class ImgController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "img"})
      * @Rest\Get("/img/{id}")
      */
     public function getOneImg($id)
@@ -89,7 +89,7 @@ class ImgController extends AbstractController
 /**
      * Create & persist a resource in database
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "img"})
      * @Rest\Post("/img")
      */
     public function postImg(Request $request)
@@ -122,7 +122,7 @@ class ImgController extends AbstractController
     /**
      * Update complete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "img"})
      * @Rest\Put("/img/{id}")
      */
     public function put(Request $request)
@@ -133,7 +133,7 @@ class ImgController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "img"})
      * @Rest\Patch("/img/{id}")
      */
 
@@ -172,7 +172,7 @@ class ImgController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "img"})
      * @Rest\Delete("/img/{id}")
      */
     public function delete($id)
