@@ -16,7 +16,7 @@ class PlaceController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Route(
      *      name = "place_list",
      *      path = "/place",
@@ -50,22 +50,21 @@ class PlaceController extends AbstractController
      *  default=25,
      *  description="Number of items to display. affects pagination"
      * )
-     * 
-     *  \|/  FILTER \|/
+      * 
+     *  \|/  TEXTSEARCH \|/
      * 
      * @Rest\QueryParam(
-     *  name="adresse",
-     *  description="set your adresse of place you looking for"
+     *  name="textSearch",
+     *  description="define the text that we'll look for"
      * )
-     * 
      */
     public function getPlace(ParamFetcher $paramFetcher)
     {
         $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
 
-        if ($adresse = $paramFetcher->get('adresse'))
-            $qb = $repository->filterWith($qb,$adresse, 'entity.adresse');  //Filtre selon l'adresse recherché
+        if ($textSearch = $paramFetcher->get('textSearch'))
+            $qb = $repository->prepTextSearch($qb,$textSearch);  //Filtre selon l'adresse recherché
         
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
@@ -80,7 +79,7 @@ class PlaceController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Get("/place/{id}")
      */
     public function getOnePlace($id)
@@ -96,7 +95,7 @@ class PlaceController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Post("/place")
      */
     public function postPlace(Request $request)
@@ -129,7 +128,7 @@ class PlaceController extends AbstractController
     /**
      * Update complete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+    * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Put("/place/{id}")
      */
     public function put(Request $request)
@@ -140,7 +139,7 @@ class PlaceController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Patch("/place/{id}")
      */
     public function patch(Request $request)
@@ -178,7 +177,7 @@ class PlaceController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Delete("/place/{id}")
      */
     public function delete($id)
