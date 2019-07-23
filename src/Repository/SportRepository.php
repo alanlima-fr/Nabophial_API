@@ -36,27 +36,37 @@ class SportRepository extends ServiceEntityRepository
         return $qb; // On renvoie la QueryBuilder
     }
 
-    /**
-     * Prend en paramètre:
-     *  la QueryBuilder instancié
-     *  un array qui contient toutes les valeurs envoyés dans l'url
-     *  where qui contient ou le filtrage s'execute
-     * 
-     * EXEMPLE : je veux récuperer tout les tests dont l'age est 16 ou 17
-     *  array = 16,17
-     *  where = 'entity.age'
-     */
     public function filterWith($qb, $array, $where) 
     {
-        // Tri selon un nom du sport .
-        // Il n'est pas obligé de recevoir le nom entier ou exacte du sport pour le chercher
-        // (recherche comme sur le moteur google lorsque on tape ce que l'on cherche)
-
-        $qb->where('entity.name LIKE :name')->setParameter('name', $array.'%'); 
+        // Philippe.H : Normalment, on en aura pas besoin mais je le  laisse pour le moment au cas ou . 
+        
+        $or = $qb->expr()->orx();
+        $array = explode(',', $array);
+        foreach ($array as $value)
+            $or->add($qb->expr()->eq($where, $value));
+        $qb->andWhere($or);
 
         return $qb;
     }
 
+    public function prepTextSearch($qb, $textSearch)
+    {
+        return $qb = $this->textSearch($qb,
+        array('entity.id', 'entity.name'),
+            $textSearch
+            );
+              
+    }
+
+    public function textSearch($qb, array $fields, $value)
+    {
+        $or = $qb->expr()->orx();
+        foreach ($fields as $field)
+            $or->add($qb->expr()->like($field, $qb->expr()->literal('%'.$value.'%')));
+        $qb->andWhere($or);
+
+        return $qb;
+    }
 
     /**
      * Ici on définit le maximum de resultat retourné ainsi que la pagination

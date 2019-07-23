@@ -16,7 +16,7 @@ class PerformanceController extends AbstractController
 /**
      * Retrieve all data from one table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Route(
      *      name = "performance_list",
      *      path = "/performance",
@@ -93,7 +93,7 @@ class PerformanceController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Get("/performance/{id}")
      */
     public function getOnePerformance($id)
@@ -108,7 +108,7 @@ class PerformanceController extends AbstractController
 /**
      * Create & persist a resource in database
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Post("/performance")
      */
     public function postPerformance(Request $request)
@@ -142,7 +142,7 @@ class PerformanceController extends AbstractController
     /**
      * Update complete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Put("/performance/{id}")
      */
     public function put(Request $request)
@@ -153,7 +153,7 @@ class PerformanceController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Patch("/performance/{id}")
      */
     public function patch(Request $request)
@@ -192,7 +192,7 @@ class PerformanceController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Delete("/performance/{id}")
      */
     public function delete($id)
