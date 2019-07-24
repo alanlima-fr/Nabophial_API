@@ -1,6 +1,0 @@
-projectKey=mon:API_PHP
-serverUrl=http://localhost:9000
-serverVersion=7.8.0.26217
-dashboardUrl=http://localhost:9000/dashboard?id=mon%3AAPI_PHP
-ceTaskId=AWuUAHFxx_-lM9zQKRy1
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AWuUAHFxx_-lM9zQKRy1

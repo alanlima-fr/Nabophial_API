@@ -104,22 +104,9 @@ POST  https://nabophial.herokuapp.com/signin
         "password": "your_password"
     }
 ```
-RESPONSE : 
-```JSON
-    {
-        "id": 13,
-        "value": "KwKqTr8iNKBJTKDu1yCuxZpgSHP39s+pYYizCeqEjb/f1tp681Uho8P8VUuBACNky88=",
-        "createdAt": "2019-07-24T07:43:11+00:00",
-        "user": {
-            "id": 1,
-            "email": "alanlima898@gmail.com"
-        }
-    }
-```
-Le contenue de "value" se place dans le header de chacune de vos requête avec comme key "x-auth-token". Ce token est valable 24h.
 ## Deconnexion
 
-DELETE https://nabophial.herokuapp.com/logout/{TOKEN_ID}
+POST https://nabophial.herokuapp.com/logout/{TOKEN_ID}
 
 Code response expected is 204
 
