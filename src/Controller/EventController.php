@@ -54,8 +54,7 @@ class EventController extends AbstractController
      *  \|/  FILTER \|/
      * 
      * @Rest\QueryParam(
-     *  name="privateEvent",
-     *  requirements="\d+",
+     *  name="private",
      *  description="set your type of event is private or no"
      * )
      * 
@@ -65,7 +64,7 @@ class EventController extends AbstractController
      * )
      * 
      * @Rest\QueryParam(
-     *  name="nom",
+     *  name="text",
      *  description="set your nom of event you looking for"
      * )
      * 
@@ -76,7 +75,7 @@ class EventController extends AbstractController
      * 
      * @Rest\QueryParam(
      *  name="date",
-     *  description="set your date of event you looking for"
+     *  description="set your date of begin of event you looking for"
      * )
      */
     public function getEvent(ParamFetcher $paramFetcher)
@@ -84,21 +83,22 @@ class EventController extends AbstractController
         $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
 
-        if ($privateEvent = $paramFetcher->get('privateEvent'))
-            $qb = $repository->filterWith($qb,$privateEvent, 'entity.privateEvent'); //Filtre si l'event et privé ou public
-
-        if ($status = $paramFetcher->get('status'))
-            $qb = $repository->filterWith($qb,$status, 'entity.status');  //Filtre selon le status de l'event 
+        if ($text = $paramFetcher->get('text'))
+             $qb = $repository->prepTextSearch($qb,$text); //Filtre selon le nom  ou la descripstion de l'évent
         
         if ($lieu = $paramFetcher->get('lieu'))
-            $qb = $repository->filterWith($qb,$lieu, 'entity.lieu'); //Filtre selon le lieu de l'évent
-
-        if ($nom = $paramFetcher->get('nom'))
-            $qb = $repository->filterWith($qb,$noms, 'entity.nom'); //Filtre selon le nom de l'évent
-            
-        if ($date = $paramFetcher->get('date'))
-            $qb = $repository->filterWith($qb,$date, 'entity.beginTime'); //Filtre selon la date de DEBUT de l'évent
+             $qb = $repository->prepTextSearch($qb,$lieu,'lieu'); //Filtre selon le lieu de l'évent
         
+        if ($lieu = $paramFetcher->get('date'))
+             $qb = $repository->prepTextSearch($qb,$lieu,'date'); //Filtre selon la date de l'évent
+        
+        if ($private = $paramFetcher->get('private'))
+             $qb = $repository->checkBoolSql($qb,$private); // Filtre selon le type d'évenment (privé ou public)
+
+        if ($status = $paramFetcher->get('status'))
+            $qb = $repository->filterWith($qb,$status, 'entity.status'); //Filtre selon le status de l'évenement
+        
+
 
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
@@ -129,7 +129,7 @@ class EventController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View(serializerGroups={"all", "event"})})
+     * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Post("/event")
      */
     public function postEvent(Request $request)
@@ -165,7 +165,7 @@ class EventController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View(serializerGroups={"all", "event"})})
+     * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Patch("/event/{id}")
      */
     public function patch(Request $request)
