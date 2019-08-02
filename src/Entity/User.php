@@ -64,7 +64,7 @@ class User implements UserInterface
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Sport")
      */
-    private $preferance;
+    private $preference;
 
     /**
      * @ORM\Column(type="array", nullable=true)
@@ -73,7 +73,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->preferance = new ArrayCollection();
+        $this->preference = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,15 +193,15 @@ class User implements UserInterface
     /**
      * @return Collection|Sport[]
      */
-    public function getPreferance(): Collection
+    public function getPreference(): Collection
     {
-        return $this->preferance;
+        return $this->preference;
     }
 
     public function addPreferance(Sport $preferance): self
     {
-        if (!$this->preferance->contains($preferance)) {
-            $this->preferance[] = $preferance;
+        if (!$this->preference->contains($preferance)) {
+            $this->preference[] = $preferance;
             $preferance->addT($this);
         }
 
@@ -210,8 +210,8 @@ class User implements UserInterface
 
     public function removePreferance(Sport $preferance): self
     {
-        if ($this->preferance->contains($preferance)) {
-            $this->preferance->removeElement($preferance);
+        if ($this->preference->contains($preferance)) {
+            $this->preference->removeElement($preferance);
             $preferance->removeT($this);
         }
 

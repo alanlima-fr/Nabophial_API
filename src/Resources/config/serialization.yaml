@@ -153,5 +153,5 @@ App\Entity\User:
       groups: ['all']
     gender:
       groups: ['all']
-    preferance:
+    preference:
       groups: ['all']
