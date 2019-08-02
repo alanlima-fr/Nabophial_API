@@ -104,22 +104,19 @@ POST  https://nabophial.herokuapp.com/signin
         "password": "your_password"
     }
 ```
-Dans le payload de la réponse il faut récupérer le token qui correspond à l'attribut "value"
-et l'utiliser dans le header de nos futurs requête avec comme nom : x-auth-token.
-
-Ci-dessous un exemple de retour de connexion. Status code = 201
+RESPONSE : 
 ```JSON
     {
-        "id": XX,
-        "value": "lJYbPxax/YPCZWeJtzeaoYSJ+w0XjaRQ+LDdfzrjvJ/NBPL7dqUjd+3jZihRxHPI3AY=",
-        "createdAt": "2019-05-27T14:04:28+00:00",
+        "id": 13,
+        "value": "KwKqTr8iNKBJTKDu1yCuxZpgSHP39s+pYYizCeqEjb/f1tp681Uho8P8VUuBACNky88=",
+        "createdAt": "2019-07-24T07:43:11+00:00",
         "user": {
-            "id": XX,
-            "email": "XXXXXX@XXXXX.XXX"
+            "id": 1,
+            "email": "alanlima898@gmail.com"
         }
     }
 ```
-
+Le contenue de "value" se place dans le header de chacune de vos requête avec comme key "x-auth-token". Ce token est valable 24h.
 ## Deconnexion
 
 POST https://nabophial.herokuapp.com/logout/{TOKEN_ID}

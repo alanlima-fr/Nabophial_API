@@ -26,49 +26,37 @@ class EventRepository extends ServiceEntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder(); // Instanciation de la QueryBuilder
         $qb->select('entity')->from($this->entity, 'entity');  // SELECT FROM, basic simple  
         
-        switch ($sortBy)
-        {
-            case 'asc':
-                $sortOrder = 'asc';
-                $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
-                break;
-            default:
-                $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
-                break;
-        }
-        
-        
+        if ($sortBy)
+            $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
+              
+    
+
         return $qb;
     }
 
     public function filterWith($qb,$array, $where)
     {
-
-        // On filtre les résultat avec un where qui change selon le array (qui est la condition)
-        switch ($where) 
-        {
-            
-            case 'entity.lieu':
-                $qb->andWhere('entity.lieu = :lieu')->setParameter('lieu', $array); // Tri selon le lieu de l'évenement 
-                break;
-            case 'entity.status':
-                $qb->andWhere('entity.status = :status')->setParameter('status', $array); //Tri selon le status de l'évenement 
-                break;
-            case 'entity.privateEvent':
-                $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', $array); //Tri selon les évenement privé ou public
-                break;
-            case 'entity.nom':  
-                $qb->where('entity.nom LIKE :nom')->setParameter('nom', $array.'%'); //Tri selon un nom évenement. Il n'est pas obligé de recevoir le nom entier ou exacte de l'evenement pour le chercher (recherche comme sur le moteur google lorsque on tape ce que l'on cherche)
-                break;
-            case 'entity.beginTime':
-                $qb->where('entity.beginTime >= :beginTime')->setParameter('beginTime', $array); // Tri selon la date DE DEBUT de l'évenement. Peut prendre en compte l'heure mais il n'est normalment pas défini
-                break;
-        }
-
-           return $qb;
-
+        $or = $qb->expr()->orx();
+        $array = explode(',', $array);
+        foreach ($array as $value)
+            $or->add($qb->expr()->eq($where, $value));
+        $qb->andWhere($or);
+        return $qb;
     }
 
+    /**
+     * Fonction qui fait le tri entre les évenements public (false) et privé (true) 
+     */
+    public function checkBoolSql($qb, $array)
+    {
+        if($array === 'true')
+            $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', 1);
+        else
+            $qb->andWhere('entity.privateEvent = :privateEvent')->setParameter('privateEvent', 0);
+        
+            //dump($qb->getQuery()); die;
+        return $qb;       
+    }
     /**
      * Le but de cette fonction est d'ajouter les sous objets dans notre recherche
      * Puis d'effectuer la recherche avec la fonction textSearch()
@@ -76,12 +64,30 @@ class EventRepository extends ServiceEntityRepository
      * EXEMPLE : je veux tout les test qui contiennent Paris
      *  je fais un leftJoin pour regarder dans les sous objets ville departement et region
      */
-    public function prepTextSearch($qb, $textSearch)
+    public function prepTextSearch($qb, $textSearch,$where  = '' )
     {
-        return $qb = $this->textSearch($qb,
-            array('entity.id', 'entity.name', 'entity.lieu', 'entity.beginTime', 'entity.endDate', 'entity.horaire', 'entity.nbrMax', 'entity.description', 'entity.privateEvent', 'entity.status'),
-            $textSearch
-        );
+        switch ($where) 
+        {   
+            case 'lieu' :
+            // Ajout de jointure ultérieurement
+                 return $qb = $this->textSearch($qb,
+                    array('entity.lieu'),
+                    $textSearch
+                    );
+                break;
+            
+            case 'date':
+                $qb->where('entity.beginTime >= :beginTime')->setParameter('beginTime', $textSearch); // Filtre selon la date DE DEBUT de l'évenement. Peut prendre en compte l'heure mais il n'est normalment pas défini
+                return $qb;
+                break;
+
+            default:
+                return $qb = $this->textSearch($qb,
+                array('entity.id', 'entity.name', 'entity.lieu', 'entity.horaire', 'entity.description'),
+                    $textSearch
+                    );
+                break;
+        }
     }
 
     /**

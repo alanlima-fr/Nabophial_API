@@ -15,3 +15,10 @@ src/Migrations/*
 ###< symfony/web-server-bundle ###
 
 templates
+\.scannerwork/
+
+evaluation
+
+sonar-project\.properties
+
+.idea*

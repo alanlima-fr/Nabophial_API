@@ -16,7 +16,7 @@ class DepartementController extends AbstractController
    /**
      * Retrieve all data from one table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Route(
      *      name = "departement_list",
      *      path = "/departement",
@@ -79,7 +79,7 @@ class DepartementController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Get("/departement/{id}")
      */
     public function getOneDepartement($id)
@@ -92,10 +92,10 @@ class DepartementController extends AbstractController
         return $departement;
     }
 
-/**
+    /**
      * Create & persist a resource in database
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Post("/departement")
      */
     public function postDepartement(Request $request)
@@ -131,7 +131,7 @@ class DepartementController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Patch("/departement/{id}")
      */
     public function patch(Request $request)
@@ -169,7 +169,7 @@ class DepartementController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Delete("/departement/{id}")
      */
     public function delete($id)

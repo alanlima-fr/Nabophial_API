@@ -17,7 +17,7 @@ class UserController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "user"})
      * @Rest\Route(
      *      name = "user_list",
      *      path = "/user",
@@ -131,7 +131,7 @@ class UserController extends AbstractController
     /**
      * Update complete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "user"})
      * @Rest\Put("/user/{id}")
      */
     public function put(Request $request)
@@ -142,7 +142,7 @@ class UserController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "user"})
      * @Rest\Patch("/user/{id}")
      */
     public function patch(Request $request)
@@ -175,7 +175,7 @@ class UserController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "user"})
      * @Rest\Delete("/user/{id}")
      */
     public function delete($id)

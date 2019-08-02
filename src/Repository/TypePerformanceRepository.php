@@ -29,8 +29,6 @@ class TypePerformanceRepository extends ServiceEntityRepository
         // en fonction de ce avec quoi on trie 
         switch ($sortBy)
         {
-            case 'typeperformance':
-                break;
             default:
                 $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
                 break;
