@@ -20,7 +20,7 @@ class UserType extends AbstractType
             ->add('number')
             ->add('gender')
             ->add('roles')
-            ->add('preferance')
+            ->add('preference')
         ;
     }
 

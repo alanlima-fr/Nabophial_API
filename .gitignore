@@ -20,3 +20,5 @@ templates
 evaluation
 
 sonar-project\.properties
+
+.idea*
