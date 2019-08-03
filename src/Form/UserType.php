@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 
 class UserType extends AbstractType
 {
@@ -14,7 +15,9 @@ class UserType extends AbstractType
         $builder
             ->add('lastname')
             ->add('firstname')
-            ->add('birthday')
+            ->add('birthday', BirthdayType::class, [
+                'widget' => 'single_text',
+            ])
             ->add('email')
             ->add('plainPassword')
             ->add('number')
