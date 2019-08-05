@@ -2,16 +2,14 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
-use App\Form\Type\CredentialsType;
 use App\Entity\AuthToken;
 use App\Entity\Credentials;
 
-class AuthTokenController extends Controller
+class AuthTokenController extends AbstractController
 {
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
@@ -24,7 +22,7 @@ class AuthTokenController extends Controller
     public function postAuthTokenAction(Request $request)
     {
         $credentials = new Credentials();
-        $form = $this->createForm('App\Form\CredentialsType', $credentials);
+        $form = $this->createForm("App\Form\CredentialsType", $credentials);
 
         $form->submit($request->request->all());
 
