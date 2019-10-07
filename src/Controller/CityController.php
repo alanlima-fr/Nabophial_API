@@ -51,21 +51,20 @@ class CityController extends AbstractController
      *  description="Number of items to display. affects pagination"
      * )
      * 
-     *  \|/  FILTER \|/
+     *  \|/  TEXTSEARCH \|/
      * 
      * @Rest\QueryParam(
-     *  name="name",
-     *  description="set your name of city you looking for"
+     *  name="textSearch",
+     *  description="define the text that we'll look for"
      * )
-     *  
      */
     public function getCity(ParamFetcher $paramFetcher)
     {
         $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
 
-        if ($name = $paramFetcher->get('name'))
-            $qb = $repository->filterWith($qb,$name, 'entity.name');  //Filtre selon le nom de la ville
+        if ($textSearch = $paramFetcher->get('textSearch'))
+            $qb = $repository->prepTextSearch($qb,$textSearch);  //Cherche le nom de la ville dans l'entité city, départment ou region
 
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 

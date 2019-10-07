@@ -51,11 +51,11 @@ class DepartementController extends AbstractController
      *  description="Number of items to display. affects pagination"
      * )
      * 
-     *  \|/  FILTER \|/
+     *  \|/  TEXTSEARCH \|/
      * 
      * @Rest\QueryParam(
-     *  name="name",
-     *  description="set your name of event you looking for"
+     *  name="textSearch",
+     *  description="define the text that we'll look for"
      * )
      */
     public function getDepartement(ParamFetcher $paramFetcher)
@@ -63,8 +63,8 @@ class DepartementController extends AbstractController
         $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
 
-        if ($name = $paramFetcher->get('name'))
-            $qb = $repository->filterWith($qb,$name, 'entity.name'); //Filtre selon le nom du departement
+        if ($textSearch = $paramFetcher->get('textSearch'))
+            $qb = $repository->prepTextSearch($qb,$textSearch); //Cherche le nom du départment ou de la region
         
             $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
