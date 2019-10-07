@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @package App\Controller
  * @SWG\Tag(name="User")
  */
-class UserController extends AbstractController
+class AppUserController extends AbstractController
 {
     protected $entity = 'App\Entity\AppUser';
     protected $namespaceType = 'App\Form\AppUserType';
