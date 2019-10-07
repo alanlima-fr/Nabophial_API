@@ -1,0 +1,6 @@
+App\Entity\Region:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']

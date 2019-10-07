@@ -1,0 +1,22 @@
+App\Entity\Event:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+    lieu:
+      groups: ['all']
+    beginTime:
+      groups: ['all']
+    endDate:
+      groups: ['all']
+    horaire:
+      groups: ['all']
+    nbrMax:
+      groups: ['all']
+    description:
+      groups: ['all']
+    privateEvent:
+      groups: ['all']
+    status:
+      groups: ['all']

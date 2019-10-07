@@ -1,0 +1,8 @@
+App\Entity\Departement:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+    region:
+      groups: ['all']

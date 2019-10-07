@@ -1,0 +1,12 @@
+App\Entity\Relation:
+  attributes:
+    id:
+      groups: ['all']
+    idUser1:
+      groups: ['all']
+    idUser2:
+      groups: ['all']
+    status:
+      groups: ['all']
+    userAction:
+      groups: ['all']

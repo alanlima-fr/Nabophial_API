@@ -1,0 +1,10 @@
+App\Entity\Performance:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']
+    typePerformance:
+      groups: ['all']
+    sport:
+      groups: ['all']

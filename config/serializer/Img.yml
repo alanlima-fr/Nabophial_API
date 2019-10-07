@@ -1,0 +1,8 @@
+App\Entity\Img:
+  attributes:
+    id:
+      groups: ['all']
+    photo:
+      groups: ['all']
+    user:
+      groups: ['all']

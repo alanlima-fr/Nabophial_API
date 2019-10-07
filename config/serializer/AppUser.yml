@@ -1,0 +1,18 @@
+App\Entity\AppUser:
+  attributes:
+    id:
+      groups: ['all', 'auth-token']
+    lastName:
+      groups: ['all']
+    firstName:
+      groups: ['all']
+    birthday:
+      groups: ['all']
+    email:
+      groups: ['all', 'auth-token']
+    number:
+      groups: ['all']
+    male:
+      groups: ['all']
+    preference:
+      groups: ['all']

@@ -1,0 +1,6 @@
+App\Entity\TypePerformance:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']

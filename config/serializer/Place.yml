@@ -1,0 +1,10 @@
+App\Entity\Place:
+  attributes:
+    id:
+      groups: ['all']
+    positionGps:
+      groups: ['all']
+    adresse:
+      groups: ['all']
+    ville:
+      groups: ['all']
