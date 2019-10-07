@@ -152,7 +152,7 @@ class JWTokenAuthenticator extends AbstractGuardAuthenticator
     public function supports(Request $request)
     {
         if ($this->httpUtils->checkRequestPath($request, '/login')
-            || $this->httpUtils->checkRequestPath($request, '/register')
+            || $this->httpUtils->checkRequestPath($request, '/signup')
             || $this->httpUtils->checkRequestPath($request, '/api/doc')
         ) {
             return false;
