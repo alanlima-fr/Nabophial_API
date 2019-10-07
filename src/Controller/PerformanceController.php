@@ -16,7 +16,7 @@ use Swagger\Annotations as SWG;
  * @package App\Controller
  * @SWG\Tag(name="Performance")
  */
-class PerformanceController extends AbstractController
+class PerformanceController extends DefaultController
 {
     protected $entity = 'App\Entity\Performance';
     protected $namespaceType = 'App\Form\PerformanceType';
@@ -83,27 +83,15 @@ class PerformanceController extends AbstractController
      *  name="textSearch",
      *  description="define the text that we'll look for"
      * )
+     * @param ParamFetcher $paramFetcher
+     * @return
      */
-
     public function getPerformance(ParamFetcher $paramFetcher)
     {
-        $repository = $this->getDoctrine()->getRepository($this->entity);
-        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
-
-        if ($sport = $paramFetcher->get('sport'))
-            $qb = $repository->filterWith($qb, $sport, 'entity.sport');
-
-        if ($textSearch = $paramFetcher->get('textSearch'))
-            $qb = $repository->prepTextSearch($qb, $textSearch);
-
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-
-        $performances = $qb->getQuery()->getResult();
-
-        if (!$performances)
-            $this->resourceNotFound();
-
-        return $performances;
+        return $this->paginate($this->createQB($paramFetcher),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('page')
+        );
     }
 
     /**
@@ -121,24 +109,13 @@ class PerformanceController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Get("/performance/{id}")
+     *
+     * @param $id
+     * @return object|null
      */
     public function getOnePerformance($id)
     {
-        $performance = $this->findOne($id);
-
-        if (!$performance)
-            $this->resourceNotFound();
-        return $performance;
-    }
-
-    /**
-     * Return a resource by his id.
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
+        return $this->getOne($id);
     }
 
     /**
@@ -148,30 +125,13 @@ class PerformanceController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Post("/performance")
+     *
+     * @param Request $request
+     * @return \Symfony\Component\Form\FormInterface
      */
     public function postPerformance(Request $request)
     {
-        $performance = new $this->entity();
-
-        // creation d'un formulaire a partir de :
-        // - modele de formulaire (informe la liste des champs du formulaire)
-        // - sur lequelle, on mappe les proprietes de l'entite
-        $form = $this->createForm($this->namespaceType, $performance);
-
-        // on envoie les donnees recuperees dans le corps de la requete HTTP
-        $form->submit($request->request->all()); // Validation des données
-
-        // si le formulaire est valide, on peut persister les donnees en base
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($performance);
-            $em->flush();
-
-            // succes : on renvoie la ressource que l'on vient de creer
-            return $performance;
-        } else
-            // echec : on renvoie le formulaire et les messages d'erreurs 
-            return $form;
+        return $this->post($request);
     }
 
     /**
@@ -181,40 +141,13 @@ class PerformanceController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Put("/performance/{id}")
+     *
+     * @param Request $request
+     * @return \App\Entity\Performance|object|\Symfony\Component\Form\FormInterface|null
      */
     public function put(Request $request)
     {
         return $this->update($request, true);
-    }
-
-    /**
-     * @param Request $request
-     * @param Boolean $clearMissing
-     * @return \App\Entity\Performance|object|\Symfony\Component\Form\FormInterface|null
-     */
-    protected function update(Request $request, Boolean $clearMissing)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $performance = $this->findOne($request->get('id'));
-
-        if (empty($performance))
-            $this->resourceNotFound();
-
-        $form = $this->createForm($this->namespaceType, $performance);
-
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
-        // entité si l'utilisateur n'en fournit pas une dans sa requête
-        $form->submit($request->request->all(), $clearMissing); // Validation des données
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($performance);
-            $em->flush();
-
-            return $performance;
-        } else
-            return $form;
     }
 
     /**
@@ -224,6 +157,9 @@ class PerformanceController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Patch("/performance/{id}")
+     *
+     * @param Request $request
+     * @return object|\Symfony\Component\Form\FormInterface|null
      */
     public function patch(Request $request)
     {
@@ -237,19 +173,13 @@ class PerformanceController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Delete("/performance/{id}")
+     *
+     * @param $id
+     * @return mixed|void
      */
     public function delete($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $performance = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-
-        if ($performance) {
-            $em->remove($performance);
-            $em->flush();
-        } else
-            $this->resourceNotFound();
+        return $this->delete($id);
     }
 
 }

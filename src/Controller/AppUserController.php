@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\AppUser;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @package App\Controller
  * @SWG\Tag(name="User")
  */
-class AppUserController extends AbstractController
+class AppUserController extends DefaultController
 {
     protected $entity = 'App\Entity\AppUser';
     protected $namespaceType = 'App\Form\AppUserType';
@@ -76,31 +76,26 @@ class AppUserController extends AbstractController
      *  name="textSearch",
      *  description="define the text that we'll look for"
      * )
+     *
+     * @param ParamFetcher $paramFetcher
+     * @return
      */
     public function getUsers(ParamFetcher $paramFetcher)
     {
-        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
-        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
+        // On récupère le repository ou nos fonctions sql sont rangées
+        $repository = $this->getDoctrine()->getRepository($this->entity);
+        // On récupère la QueryBuilder instancié dans la fonctions
+        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
 
+        // Si un mot clef est passé en parametre on le recherche
         if ($textSearch = $paramFetcher->get('textSearch'))
             $qb = $repository->prepTextSearch($qb, $textSearch);
 
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-
-        $user = $qb->getQuery()->getResult();
-
-        if (!$user)
-            $this->resourceNotFound();
-
-        return $user;
-    }
-
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new NotFoundHttpException('Resource not found or empty');
+        // On retourne la QuerybBuilder pour la pagination
+        return $this->paginate($qb,
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('page')
+        );
     }
 
     /**
@@ -115,29 +110,11 @@ class AppUserController extends AbstractController
      * )
      *
      * @param $id
-     * @return \App\Entity\AppUser|object|null
+     * @return AppUser|object|null
      */
     public function getOneUser($id)
     {
-        $user = $this->findOne($id);
-
-        if (!$user)
-            $this->resourceNotFound();
-
-        return $user;
-    }
-
-    /**
-     * Return a resource by his id.
-     *
-     * @param $id
-     * @return \App\Entity\AppUser|object|null
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
+        return $this->getOne($id);
     }
 
     /**
@@ -153,11 +130,11 @@ class AppUserController extends AbstractController
      *
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
-     * @return \Symfony\Component\Form\FormInterface
+     * @return FormInterface | AppUser
      */
     public function postUserAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
-        $user = new $this->entity();
+        $user = new AppUser();
         $form = $this->createForm($this->namespaceType, $user);
 
         $form->submit($request->request->all());
@@ -165,9 +142,6 @@ class AppUserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($encoded);
-
-            $roles[] = 'ROLE_USER';
-            $user->setRoles($roles);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -187,7 +161,7 @@ class AppUserController extends AbstractController
      * @Rest\Put("/user/{id}")
      *
      * @param Request $request
-     * @return \App\Entity\AppUser|object|\Symfony\Component\Form\FormInterface|null
+     * @return AppUser|object|FormInterface|null
      */
     public function put(Request $request)
     {
@@ -203,31 +177,11 @@ class AppUserController extends AbstractController
      * @Rest\Patch("/user/{id}")
      *
      * @param Request $request
-     * @return \App\Entity\AppUser|object|\Symfony\Component\Form\FormInterface|null
+     * @return AppUser|object|FormInterface|null
      */
     public function patch(Request $request)
     {
         return $this->update($request, false);
-    }
-
-    protected function update($request, $clearMissing)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $user = $this->findOne($request->get('id'));
-
-        if (empty($user))
-            $this->resourceNotFound();
-
-        $form = $this->createForm($this->namespaceType, $user);
-        $form->submit($request->request->all(), $clearMissing);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->merge($user);
-            $em->flush();
-
-            return $user;
-        } else
-            return $form;
     }
 
     /**
@@ -242,15 +196,6 @@ class AppUserController extends AbstractController
      */
     public function delete($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $user = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-
-        if ($user) {
-            $em->remove($user);
-            $em->flush();
-        } else
-            $this->resourceNotFound();
+        $this->delete($id);
     }
 }

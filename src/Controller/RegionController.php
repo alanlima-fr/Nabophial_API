@@ -6,7 +6,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -15,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @package App\Controller
  * @SWG\Tag(name="Region")
  */
-class RegionController extends AbstractController
+class RegionController extends DefaultController
 {
     protected $entity = 'App\Entity\Region';
     protected $namespaceType = 'App\Form\RegionType';
@@ -73,31 +72,16 @@ class RegionController extends AbstractController
      *  name="textSearch",
      *  description="define the text that we'll look for"
      * )
+     *
+     * @param ParamFetcher $paramFetcher
+     * @return \App\Representation\Pagination
      */
     public function getRegion(ParamFetcher $paramFetcher)
     {
-        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
-        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
-
-        if ($textSearch = $paramFetcher->get('textSearch'))
-            $qb = $repository->prepTextSearch($qb, $textSearch); //Filtre selon le nom de l'évent
-
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-
-        $region = $qb->getQuery()->getResult();
-
-        if (!$region)
-            $this->resourceNotFound();
-
-        return $region;
-    }
-
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new NotFoundHttpException('Resource not found or empty');
+        return $this->paginate($this->createQB($paramFetcher),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('page')
+        );
     }
 
     /**
@@ -107,25 +91,13 @@ class RegionController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Get("/region/{id}")
+     *
+     * @param $id
+     * @return object|null
      */
     public function getOneRegion($id)
     {
-        $region = $this->findOne($id);
-
-        if (!$region)
-            $this->resourceNotFound();
-
-        return $region;
-    }
-
-    /**
-     * Return a resource by his id.
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
+        return $this->getOne($id);
     }
 
     /**
@@ -135,33 +107,13 @@ class RegionController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Post("/region")
+     *
+     * @param Request $request
+     * @return \Symfony\Component\Form\FormInterface
      */
     public function postRegion(Request $request)
     {
-        $region = new $this->entity();
-
-        // creation d'un formulaire a partir de :
-        // - modele de formulaire (informe la liste des champs du formulaire)
-        // - sur lequelle, on mappe les proprietes de l'entite
-
-        $form = $this->createForm($this->namespaceType, $region);
-
-        // on envoie les donnees recuperees dans le corps de la requete HTTP
-        $form->submit($request->request->all()); // Validation des données
-
-        //dump($form); die;
-
-        // si le formulaire est valide, on peut persister les donnees en base
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($region);
-            $em->flush();
-
-            // succes : on renvoie la ressource que l'on vient de creer
-            return $region;
-        } else
-            // echec : on renvoie le formulaire et les messages d'erreurs
-            return $form;
+        return $this->post($request);
     }
 
     /**
@@ -171,35 +123,13 @@ class RegionController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Patch("/region/{id}")
+     *
+     * @param Request $request
+     * @return object|\Symfony\Component\Form\FormInterface|null
      */
     public function patch(Request $request)
     {
         return $this->update($request, false);
-    }
-
-    protected function update($request, $clearMissing)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $region = $this->findOne($request->get('id'));
-
-        if (empty($region))
-            $this->resourceNotFound();
-
-        $form = $this->createForm($this->namespaceType, $region);
-
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre
-        // entité si l'utilisateur n'en fournit pas une dans sa requête
-        $form->submit($request->request->all(), $clearMissing); // Validation des données
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($region);
-            $em->flush();
-
-            return $region;
-        } else
-            return $form;
     }
 
     /**
@@ -209,19 +139,13 @@ class RegionController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Delete("/region/{id}")
+     *
+     * @param $id
+     * @return mixed|void
      */
     public function delete($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $region = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-
-        if ($region) {
-            $em->remove($region);
-            $em->flush();
-        } else
-            $this->resourceNotFound();
+        return $this->delete($id);
     }
 
 }

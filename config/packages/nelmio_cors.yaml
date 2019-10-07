@@ -1,0 +1,14 @@
+nelmio_cors:
+    defaults:
+        origin_regex: false
+        allow_origin: []
+        allow_methods: []
+        allow_headers: []
+        expose_headers: []
+        max_age: 0
+    paths:
+        '^/':
+            origin_regex: true
+            allow_origin: ['^http://localhost:[0-9]+', '^(.+)\.herokuapp.com']
+            allow_headers: ['origin', 'content-type', 'authorization', 'x-xsrf-token', 'x-auth-token']
+            allow_methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']

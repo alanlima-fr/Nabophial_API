@@ -2,23 +2,25 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Place;
+use App\Representation\Pagination;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class PlaceController
  * @package App\Controller
  * @SWG\Tag(name="Place")
  */
-class PlaceController extends AbstractController
+class PlaceController extends DefaultController
 {
     protected $entity = 'App\Entity\Place';
     protected $namespaceType = 'App\Form\PlaceType';
-    
+
     /**
      * Retrieve all data from the Place table
      *
@@ -30,16 +32,16 @@ class PlaceController extends AbstractController
      *         @SWG\Items(ref=@Doc\Model(type="App\Entity\Place", groups={"all", "place"}))
      *     )
      * )
-     * 
+     *
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Route(
      *      name = "place_list",
      *      path = "/place",
      *      methods = { Request::METHOD_GET }
      * )
-     * 
+     *
      *  \|/  SORT   \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="sortBy",
      *  default="id",
@@ -50,9 +52,9 @@ class PlaceController extends AbstractController
      *  default="desc",
      *  description="define the order of the sort"
      * )
-     * 
+     *
      *  \|/  PAGINATION \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="page",
      *  requirements="\d+",
@@ -65,177 +67,102 @@ class PlaceController extends AbstractController
      *  default=25,
      *  description="Number of items to display. affects pagination"
      * )
-      * 
+     *
      *  \|/  TEXTSEARCH \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="textSearch",
      *  description="define the text that we'll look for"
      * )
+     *
+     * @param ParamFetcher $paramFetcher
+     * @return Pagination
      */
     public function getPlace(ParamFetcher $paramFetcher)
     {
-        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
-        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
-
-        if ($textSearch = $paramFetcher->get('textSearch'))
-            $qb = $repository->prepTextSearch($qb,$textSearch);  //Filtre selon l'adresse recherché
-        
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-
-        $place = $qb->getQuery()->getResult();
-
-        if (!$place)
-            $this->resourceNotFound();
-
-        return $place;
+        return $this->paginate($this->createQB($paramFetcher),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('page')
+        );
     }
 
     /**
      * Retrieve one resource from the place table
      *
      * @SWG\Response(response=200, description="return the Place")
-     * 
+     *
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Get("/place/{id}")
+     *
+     * @param $id
+     * @return object|null
      */
     public function getOnePlace($id)
     {
-        $place = $this->findOne($id);
-
-        if (!$place)
-            $this->resourceNotFound();
-
-        return $place;
+        return $this->getOne($id);
     }
 
     /**
      * Create & persist a resource in database
      *
      * @SWG\Response(response=201, description="return the Place created")
-     * 
+     *
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Post("/place")
+     *
+     * @param Request $request
+     * @return FormInterface
      */
     public function postPlace(Request $request)
     {
-        $place = new $this->entity();
-
-        // creation d'un formulaire a partir de :
-        // - modele de formulaire (informe la liste des champs du formulaire)
-        // - sur lequelle, on mappe les proprietes de l'entite
-        $form = $this->createForm($this->namespaceType, $place);
-
-         // on envoie les donnees recuperees dans le corps de la requete HTTP
-        $form->submit($request->request->all()); // Validation des données
-
-        // si le formulaire est valide, on peut persister les donnees en base
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($place);
-            $em->flush();
-
-            // succes : on renvoie la ressource que l'on vient de creer
-            return $place;
-        }
-        else
-            // echec : on renvoie le formulaire et les messages d'erreurs 
-            return $form;
+        return $this->post($request);
     }
 
     /**
      * Update complete the resource
      *
      * @SWG\Response(response=200, description="return the updated Place")
-     * 
-    * @Rest\View(serializerGroups={"all", "place"})
+     *
+     * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Put("/place/{id}")
+     *
+     * @param Request $request
+     * @return object|FormInterface|null
      */
     public function put(Request $request)
     {
         return $this->update($request, true);
-    }    
-    
+    }
+
     /**
      * Update partial the resource
      *
      * @SWG\Response(response=200, description="return the updated Place")
-     * 
+     *
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Patch("/place/{id}")
+     *
+     * @param Request $request
+     * @return Place|object|FormInterface|null
      */
     public function patch(Request $request)
     {
         return $this->update($request, false);
     }
-    
-    protected function update($request, $clearMissing)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $place = $this->findOne($request->get('id'));
 
-        if (empty($place))
-            $this->resourceNotFound();  
-        
-        $form = $this->createForm($this->namespaceType, $place);
-
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
-        // entité si l'utilisateur n'en fournit pas une dans sa requête
-        $form->submit($request->request->all(), $clearMissing); // Validation des données
-        
-        if($form->isSubmitted() && $form->isValid())
-        {
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($place);
-            $em->flush();
-
-            return $place;
-        }
-        else
-            return $form;
-    }
-    
     /**
      * Delete the resource
      *
      * @SWG\Response(response=204, description="return no content")
-     * 
+     *
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Delete("/place/{id}")
+     *
+     * @param $id
+     * @return mixed|void
      */
     public function delete($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $place = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-        
-        if($place)
-        {
-            $em->remove($place);
-            $em->flush();
-        }
-        else
-            $this->resourceNotFound();
-    }
-
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
-    }
-
-    /**
-     * Return a resource by his id.
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
+        return $this->delete($id);
     }
 }

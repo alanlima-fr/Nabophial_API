@@ -2,21 +2,20 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Representation\Pagination;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DepartementController
  * @package App\Controller
  * @SWG\Tag(name="Departement")
  */
-class DepartementController extends AbstractController
+class DepartementController extends DefaultController
 {
     protected $entity = 'App\Entity\Departement';
     protected $namespaceType = 'App\Form\DepartementType';
@@ -73,31 +72,16 @@ class DepartementController extends AbstractController
      *  name="textSearch",
      *  description="define the text that we'll look for"
      * )
+     *
+     * @param ParamFetcher $paramFetcher
+     * @return Pagination
      */
-    public function getDepartement(ParamFetcher $paramFetcher)
+    public function getDepartements(ParamFetcher $paramFetcher)
     {
-        $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
-        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
-
-        if ($textSearch = $paramFetcher->get('textSearch'))
-            $qb = $repository->prepTextSearch($qb, $textSearch); //Cherche le nom du départment ou de la region
-
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-
-        $departement = $qb->getQuery()->getResult();
-
-        if (!$departement)
-            $this->resourceNotFound();
-
-        return $departement;
-    }
-
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new NotFoundHttpException('Resource not found or empty');
+        return $this->paginate($this->createQB($paramFetcher),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('page')
+        );
     }
 
     /**
@@ -107,25 +91,13 @@ class DepartementController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Get("/departement/{id}")
+     *
+     * @param $id
+     * @return object|null
      */
     public function getOneDepartement($id)
     {
-        $departement = $this->findOne($id);
-
-        if (!$departement)
-            $this->resourceNotFound();
-
-        return $departement;
-    }
-
-    /**
-     * Return a resource by his id.
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
+        return $this->getOne($id);
     }
 
     /**
@@ -135,33 +107,29 @@ class DepartementController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Post("/departement")
+     *
+     * @param Request $request
+     * @return FormInterface
      */
     public function postDepartement(Request $request)
     {
-        $departement = new $this->entity();
+        return $this->post($request);
+    }
 
-        // creation d'un formulaire a partir de :
-        // - modele de formulaire (informe la liste des champs du formulaire)
-        // - sur lequelle, on mappe les proprietes de l'entite
-
-        $form = $this->createForm($this->namespaceType, $departement);
-
-        // on envoie les donnees recuperees dans le corps de la requete HTTP
-        $form->submit($request->request->all()); // Validation des données
-
-        //dump($form); die;
-
-        // si le formulaire est valide, on peut persister les donnees en base
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($departement);
-            $em->flush();
-
-            // succes : on renvoie la ressource que l'on vient de creer
-            return $departement;
-        } else
-            // echec : on renvoie le formulaire et les messages d'erreurs
-            return $form;
+    /**
+     * Update complete the resource
+     *
+     * @SWG\Response(response=200, description="return the updated Departement")
+     *
+     * @Rest\View(serializerGroups={"all", "departement"})
+     * @Rest\Put("/departement/{id}")
+     *
+     * @param Request $request
+     * @return object|FormInterface|null
+     */
+    public function put(Request $request)
+    {
+        return $this->update($request, true);
     }
 
     /**
@@ -171,35 +139,13 @@ class DepartementController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Patch("/departement/{id}")
+     *
+     * @param Request $request
+     * @return object|FormInterface|null
      */
     public function patch(Request $request)
     {
         return $this->update($request, false);
-    }
-
-    protected function update($request, $clearMissing)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $departement = $this->findOne($request->get('id'));
-
-        if (empty($departement))
-            $this->resourceNotFound();
-
-        $form = $this->createForm($this->namespaceType, $departement);
-
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre
-        // entité si l'utilisateur n'en fournit pas une dans sa requête
-        $form->submit($request->request->all(), $clearMissing); // Validation des données
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($departement);
-            $em->flush();
-
-            return $departement;
-        } else
-            return $form;
     }
 
     /**
@@ -209,19 +155,13 @@ class DepartementController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "departement"})
      * @Rest\Delete("/departement/{id}")
+     *
+     * @param $id
+     * @return mixed|void
      */
     public function delete($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $departement = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-
-        if ($departement) {
-            $em->remove($departement);
-            $em->flush();
-        } else
-            $this->resourceNotFound();
+        return $this->delete($id);
     }
 
 }
