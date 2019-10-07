@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\TypePerformance;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class TypePerformanceController
@@ -19,7 +19,7 @@ class TypePerformanceController extends DefaultController
 {
     protected $entity = 'App\Entity\TypePerformance';
     protected $namespaceType = 'App\Form\TypePerformanceType';
-    
+
     /**
      * Retrieve all data from one table
      *
@@ -31,18 +31,18 @@ class TypePerformanceController extends DefaultController
      *         @SWG\Items(ref=@Doc\Model(type="App\Entity\TypePerformance", groups={"all", "typePerformance"}))
      *     )
      * )
-     * 
+     *
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Route(
      *      name = "typeperformance_list",
      *      path = "/typeperformance",
      *      methods = { Request::METHOD_GET }
      * )
-     * 
+     *
      * QUERY PARAM ***
-     * 
+     *
      *  \|/  SORT   \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="sortBy",
      *  default="id",
@@ -53,9 +53,9 @@ class TypePerformanceController extends DefaultController
      *  default="desc",
      *  description="define the order of the sort"
      * )
-     * 
+     *
      *  \|/  PAGINATION \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="page",
      *  requirements="\d+",
@@ -68,9 +68,9 @@ class TypePerformanceController extends DefaultController
      *  default=25,
      *  description="Number of items to display. affects pagination"
      * )
-     * 
+     *
      *  \|/  TEXTSEARCH \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="textSearch",
      *  description="define the text that we'll look for"
@@ -89,7 +89,7 @@ class TypePerformanceController extends DefaultController
      * Retrieve one resource from the table
      *
      * @SWG\Response(response=200, description="return the TypePerformance")
-     * 
+     *
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Get("/typeperformance/{id}")
      */
@@ -119,7 +119,7 @@ class TypePerformanceController extends DefaultController
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Put("/typeperformance/{id}")
      * @param Request $request
-     * @return \App\Entity\TypePerformance|object|\Symfony\Component\Form\FormInterface|null
+     * @return TypePerformance|object|FormInterface|null
      */
     public function put(Request $request)
     {
@@ -134,7 +134,7 @@ class TypePerformanceController extends DefaultController
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Patch("/typeperformance/{id}")
      * @param Request $request
-     * @return \App\Entity\TypePerformance|object|\Symfony\Component\Form\FormInterface|null
+     * @return TypePerformance|object|FormInterface|null
      */
     public function patch(Request $request)
     {
@@ -148,7 +148,7 @@ class TypePerformanceController extends DefaultController
      *
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Delete("/typeperformance/{id}")
-     * 
+     *
      * @param $id
      * @return mixed|void
      */
