@@ -4,17 +4,32 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
+use Nelmio\ApiDocBundle\Annotation as Doc;
+use Swagger\Annotations as SWG;
 
+/**
+ * Class PlaceController
+ * @package App\Controller
+ * @SWG\Tag(name="Place")
+ */
 class PlaceController extends AbstractController
 {
     protected $entity = 'App\Entity\Place';
     protected $namespaceType = 'App\Form\PlaceType';
     
     /**
-     * Retrieve all data from one table
+     * Retrieve all data from the Place table
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the {limit} first place",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Doc\Model(type="App\Entity\Place", groups={"all", "place"}))
+     *     )
+     * )
      * 
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Route(
@@ -77,7 +92,9 @@ class PlaceController extends AbstractController
     }
 
     /**
-     * Retrieve one resource from the table
+     * Retrieve one resource from the place table
+     *
+     * @SWG\Response(response=200, description="return the Place")
      * 
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Get("/place/{id}")
@@ -94,6 +111,8 @@ class PlaceController extends AbstractController
 
     /**
      * Create & persist a resource in database
+     *
+     * @SWG\Response(response=201, description="return the Place created")
      * 
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Post("/place")
@@ -127,6 +146,8 @@ class PlaceController extends AbstractController
 
     /**
      * Update complete the resource
+     *
+     * @SWG\Response(response=200, description="return the updated Place")
      * 
     * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Put("/place/{id}")
@@ -138,6 +159,8 @@ class PlaceController extends AbstractController
     
     /**
      * Update partial the resource
+     *
+     * @SWG\Response(response=200, description="return the updated Place")
      * 
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Patch("/place/{id}")
@@ -176,6 +199,8 @@ class PlaceController extends AbstractController
     
     /**
      * Delete the resource
+     *
+     * @SWG\Response(response=204, description="return no content")
      * 
      * @Rest\View(serializerGroups={"all", "place"})
      * @Rest\Delete("/place/{id}")

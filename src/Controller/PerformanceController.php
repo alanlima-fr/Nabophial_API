@@ -2,31 +2,48 @@
 
 namespace App\Controller;
 
+use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
+use Nelmio\ApiDocBundle\Annotation as Doc;
+use Swagger\Annotations as SWG;
 
+/**
+ * Class PerformanceController
+ * @package App\Controller
+ * @SWG\Tag(name="Performance")
+ */
 class PerformanceController extends AbstractController
 {
     protected $entity = 'App\Entity\Performance';
     protected $namespaceType = 'App\Form\PerformanceType';
 
-/**
-     * Retrieve all data from one table
-     * 
+    /**
+     * Retrieve all data from the Performance table
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the {limit} first performance",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Doc\Model(type="App\Entity\Performance", groups={"all", "performance"}))
+     *     )
+     * )
+     *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Route(
      *      name = "performance_list",
      *      path = "/performance",
      *      methods = { Request::METHOD_GET }
      * )
-     * 
+     *
      * QUERY PARAM ***
-     * 
+     *
      *  \|/  SORT   \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="sortBy",
      *  default="id",
@@ -37,9 +54,9 @@ class PerformanceController extends AbstractController
      *  default="desc",
      *  description="define the order of the sort"
      * )
-     * 
+     *
      *  \|/  PAGINATION \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="page",
      *  requirements="\d+",
@@ -52,17 +69,16 @@ class PerformanceController extends AbstractController
      *  default=25,
      *  description="Number of items to display. affects pagination"
      * )
-     * 
+     *
      *  \|/  FILTER \|/
-     * 
-
+     *
      * @Rest\QueryParam(
      *  name="sport",
      *  description="Give the ID's of the sport you desired"
      * )
-     * 
+     *
      *  \|/  TEXTSEARCH \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="textSearch",
      *  description="define the text that we'll look for"
@@ -91,8 +107,18 @@ class PerformanceController extends AbstractController
     }
 
     /**
-     * Retrieve one resource from the table
-     * 
+     * Return Error in case of a not found.
+     */
+    protected function resourceNotFound()
+    {
+        throw new NotFoundHttpException('Resource not found or empty');
+    }
+
+    /**
+     * Retrieve one resource from the Performance table
+     *
+     * @SWG\Response(response=200, description="return the Performance")
+     *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Get("/performance/{id}")
      */
@@ -104,10 +130,22 @@ class PerformanceController extends AbstractController
             $this->resourceNotFound();
         return $performance;
     }
-   
-/**
+
+    /**
+     * Return a resource by his id.
+     */
+    protected function findOne($id)
+    {
+        return $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
+    }
+
+    /**
      * Create & persist a resource in database
-     * 
+     *
+     * @SWG\Response(response=201, description="return the Performance created")
+     *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Post("/performance")
      */
@@ -120,39 +158,70 @@ class PerformanceController extends AbstractController
         // - sur lequelle, on mappe les proprietes de l'entite
         $form = $this->createForm($this->namespaceType, $performance);
 
-         // on envoie les donnees recuperees dans le corps de la requete HTTP
+        // on envoie les donnees recuperees dans le corps de la requete HTTP
         $form->submit($request->request->all()); // Validation des données
 
         // si le formulaire est valide, on peut persister les donnees en base
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($performance);
             $em->flush();
 
             // succes : on renvoie la ressource que l'on vient de creer
             return $performance;
-        }
-        else
+        } else
             // echec : on renvoie le formulaire et les messages d'erreurs 
             return $form;
     }
 
-
     /**
      * Update complete the resource
-     * 
+     *
+     * @SWG\Response(response=200, description="return the updated Performance")
+     *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Put("/performance/{id}")
      */
     public function put(Request $request)
     {
         return $this->update($request, true);
-    }    
+    }
+
+    /**
+     * @param Request $request
+     * @param Boolean $clearMissing
+     * @return \App\Entity\Performance|object|\Symfony\Component\Form\FormInterface|null
+     */
+    protected function update(Request $request, Boolean $clearMissing)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $performance = $this->findOne($request->get('id'));
+
+        if (empty($performance))
+            $this->resourceNotFound();
+
+        $form = $this->createForm($this->namespaceType, $performance);
+
+        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
+        // entité si l'utilisateur n'en fournit pas une dans sa requête
+        $form->submit($request->request->all(), $clearMissing); // Validation des données
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // l'entité vient de la base, donc le merge n'est pas nécessaire.
+            // il est utilisé juste par soucis de clarté
+            $em->merge($performance);
+            $em->flush();
+
+            return $performance;
+        } else
+            return $form;
+    }
 
     /**
      * Update partial the resource
-     * 
+     *
+     * @SWG\Response(response=200, description="return the updated Performance")
+     *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Patch("/performance/{id}")
      */
@@ -160,38 +229,12 @@ class PerformanceController extends AbstractController
     {
         return $this->update($request, false);
     }
-    
-    protected function update($request, $clearMissing)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $performance = $this->findOne($request->get('id'));
-
-        if (empty($performance))
-            $this->resourceNotFound();  
-        
-        $form = $this->createForm($this->namespaceType, $performance);
-
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
-        // entité si l'utilisateur n'en fournit pas une dans sa requête
-        $form->submit($request->request->all(), $clearMissing); // Validation des données
-        
-        if($form->isSubmitted() && $form->isValid())
-        {
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($performance);
-            $em->flush();
-
-            return $performance;
-        }
-        else
-            return $form;
-    }
-
 
     /**
      * Delete the resource
-     * 
+     *
+     * @SWG\Response(response=204, description="return no content")
+     *
      * @Rest\View(serializerGroups={"all", "performance"})
      * @Rest\Delete("/performance/{id}")
      */
@@ -201,32 +244,12 @@ class PerformanceController extends AbstractController
         $performance = $this->getDoctrine()
             ->getRepository($this->entity)
             ->find($id);
-        
-        if($performance)
-        {
+
+        if ($performance) {
             $em->remove($performance);
             $em->flush();
-        }
-        else
+        } else
             $this->resourceNotFound();
-    }
-
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
-    }
-
-    /**
-     * Return a resource by his id.
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
     }
 
 }
