@@ -16,7 +16,7 @@ class RegionController extends AbstractController
     /**
      * Retrieve all data from one table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Route(
      *      name = "region_list",
      *      path = "/region",
@@ -51,11 +51,11 @@ class RegionController extends AbstractController
      *  description="Number of items to display. affects pagination"
      * )
      * 
-     *  \|/  FILTER \|/
-     *
+     *  \|/  TEXTSEARCH \|/
+     * 
      * @Rest\QueryParam(
-     *  name="name",
-     *  description="set your name of region you looking for"
+     *  name="textSearch",
+     *  description="define the text that we'll look for"
      * )
      */
     public function getRegion(ParamFetcher $paramFetcher)
@@ -63,8 +63,8 @@ class RegionController extends AbstractController
         $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
 
-        if ($name = $paramFetcher->get('name'))
-            $qb = $repository->filterWith($qb,$name, 'entity.name'); //Filtre selon le nom de l'évent
+        if ($textSearch = $paramFetcher->get('textSearch'))
+            $qb = $repository->prepTextSearch($qb,$textSearch); //Filtre selon le nom de l'évent
         
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
@@ -79,7 +79,7 @@ class RegionController extends AbstractController
     /**
      * Retrieve one resource from the table
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Get("/region/{id}")
      */
     public function getOneRegion($id)
@@ -95,7 +95,7 @@ class RegionController extends AbstractController
     /**
      * Create & persist a resource in database
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Post("/region")
      */
     public function postRegion(Request $request)
@@ -131,7 +131,7 @@ class RegionController extends AbstractController
     /**
      * Update partial the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Patch("/region/{id}")
      */
     public function patch(Request $request)
@@ -169,7 +169,7 @@ class RegionController extends AbstractController
     /**
      * Delete the resource
      * 
-     * @Rest\View(serializerGroups={"all"})
+     * @Rest\View(serializerGroups={"all", "region"})
      * @Rest\Delete("/region/{id}")
      */
     public function delete($id)

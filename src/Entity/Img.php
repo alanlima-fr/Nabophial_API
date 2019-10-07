@@ -22,7 +22,7 @@ class Img
     private $photo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\AppUser")
      */
     private $user;
 
@@ -43,15 +43,16 @@ class Img
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?AppUser
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): self
+    public function setUser(?AppUser $user): self
     {
         $this->user = $user;
 
         return $this;
     }
+
 }

@@ -38,14 +38,36 @@ class RegionRepository extends ServiceEntityRepository
 
     public function filterWith($qb, $array, $where)
     {
-        //Tri selon un nom de region.
-        // Il n'est pas obligé de recevoir le nom entier ou exacte du region pour le chercher
-        // (recherche comme sur le moteur google lorsque on tape ce que l'on cherche)
+        // Philippe.H : Normalment, on en aura pas besoin mais je le  laisse pour le moment au cas ou . 
+        
+        $or = $qb->expr()->orx();
+        $array = explode(',', $array);
+        foreach ($array as $value)
+            $or->add($qb->expr()->eq($where, $value));
+        $qb->andWhere($or);
 
-        $qb->where('entity.name LIKE :name')->setParameter('name', $array.'%'); 
         return $qb;
     }
 
+    public function prepTextSearch($qb, $textSearch)
+    {
+
+        return $qb = $this->textSearch($qb,
+        array('entity.id', 'entity.name'),
+            $textSearch
+            );
+              
+    }
+
+    public function textSearch($qb, array $fields, $value)
+    {
+        $or = $qb->expr()->orx();
+        foreach ($fields as $field)
+            $or->add($qb->expr()->like($field, $qb->expr()->literal('%'.$value.'%')));
+        $qb->andWhere($or);
+
+        return $qb;
+    }
 
     public function pageLimit($qb, $page, $limit)
     {

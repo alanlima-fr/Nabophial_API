@@ -40,17 +40,44 @@ class PlaceRepository extends ServiceEntityRepository
     public function filterWith($qb,$array, $where)
     {
 
-        // On filtre les résultat avec un where qui change selon le array (qui est la condition)
-        switch ($where) 
-        {
-            case 'entity.adresse':  
-                $qb->where('entity.adresse LIKE :adresse')->setParameter('adresse', $array.'%'); //Tri selon un nom évenement l'adresse recherché . Il n'est pas obligé de recevoir le nom entier ou exacte de l'evenement pour le chercher (recherche comme sur le moteur google lorsque on tape ce que l'on cherche)
-                break;
-        }
+        // Philippe.H : Normalment, on en aura pas besoin mais je le  laisse pour le moment au cas ou . 
+        
+        $or = $qb->expr()->orx();
+        $array = explode(',', $array);
+        foreach ($array as $value)
+            $or->add($qb->expr()->eq($where, $value));
+        $qb->andWhere($or);
 
-           return $qb;
-
+        return $qb;
     }
+
+    public function prepTextSearch($qb, $textSearch)
+    {
+        //Cherche également dans city ,departement et region
+        //Mise en commentaire car il n'y a pas de liaison ManytoOne a 'ville' de l'entité place pour le moment.
+        //$qb->leftJoin('entity.place', 'tsPlace')
+        //        ->leftJoin('tsPlace.city', 'tsCity')
+        //        ->leftJoin('tsCity.departement', 'tsDepartement')
+        //        ->leftJoin('tsDepartement.region', 'tsRegion'); 
+            
+            
+        return $qb = $this->textSearch($qb,
+        array('entity.id', 'entity.adresse','entity.ville'),
+            $textSearch
+            );
+              
+    }
+
+    public function textSearch($qb, array $fields, $value)
+    {
+        $or = $qb->expr()->orx();
+        foreach ($fields as $field)
+            $or->add($qb->expr()->like($field, $qb->expr()->literal('%'.$value.'%')));
+        $qb->andWhere($or);
+
+        return $qb;
+    }
+
 
     public function pageLimit($qb, $page, $limit)
     {

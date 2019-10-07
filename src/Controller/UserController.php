@@ -4,15 +4,14 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    protected $entity = 'App\Entity\User';
-    protected $namespaceType = 'App\Form\UserType';
+    protected $entity = 'App\Entity\AppUser';
+    protected $namespaceType = 'App\Form\AppUserType';
 
     /**
      * Retrieve all data from one table
