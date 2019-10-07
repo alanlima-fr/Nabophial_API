@@ -16,7 +16,7 @@ use phpDocumentor\Reflection\Types\Integer;
  */
 class AppUserRepository extends ServiceEntityRepository
 {
-    private $entity = 'App\Entity\AppUser';
+    private $entity = 'App:AppUser';
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -26,7 +26,7 @@ class AppUserRepository extends ServiceEntityRepository
     /**
      * @param string $sortBy
      * @param string $sortOrder
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function findAllSortBy($sortBy = 'id', $sortOrder = 'desc') // par defaut on trie par id par ordre décroissant
     {
@@ -41,25 +41,6 @@ class AppUserRepository extends ServiceEntityRepository
                 break;
         }
         return $qb; // On renvoie la QueryBuilder
-    }
-
-    /**
-     * @param QueryBuilder $qb
-     * @param String $array
-     * @param String $where
-     * @return QueryBuilder
-     */
-    public function filterWith(QueryBuilder $qb, String $array, String $where)
-    {
-        // Philippe.H : Normalment, on en aura pas besoin mais je le  laisse pour le moment au cas ou .
-
-        $or = $qb->expr()->orx();
-        $array = explode(',', $array);
-        foreach ($array as $value)
-            $or->add($qb->expr()->eq($where, $value));
-        $qb->andWhere($or);
-
-        return $qb;
     }
 
     /**
@@ -79,39 +60,5 @@ class AppUserRepository extends ServiceEntityRepository
             $textSearch
         );
 
-    }
-
-    /**
-     * @param QueryBuilder $qb
-     * @param array $fields
-     * @param String $value
-     * @return QueryBuilder
-     */
-    public function textSearch(QueryBuilder $qb, array $fields, String $value)
-    {
-        $or = $qb->expr()->orx();
-        foreach ($fields as $field)
-            $or->add($qb->expr()->like($field, $qb->expr()->literal('%'.$value.'%')));
-        $qb->andWhere($or);
-
-        return $qb;
-    }
-
-    /**
-     * @param QueryBuilder $qb
-     * @param Integer $page
-     * @param Integer $limit
-     * @return QueryBuilder
-     */
-    public function pageLimit(QueryBuilder $qb, Integer $page, Integer $limit)
-    {
-        $qb->setFirstResult(($page-1) * $limit);
-
-        if ($limit > 100)
-            $limit = 100;
-
-        $qb->setMaxResults($limit);
-
-        return $qb;
     }
 }

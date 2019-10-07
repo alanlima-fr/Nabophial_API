@@ -6,7 +6,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -15,7 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @package App\Controller
  * @SWG\Tag(name="Relation")
  */
-class RelationController extends AbstractController
+class RelationController extends DefaultController
 {
     protected $entity = 'App\Entity\Relation';
     protected $namespaceType = 'App\Form\RelationType';
@@ -178,19 +177,6 @@ class RelationController extends AbstractController
         return $this->update($request, true);
     }
 
-    /**
-     * Update partial the resource
-     *
-     * @SWG\Response(response=200, description="return the updated Relation")
-     *
-     * @Rest\View(serializerGroups={"all", "relation"})
-     * @Rest\Patch("/relation/{id}")
-     */
-    public function patch(Request $request)
-    {
-        return $this->update($request, false);
-    }
-
     protected function update($request, $clearMissing)
     {
         $em = $this->getDoctrine()->getManager();
@@ -214,6 +200,19 @@ class RelationController extends AbstractController
             return $relation;
         } else
             return $form;
+    }
+
+    /**
+     * Update partial the resource
+     *
+     * @SWG\Response(response=200, description="return the updated Relation")
+     *
+     * @Rest\View(serializerGroups={"all", "relation"})
+     * @Rest\Patch("/relation/{id}")
+     */
+    public function patch(Request $request)
+    {
+        return $this->update($request, false);
     }
 
     /**

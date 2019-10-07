@@ -14,7 +14,7 @@ use Swagger\Annotations as SWG;
  * @package App\Controller
  * @SWG\Tag(name="Status")
  */
-class StatusController extends AbstractController
+class StatusController extends DefaultController
 {
     protected $entity = 'App\Entity\Status';
     protected $namespaceType = 'App\Form\StatusType';
@@ -36,15 +36,9 @@ class StatusController extends AbstractController
      */
     public function getStatus()
     {
-        $status =  $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->findAll();
-
-        if (!$status)
-            $this->resourceNotFound();
-
-        return $status;
+       return $this->getAll();
     }
+
     /**
      * Retrieve one resource from the table
      *
@@ -55,27 +49,6 @@ class StatusController extends AbstractController
      */
     public function getOneStatus($id)
     {
-        $status = $this->findOne($id);
-
-        if (!$status)
-            $this->resourceNotFound();
-
-        return $status;
-    }
-    /**
-     * Return a resource by his id.
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-    }
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
+        return $this->getOne($id);
     }
 }

@@ -2,21 +2,19 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class SportController
  * @package App\Controller
  * @SWG\Tag(name="Sport")
  */
-class SportController extends AbstractController
+class SportController extends DefaultController
 {
     protected $entity = 'App\Entity\Sport';
     protected $namespaceType = 'App\Form\SportType';
@@ -76,32 +74,15 @@ class SportController extends AbstractController
      *  name="textSearch",
      *  description="define the text that we'll look for"
      * )
-     *
+     * @param ParamFetcher $paramFetcher
+     * @return
      */
     public function getSport(ParamFetcher $paramFetcher)
     {
-        $repository = $this->getDoctrine()->getRepository($this->entity);
-        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
-
-        if ($textSearch = $paramFetcher->get('textSearch'))
-            $qb = $repository->prepTextSearch($qb, $textSearch);
-
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-
-        $sport = $qb->getQuery()->getResult();
-
-        if (!$sport)
-            $this->resourceNotFound();
-
-        return $sport;
-    }
-
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new NotFoundHttpException('Resource not found or empty');
+        return $this->paginate($this->createQB($paramFetcher),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('page')
+        );
     }
 
     /**
@@ -111,25 +92,13 @@ class SportController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Get("/sport/{id}")
+     *
+     * @param $id
+     * @return object|null
      */
     public function getOneSport($id)
     {
-        $sport = $this->findOne($id);
-
-        if (!$sport)
-            $this->resourceNotFound();
-
-        return $sport;
-    }
-
-    /**
-     * Return a resource by his id.
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
+        return $this->getOne($id);
     }
 
     /**
@@ -139,30 +108,13 @@ class SportController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Post("/sport")
+     *
+     * @param Request $request
+     * @return FormInterface
      */
     public function postSport(Request $request)
     {
-        $sport = new $this->entity();
-
-        // creation d'un formulaire a partir de :
-        // - modele de formulaire (informe la liste des champs du formulaire)
-        // - sur lequelle, on mappe les proprietes de l'entite
-        $form = $this->createForm($this->namespaceType, $sport);
-
-        // on envoie les donnees recuperees dans le corps de la requete HTTP
-        $form->submit($request->request->all()); // Validation des données
-
-        // si le formulaire est valide, on peut persister les donnees en base
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($sport);
-            $em->flush();
-
-            // succes : on renvoie la ressource que l'on vient de creer
-            return $sport;
-        } else
-            // echec : on renvoie le formulaire et les messages d'erreurs
-            return $form;
+        return $this->post($request);
     }
 
     /**
@@ -172,35 +124,13 @@ class SportController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Put("/sport/{id}")
+     *
+     * @param Request $request
+     * @return object|FormInterface|null
      */
     public function put(Request $request)
     {
         return $this->update($request, true);
-    }
-
-    protected function update($request, $clearMissing)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $sport = $this->findOne($request->get('id'));
-
-        if (empty($sport))
-            $this->resourceNotFound();
-
-        $form = $this->createForm($this->namespaceType, $sport);
-
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre
-        // entité si l'utilisateur n'en fournit pas une dans sa requête
-        $form->submit($request->request->all(), $clearMissing); // Validation des données
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($sport);
-            $em->flush();
-
-            return $sport;
-        } else
-            return $form;
     }
 
     /**
@@ -210,6 +140,9 @@ class SportController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Patch("/sport/{id}")
+     *
+     * @param Request $request
+     * @return object|FormInterface|null
      */
     public function patch(Request $request)
     {
@@ -223,19 +156,13 @@ class SportController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Delete("/sport/{id}")
+     *
+     * @param $id
+     * @return mixed|void
      */
     public function delete($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $sport = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-
-        if ($sport) {
-            $em->remove($sport);
-            $em->flush();
-        } else
-            $this->resourceNotFound();
+        return $this->delete($id);
     }
 
 }

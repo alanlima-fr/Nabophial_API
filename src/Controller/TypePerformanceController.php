@@ -15,7 +15,7 @@ use Swagger\Annotations as SWG;
  * @package App\Controller
  * @SWG\Tag(name="TypePerformance")
  */
-class TypePerformanceController extends AbstractController
+class TypePerformanceController extends DefaultController
 {
     protected $entity = 'App\Entity\TypePerformance';
     protected $namespaceType = 'App\Form\TypePerformanceType';
@@ -79,20 +79,10 @@ class TypePerformanceController extends AbstractController
 
     public function getTypePerformance(ParamFetcher $paramFetcher)
     {
-        $repository = $this->getDoctrine()->getRepository($this->entity);
-        $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder'));
-
-        if ($textSearch = $paramFetcher->get('textSearch'))
-            $qb = $repository->prepTextSearch($qb, $textSearch);
-
-        $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
-
-        $typePerformances = $qb->getQuery()->getResult();
-
-        if (!$typePerformances)
-            $this->resourceNotFound();
-
-        return $typePerformances;
+        return $this->paginate($this->createQB($paramFetcher),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('page')
+        );
     }
 
     /**
@@ -105,12 +95,7 @@ class TypePerformanceController extends AbstractController
      */
     public function getOneTypePerformance($id)
     {
-        $typePerformance = $this->findOne($id);
-
-        if (!$typePerformance)
-            $this->resourceNotFound();
-
-        return $typePerformance;
+        return $this->getOne($id);
     }
 
     /**
@@ -123,29 +108,7 @@ class TypePerformanceController extends AbstractController
      */
     public function postTypePerformance(Request $request)
     {
-        $typePerformance = new $this->entity();
-
-        // creation d'un formulaire a partir de :
-        // - modele de formulaire (informe la liste des champs du formulaire)
-        // - sur lequelle, on mappe les proprietes de l'entite
-        $form = $this->createForm($this->namespaceType, $typePerformance);
-
-         // on envoie les donnees recuperees dans le corps de la requete HTTP
-        $form->submit($request->request->all()); // Validation des données
-
-        // si le formulaire est valide, on peut persister les donnees en base
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($typePerformance);
-            $em->flush();
-
-            // succes : on renvoie la ressource que l'on vient de creer
-            return $typePerformance;
-        }
-        else
-            // echec : on renvoie le formulaire et les messages d'erreurs 
-            return $form;
+        return $this->post($request);
     }
 
     /**
@@ -155,11 +118,13 @@ class TypePerformanceController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Put("/typeperformance/{id}")
+     * @param Request $request
+     * @return \App\Entity\TypePerformance|object|\Symfony\Component\Form\FormInterface|null
      */
     public function put(Request $request)
     {
         return $this->update($request, true);
-    }    
+    }
 
     /**
      * Update partial the resource
@@ -168,39 +133,13 @@ class TypePerformanceController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Patch("/typeperformance/{id}")
+     * @param Request $request
+     * @return \App\Entity\TypePerformance|object|\Symfony\Component\Form\FormInterface|null
      */
     public function patch(Request $request)
     {
         return $this->update($request, false);
     }
-    
-    protected function update($request, $clearMissing)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $typePerformance = $this->findOne($request->get('id'));
-
-        if (empty($typePerformance))
-            $this->resourceNotFound();  
-        
-        $form = $this->createForm($this->namespaceType, $typePerformance);
-
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
-        // entité si l'utilisateur n'en fournit pas une dans sa requête
-        $form->submit($request->request->all(), $clearMissing); // Validation des données
-        
-        if($form->isSubmitted() && $form->isValid())
-        {
-            // l'entité vient de la base, donc le merge n'est pas nécessaire.
-            // il est utilisé juste par soucis de clarté
-            $em->merge($typePerformance);
-            $em->flush();
-
-            return $typePerformance;
-        }
-        else
-            return $form;
-    }
-
 
     /**
      * Delete the resource
@@ -209,38 +148,12 @@ class TypePerformanceController extends AbstractController
      *
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Delete("/typeperformance/{id}")
+     * 
+     * @param $id
+     * @return mixed|void
      */
     public function delete($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $typePerformance = $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
-        
-        if($typePerformance)
-        {
-            $em->remove($typePerformance);
-            $em->flush();
-        }
-        else
-            $this->resourceNotFound();
-    }
-
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
-    }
-
-    /**
-     * Return a resource by his id.
-     */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
+        return $this->delete($id);
     }
 }

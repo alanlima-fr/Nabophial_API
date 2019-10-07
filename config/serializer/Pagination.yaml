@@ -1,0 +1,6 @@
+App\Representation\Pagination:
+  attributes:
+    data:
+      groups: ['all']
+    meta:
+      groups: ['all']
