@@ -1,23 +1,22 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        auth_token_user_provider:
-            id: auth_token_user_provider
-
-    role_hierarchy:
-        ROLE_ADMIN:             ROLE_USER
-
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\AppUser
+                property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            pattern: ^/
+            pattern:  ^/
             stateless: true
-            simple_preauth:
-                authenticator: auth_token_authenticator
-            provider: auth_token_user_provider
             anonymous: true
+            guard:
+                authenticators:
+                    - jwt_token_authenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -26,17 +25,13 @@ security:
             # switch_user: true
 
     encoders:
-        Symfony\Component\Security\Core\User\User:
+        App\Entity\AppUser:
             algorithm: bcrypt
-            cost: 12
-        App\Entity\User:
-            algorithm: bcrypt
-            cost: 12
+            cost: 13
 
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/signup, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
-        - { path: ^/signin, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: POST }
         - { path: ^/, roles: ROLE_USER }

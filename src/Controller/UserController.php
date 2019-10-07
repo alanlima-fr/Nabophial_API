@@ -10,8 +10,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    protected $entity = 'App\Entity\User';
-    protected $namespaceType = 'App\Form\UserType';
+    protected $entity = 'App\Entity\AppUser';
+    protected $namespaceType = 'App\Form\AppUserType';
 
     /**
      * Retrieve all data from one table
