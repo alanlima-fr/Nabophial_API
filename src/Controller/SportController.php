@@ -4,10 +4,18 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
+use Nelmio\ApiDocBundle\Annotation as Doc;
+use Swagger\Annotations as SWG;
 
+/**
+ * Class SportController
+ * @package App\Controller
+ * @SWG\Tag(name="Sport")
+ */
 class SportController extends AbstractController
 {
     protected $entity = 'App\Entity\Sport';
@@ -15,18 +23,27 @@ class SportController extends AbstractController
 
     /**
      * Retrieve all data from one table
-     * 
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the {limit} first sport",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Doc\Model(type="App\Entity\Sport", groups={"all", "sport"}))
+     *     )
+     * )
+     *
      * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Route(
      *      name = "sport_list",
      *      path = "/sport",
      *      methods = { Request::METHOD_GET }
      * )
-     * 
+     *
      * QUERY PARAM ***
-     * 
+     *
      *  \|/  SORT   \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="sortBy",
      *  default="id",
@@ -37,9 +54,9 @@ class SportController extends AbstractController
      *  default="desc",
      *  description="define the order of the sort"
      * )
-     * 
+     *
      *  \|/  PAGINATION \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="page",
      *  requirements="\d+",
@@ -52,14 +69,14 @@ class SportController extends AbstractController
      *  default=25,
      *  description="Number of items to display. affects pagination"
      * )
-     * 
+     *
      *  \|/  TEXTSEARCH \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="textSearch",
      *  description="define the text that we'll look for"
      * )
-     * 
+     *
      */
     public function getSport(ParamFetcher $paramFetcher)
     {
@@ -68,7 +85,7 @@ class SportController extends AbstractController
 
         if ($textSearch = $paramFetcher->get('textSearch'))
             $qb = $repository->prepTextSearch($qb, $textSearch);
-                    
+
         $qb = $repository->pageLimit($qb, $paramFetcher->get('page'), $paramFetcher->get('limit'));
 
         $sport = $qb->getQuery()->getResult();
@@ -80,11 +97,21 @@ class SportController extends AbstractController
     }
 
     /**
-    * Retrieve one resource from the table
-    *
-    * @Rest\View(serializerGroups={"all", "sport"})
-    * @Rest\Get("/sport/{id}")
-    */
+     * Return Error in case of a not found.
+     */
+    protected function resourceNotFound()
+    {
+        throw new NotFoundHttpException('Resource not found or empty');
+    }
+
+    /**
+     * Retrieve one resource from the table
+     *
+     * @SWG\Response(response=200, description="return the Sport")
+     *
+     * @Rest\View(serializerGroups={"all", "sport"})
+     * @Rest\Get("/sport/{id}")
+     */
     public function getOneSport($id)
     {
         $sport = $this->findOne($id);
@@ -96,8 +123,20 @@ class SportController extends AbstractController
     }
 
     /**
+     * Return a resource by his id.
+     */
+    protected function findOne($id)
+    {
+        return $this->getDoctrine()
+            ->getRepository($this->entity)
+            ->find($id);
+    }
+
+    /**
      * Create & persist a resource in database
-     * 
+     *
+     * @SWG\Response(response=201, description="return the Sport created")
+     *
      * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Post("/sport")
      */
@@ -110,45 +149,33 @@ class SportController extends AbstractController
         // - sur lequelle, on mappe les proprietes de l'entite
         $form = $this->createForm($this->namespaceType, $sport);
 
-         // on envoie les donnees recuperees dans le corps de la requete HTTP
+        // on envoie les donnees recuperees dans le corps de la requete HTTP
         $form->submit($request->request->all()); // Validation des données
 
         // si le formulaire est valide, on peut persister les donnees en base
-        if ($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($sport);
             $em->flush();
 
             // succes : on renvoie la ressource que l'on vient de creer
             return $sport;
-        }
-        else
-            // echec : on renvoie le formulaire et les messages d'erreurs 
+        } else
+            // echec : on renvoie le formulaire et les messages d'erreurs
             return $form;
     }
 
-
     /**
      * Update complete the resource
-     * 
+     *
+     * @SWG\Response(response=200, description="return the updated Sport")
+     *
      * @Rest\View(serializerGroups={"all", "sport"})
      * @Rest\Put("/sport/{id}")
      */
     public function put(Request $request)
     {
         return $this->update($request, true);
-    }    
-    
-    /**
-     * Update partial the resource
-     * 
-     * @Rest\View(serializerGroups={"all", "sport"})
-     * @Rest\Patch("/sport/{id}")
-     */
-    public function patch(Request $request)
-    {
-        return $this->update($request, false);
     }
 
     protected function update($request, $clearMissing)
@@ -157,33 +184,46 @@ class SportController extends AbstractController
         $sport = $this->findOne($request->get('id'));
 
         if (empty($sport))
-            $this->resourceNotFound();  
-        
+            $this->resourceNotFound();
+
         $form = $this->createForm($this->namespaceType, $sport);
 
-        // Le paramètre false dit à Symfony de garder les valeurs dans notre 
+        // Le paramètre false dit à Symfony de garder les valeurs dans notre
         // entité si l'utilisateur n'en fournit pas une dans sa requête
         $form->submit($request->request->all(), $clearMissing); // Validation des données
-        
-        if($form->isSubmitted() && $form->isValid())
-        {
+
+        if ($form->isSubmitted() && $form->isValid()) {
             // l'entité vient de la base, donc le merge n'est pas nécessaire.
             // il est utilisé juste par soucis de clarté
             $em->merge($sport);
             $em->flush();
 
             return $sport;
-        }
-        else
+        } else
             return $form;
     }
 
     /**
-    * Delete the resource
-    *
-    * @Rest\View(serializerGroups={"all", "sport"})
-    * @Rest\Delete("/sport/{id}")
-    */
+     * Update partial the resource
+     *
+     * @SWG\Response(response=200, description="return the updated Sport")
+     *
+     * @Rest\View(serializerGroups={"all", "sport"})
+     * @Rest\Patch("/sport/{id}")
+     */
+    public function patch(Request $request)
+    {
+        return $this->update($request, false);
+    }
+
+    /**
+     * Delete the resource
+     *
+     * @SWG\Response(response=204, description="return no content")
+     *
+     * @Rest\View(serializerGroups={"all", "sport"})
+     * @Rest\Delete("/sport/{id}")
+     */
     public function delete($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -191,31 +231,11 @@ class SportController extends AbstractController
             ->getRepository($this->entity)
             ->find($id);
 
-        if($sport)
-        {
+        if ($sport) {
             $em->remove($sport);
             $em->flush();
-        }
-        else
+        } else
             $this->resourceNotFound();
-    }
-
-    /**
-    * Return Error in case of a not found.
-    */
-    protected function resourceNotFound()
-    {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Resource not found or empty');
-    }
-
-    /**
-    * Return a resource by his id.
-    */
-    protected function findOne($id)
-    {
-        return $this->getDoctrine()
-            ->getRepository($this->entity)
-            ->find($id);
     }
 
 }

@@ -7,7 +7,14 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
+use Nelmio\ApiDocBundle\Annotation as Doc;
+use Swagger\Annotations as SWG;
 
+/**
+ * Class TypePerformanceController
+ * @package App\Controller
+ * @SWG\Tag(name="TypePerformance")
+ */
 class TypePerformanceController extends AbstractController
 {
     protected $entity = 'App\Entity\TypePerformance';
@@ -15,8 +22,17 @@ class TypePerformanceController extends AbstractController
     
     /**
      * Retrieve all data from one table
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the {limit} first typePerformance",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Doc\Model(type="App\Entity\TypePerformance", groups={"all", "typePerformance"}))
+     *     )
+     * )
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Route(
      *      name = "typeperformance_list",
      *      path = "/typeperformance",
@@ -81,8 +97,10 @@ class TypePerformanceController extends AbstractController
 
     /**
      * Retrieve one resource from the table
+     *
+     * @SWG\Response(response=200, description="return the TypePerformance")
      * 
-     * @Rest\View()
+     * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Get("/typeperformance/{id}")
      */
     public function getOneTypePerformance($id)
@@ -97,8 +115,10 @@ class TypePerformanceController extends AbstractController
 
     /**
      * Create & persist a resource in database
-     * 
-     * @Rest\View()
+     *
+     * @SWG\Response(response=201, description="return the TypePerformance created")
+     *
+     * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Post("/typeperformance")
      */
     public function postTypePerformance(Request $request)
@@ -130,8 +150,10 @@ class TypePerformanceController extends AbstractController
 
     /**
      * Update complete the resource
-     * 
-     * @Rest\View()
+     *
+     * @SWG\Response(response=200, description="return the updated TypePerformance")
+     *
+     * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Put("/typeperformance/{id}")
      */
     public function put(Request $request)
@@ -141,8 +163,10 @@ class TypePerformanceController extends AbstractController
 
     /**
      * Update partial the resource
-     * 
-     * @Rest\View()
+     *
+     * @SWG\Response(response=200, description="return the updated TypePerformance")
+     *
+     * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Patch("/typeperformance/{id}")
      */
     public function patch(Request $request)
@@ -180,8 +204,10 @@ class TypePerformanceController extends AbstractController
 
     /**
      * Delete the resource
-     * 
-     * @Rest\View()
+     *
+     * @SWG\Response(response=204, description="return no content")
+     *
+     * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Delete("/typeperformance/{id}")
      */
     public function delete($id)

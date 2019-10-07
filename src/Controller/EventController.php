@@ -4,10 +4,16 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
+use Nelmio\ApiDocBundle\Annotation as Doc;
+use Swagger\Annotations as SWG;
 
+/**
+ * Class EventController
+ * @package App\Controller
+ * @SWG\Tag(name="Event")
+ */
 class EventController extends AbstractController
 {
     protected $entity = 'App\Entity\Event';
@@ -15,16 +21,25 @@ class EventController extends AbstractController
 
     /**
      * Retrieve all data from one table
-     * 
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the {limit} first Event",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Doc\Model(type="App\Entity\Event", groups={"all", "event"}))
+     *     )
+     * )
+     *
      * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Route(
      *      name = "event_list",
      *      path = "/event",
      *      methods = { Request::METHOD_GET }
      * )
-     * 
+     *
      *  \|/  SORT   \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="sortBy",
      *  default="id",
@@ -35,9 +50,9 @@ class EventController extends AbstractController
      *  default="desc",
      *  description="define the order of the sort"
      * )
-     * 
+     *
      *  \|/  PAGINATION \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="page",
      *  requirements="\d+",
@@ -50,33 +65,35 @@ class EventController extends AbstractController
      *  default=25,
      *  description="Number of items to display. affects pagination"
      * )
-     * 
+     *
      *  \|/  FILTER \|/
-     * 
+     *
      * @Rest\QueryParam(
      *  name="private",
      *  description="set your type of event is private or no"
      * )
-     * 
+     *
      * @Rest\QueryParam(
      *  name="lieu",
      *  description="set your lieu where you looking for"
      * )
-     * 
+     *
      * @Rest\QueryParam(
      *  name="text",
      *  description="set your nom of event you looking for"
      * )
-     * 
+     *
      * @Rest\QueryParam(
      *  name="status",
      *  description="set your status of event you looking for"
      * )
-     * 
+     *
      * @Rest\QueryParam(
      *  name="date",
      *  description="set your date of begin of event you looking for"
      * )
+     * @param ParamFetcher $paramFetcher
+     * @return Object
      */
     public function getEvent(ParamFetcher $paramFetcher)
     {
@@ -112,6 +129,8 @@ class EventController extends AbstractController
 
     /**
      * Retrieve one resource from the table
+     *
+     * @SWG\Response(response=200, description="return the Event")
      * 
      * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Get("/event/{id}")
@@ -128,7 +147,9 @@ class EventController extends AbstractController
 
     /**
      * Create & persist a resource in database
-     * 
+     *
+     * @SWG\Response(response=201, description="return the Event created")
+     *
      * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Post("/event")
      */
@@ -164,7 +185,9 @@ class EventController extends AbstractController
 
     /**
      * Update partial the resource
-     * 
+     *
+     * @SWG\Response(response=200, description="return the updated City")
+     *
      * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Patch("/event/{id}")
      */
@@ -202,6 +225,8 @@ class EventController extends AbstractController
 
     /**
      * Delete the resource
+     * 
+     * @SWG\Response(response=204, description="return no content")
      * 
      * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Delete("/event/{id}")

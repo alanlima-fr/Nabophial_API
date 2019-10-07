@@ -11,7 +11,6 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Swagger\Annotations as SWG;
-use Symfony\Component\Validator\Constraints\Date;
 
 class TokenController extends AbstractController
 {
