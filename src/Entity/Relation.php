@@ -32,9 +32,9 @@ class Relation
     private $status;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\RelationStatus")
      */
-    private $userAction;
+    private $relationStatus;
 
     public function getId(): ?int
     {
@@ -77,17 +77,15 @@ class Relation
         return $this;
     }
 
-    public function getUserAction(): ?int
+    public function getRelationStatus(): ?RelationStatus
     {
-        return $this->userAction;
+        return $this->relationStatus;
     }
 
-    public function setUserAction(?int $userAction): self
+    public function setRelationStatus(?RelationStatus $relationStatus): self
     {
-        $this->userAction = $userAction;
+        $this->relationStatus = $relationStatus;
 
         return $this;
     }
-
-
 }
