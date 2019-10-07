@@ -147,7 +147,7 @@ App\Entity\AppUser:
       groups: ['all', 'auth-token']
     number:
       groups: ['all']
-    gender:
+    male:
       groups: ['all']
     preference:
       groups: ['all']

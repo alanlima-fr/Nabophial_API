@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTEncodeFailureException;
+use Swagger\Annotations as SWG;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
-use Swagger\Annotations as SWG;
 
 class TokenController extends AbstractController
 {
@@ -49,7 +49,6 @@ class TokenController extends AbstractController
             'roles' => $user->getRoles(),
             'id' => $user->getId()
         ]);
-        $em = $this->getDoctrine()->getManager();
 
         return new JsonResponse(['token' => $token]);
     }

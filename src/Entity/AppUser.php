@@ -35,7 +35,7 @@ class AppUser implements UserInterface
     private $birthday;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $email;
 
@@ -58,7 +58,7 @@ class AppUser implements UserInterface
      * False = female
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $gender;
+    private $male;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Sport")
@@ -82,7 +82,9 @@ class AppUser implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if (!$this->roles) {
+            $this->roles[] = 'ROLE_USER';
+        }
 
         return array_unique($roles);
     }
@@ -108,7 +110,7 @@ class AppUser implements UserInterface
      */
     public function getUsername()
     {
-        return (string) $this->email;
+        return $this->email;
     }
 
     /**
@@ -192,21 +194,13 @@ class AppUser implements UserInterface
         return $this;
     }
 
-    public function getGender(): ?bool
-    {
-        return $this->gender;
-    }
-
-    public function setGender(?bool $gender): self
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
     public function setRoles(?array $roles): self
     {
         $this->roles = $roles;
+
+        if (!$this->roles) {
+            $this->roles[] = 'ROLE_USER';
+        }
 
         return $this;
     }
@@ -237,5 +231,27 @@ class AppUser implements UserInterface
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
 
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getMale(): ?bool
+    {
+        return $this->male;
+    }
+
+    public function setMale(?bool $male): self
+    {
+        $this->male = $male;
+
+        return $this;
+    }
 }
