@@ -90,7 +90,7 @@ class RegionController extends DefaultController
      * @SWG\Response(response=200, description="return the Region")
      *
      * @Rest\View(serializerGroups={"all", "region"})
-     * @Rest\Get("/region/{id}")
+     * @Rest\Get(path="/region/{id}", name="GET_Region", methods={Request::METHOD_GET})
      *
      * @param $id
      * @return object|null
@@ -99,53 +99,4 @@ class RegionController extends DefaultController
     {
         return $this->getOne($id);
     }
-
-    /**
-     * Create & persist a resource in database
-     *
-     * @SWG\Response(response=201, description="return the Region created")
-     *
-     * @Rest\View(serializerGroups={"all", "region"})
-     * @Rest\Post("/region")
-     *
-     * @param Request $request
-     * @return \Symfony\Component\Form\FormInterface
-     */
-    public function postRegion(Request $request)
-    {
-        return $this->post($request);
-    }
-
-    /**
-     * Update partial the resource
-     *
-     * @SWG\Response(response=200, description="return the updated Region")
-     *
-     * @Rest\View(serializerGroups={"all", "region"})
-     * @Rest\Patch("/region/{id}")
-     *
-     * @param Request $request
-     * @return object|\Symfony\Component\Form\FormInterface|null
-     */
-    public function patch(Request $request)
-    {
-        return $this->update($request, false);
-    }
-
-    /**
-     * Delete the resource
-     *
-     * @SWG\Response(response=204, description="return no content")
-     *
-     * @Rest\View(serializerGroups={"all", "region"})
-     * @Rest\Delete("/region/{id}")
-     *
-     * @param $id
-     * @return mixed|void
-     */
-    public function delete($id)
-    {
-        return $this->delete($id);
-    }
-
 }

@@ -43,9 +43,12 @@ class StatusController extends DefaultController
      * Retrieve one resource from the table
      *
      * @SWG\Response(response=200, description="return the Status")
-     * 
+     *
      * @Rest\View(serializerGroups={"all", "status"})
      * @Rest\Get("/status/{id}")
+     *
+     * @param $id
+     * @return object|null
      */
     public function getOneStatus($id)
     {

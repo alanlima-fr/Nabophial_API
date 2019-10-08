@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\TypePerformance;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -34,8 +32,8 @@ class TypePerformanceController extends DefaultController
      *
      * @Rest\View(serializerGroups={"all", "typePerformance"})
      * @Rest\Route(
-     *      name = "typeperformance_list",
-     *      path = "/typeperformance",
+     *      name = "GET_typePerformance_list",
+     *      path = "/typePerformance",
      *      methods = { Request::METHOD_GET }
      * )
      *
@@ -91,69 +89,13 @@ class TypePerformanceController extends DefaultController
      * @SWG\Response(response=200, description="return the TypePerformance")
      *
      * @Rest\View(serializerGroups={"all", "typePerformance"})
-     * @Rest\Get("/typeperformance/{id}")
+     * @Rest\Get(path="/typePerformance/{id}", name="GET_TypePerformance", methods={Request::METHOD_GET})
+     *
+     * @param $id
+     * @return object|null
      */
     public function getOneTypePerformance($id)
     {
         return $this->getOne($id);
-    }
-
-    /**
-     * Create & persist a resource in database
-     *
-     * @SWG\Response(response=201, description="return the TypePerformance created")
-     *
-     * @Rest\View(serializerGroups={"all", "typePerformance"})
-     * @Rest\Post("/typeperformance")
-     */
-    public function postTypePerformance(Request $request)
-    {
-        return $this->post($request);
-    }
-
-    /**
-     * Update complete the resource
-     *
-     * @SWG\Response(response=200, description="return the updated TypePerformance")
-     *
-     * @Rest\View(serializerGroups={"all", "typePerformance"})
-     * @Rest\Put("/typeperformance/{id}")
-     * @param Request $request
-     * @return TypePerformance|object|FormInterface|null
-     */
-    public function put(Request $request)
-    {
-        return $this->update($request, true);
-    }
-
-    /**
-     * Update partial the resource
-     *
-     * @SWG\Response(response=200, description="return the updated TypePerformance")
-     *
-     * @Rest\View(serializerGroups={"all", "typePerformance"})
-     * @Rest\Patch("/typeperformance/{id}")
-     * @param Request $request
-     * @return TypePerformance|object|FormInterface|null
-     */
-    public function patch(Request $request)
-    {
-        return $this->update($request, false);
-    }
-
-    /**
-     * Delete the resource
-     *
-     * @SWG\Response(response=204, description="return no content")
-     *
-     * @Rest\View(serializerGroups={"all", "typePerformance"})
-     * @Rest\Delete("/typeperformance/{id}")
-     *
-     * @param $id
-     * @return mixed|void
-     */
-    public function delete($id)
-    {
-        return $this->delete($id);
     }
 }

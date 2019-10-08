@@ -1,12 +1,10 @@
 App\Entity\Relation:
   attributes:
-    id:
+    firstUser:
       groups: ['all']
-    idUser1:
+    secondUser:
       groups: ['all']
-    idUser2:
+    initiator:
       groups: ['all']
-    status:
-      groups: ['all']
-    userAction:
+    relationStatus:
       groups: ['all']

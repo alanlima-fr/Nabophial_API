@@ -32,11 +32,7 @@ class DepartementController extends DefaultController
      *     )
      * )
      * @Rest\View(serializerGroups={"all", "departement"})
-     * @Rest\Route(
-     *      name = "departement_list",
-     *      path = "/departement",
-     *      methods = { Request::METHOD_GET }
-     * )
+     * @Rest\Route(name = "departement_list", path = "/departement", methods = { Request::METHOD_GET })
      *
      *  \|/  SORT   \|/
      *
@@ -90,78 +86,13 @@ class DepartementController extends DefaultController
      * @SWG\Response(response=200, description="return the Departement")
      *
      * @Rest\View(serializerGroups={"all", "departement"})
-     * @Rest\Get("/departement/{id}")
+     * @Rest\Get(path="/departement/{id}", name="GET_Departement", methods={Request::METHOD_GET})
      *
      * @param $id
      * @return object|null
      */
-    public function getOneDepartement($id)
+    public function getDepartement($id)
     {
         return $this->getOne($id);
     }
-
-    /**
-     * Create & persist a resource in database
-     *
-     * @SWG\Response(response=201, description="return the Departement created")
-     *
-     * @Rest\View(serializerGroups={"all", "departement"})
-     * @Rest\Post("/departement")
-     *
-     * @param Request $request
-     * @return FormInterface
-     */
-    public function postDepartement(Request $request)
-    {
-        return $this->post($request);
-    }
-
-    /**
-     * Update complete the resource
-     *
-     * @SWG\Response(response=200, description="return the updated Departement")
-     *
-     * @Rest\View(serializerGroups={"all", "departement"})
-     * @Rest\Put("/departement/{id}")
-     *
-     * @param Request $request
-     * @return object|FormInterface|null
-     */
-    public function put(Request $request)
-    {
-        return $this->update($request, true);
-    }
-
-    /**
-     * Update partial the resource
-     *
-     * @SWG\Response(response=200, description="return the updated Departement")
-     *
-     * @Rest\View(serializerGroups={"all", "departement"})
-     * @Rest\Patch("/departement/{id}")
-     *
-     * @param Request $request
-     * @return object|FormInterface|null
-     */
-    public function patch(Request $request)
-    {
-        return $this->update($request, false);
-    }
-
-    /**
-     * Delete the resource
-     *
-     * @SWG\Response(response=200, description="return the updated Departement")
-     *
-     * @Rest\View(serializerGroups={"all", "departement"})
-     * @Rest\Delete("/departement/{id}")
-     *
-     * @param $id
-     * @return mixed|void
-     */
-    public function delete($id)
-    {
-        return $this->delete($id);
-    }
-
 }

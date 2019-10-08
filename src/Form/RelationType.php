@@ -15,7 +15,7 @@ class RelationType extends AbstractType
             ->add('idUser1')
             ->add('idUser2')
             ->add('status')
-            ->add('userAction')
+            ->add('relationStatus')
         ;
     }
 

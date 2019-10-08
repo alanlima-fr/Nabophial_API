@@ -11,68 +11,65 @@ class Relation
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\AppUser", inversedBy="relations")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $id;
+    private $firstUser;
+
+    /**
+     * @ORM\Id()
+     * @ORM\ManyToOne(targetEntity="App\Entity\AppUser")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $SecondUser;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $idUser1;
-    
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $idUser2;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $status;
+    private $initiator;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\RelationStatus")
      */
     private $relationStatus;
 
+    public function getFirstUser(): ?AppUser
+    {
+        return $this->firstUser;
+    }
+
+    public function setFirstUser(?AppUser $firstUser): self
+    {
+        $this->firstUser = $firstUser;
+
+        return $this;
+    }
+
+    public function getSecondUser(): ?AppUser
+    {
+        return $this->SecondUser;
+    }
+
+    public function setSecondUser(?AppUser $SecondUser): self
+    {
+        $this->SecondUser = $SecondUser;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdUser1(): ?int
+    public function getInitiator(): ?int
     {
-        return $this->idUser1;
+        return $this->initiator;
     }
 
-    public function setIdUser1(?int $idUser1): self
+    public function setInitiator(?int $initiator): self
     {
-        $this->idUser1 = $idUser1;
-
-        return $this;
-    }
-
-    public function getIdUser2(): ?int
-    {
-        return $this->idUser2;
-    }
-
-    public function setIdUser2(?int $idUser2): self
-    {
-        $this->idUser2 = $idUser2;
-
-        return $this;
-    }
-
-    public function getStatus(): ?int
-    {
-        return $this->status;
-    }
-
-    public function setStatus(?int $status): self
-    {
-        $this->status = $status;
+        $this->initiator = $initiator;
 
         return $this;
     }
@@ -88,4 +85,6 @@ class Relation
 
         return $this;
     }
+
+
 }

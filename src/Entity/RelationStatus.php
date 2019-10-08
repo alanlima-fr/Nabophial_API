@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\RelationStatusRepository")
+ * This class define which is the status beetween two user
+ * for example : 1 = friend; 2 blocked
  */
 class RelationStatus
 {

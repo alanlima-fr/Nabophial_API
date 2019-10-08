@@ -163,7 +163,7 @@ class AppUserController extends DefaultController
      * @param Request $request
      * @return AppUser|object|FormInterface|null
      */
-    public function put(Request $request)
+    public function putAppUser(Request $request)
     {
         return $this->update($request, true);
     }
@@ -179,7 +179,7 @@ class AppUserController extends DefaultController
      * @param Request $request
      * @return AppUser|object|FormInterface|null
      */
-    public function patch(Request $request)
+    public function patchAppUser(Request $request)
     {
         return $this->update($request, false);
     }
@@ -193,9 +193,10 @@ class AppUserController extends DefaultController
      * @Rest\Delete("/user/{id}")
      *
      * @param $id
+     * @return mixed|void
      */
-    public function delete($id)
+    public function deleteAppUser($id)
     {
-        $this->delete($id);
+        return $this->delete($id);
     }
 }

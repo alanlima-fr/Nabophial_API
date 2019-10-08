@@ -70,9 +70,15 @@ class AppUser implements UserInterface
      */
     private $roles = array();
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Relation", mappedBy="firstUser")
+     */
+    private $relations;
+
     public function __construct()
     {
         $this->preference = new ArrayCollection();
+        $this->relations = new ArrayCollection();
     }
 
     /**
@@ -251,6 +257,37 @@ class AppUser implements UserInterface
     public function setMale(?bool $male): self
     {
         $this->male = $male;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Relation[]
+     */
+    public function getRelations(): Collection
+    {
+        return $this->relations;
+    }
+
+    public function addRelation(Relation $relation): self
+    {
+        if (!$this->relations->contains($relation)) {
+            $this->relations[] = $relation;
+            $relation->setFirstUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelation(Relation $relation): self
+    {
+        if ($this->relations->contains($relation)) {
+            $this->relations->removeElement($relation);
+            // set the owning side to null (unless already changed)
+            if ($relation->getFirstUser() === $this) {
+                $relation->setFirstUser(null);
+            }
+        }
 
         return $this;
     }
