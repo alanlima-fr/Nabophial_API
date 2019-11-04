@@ -57,11 +57,6 @@ class Relation
         return $this;
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getInitiator(): ?int
     {
         return $this->initiator;

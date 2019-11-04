@@ -9,6 +9,7 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -122,7 +123,7 @@ class AppUserController extends DefaultController
      *
      * @SWG\Response(response=201, description="return the User created")
      *
-     * @Rest\View(serializerGroups={"user", "all"})
+     * @Rest\View(serializerGroups={"user", "all"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Route(
      *   path = "/signup",
      *   methods = { Request::METHOD_POST, Request::METHOD_OPTIONS }

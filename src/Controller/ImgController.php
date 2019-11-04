@@ -17,7 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ImgController extends DefaultController
 {
-    protected $entity = 'App\Entity\Img';
+    protected $entity = 'App:Img';
+    protected $namespaceEntity = 'App\Entity\Img';
     protected $namespaceType = 'App\Form\ImgType';
 
     /**
@@ -43,16 +44,9 @@ class ImgController extends DefaultController
      *
      *  \|/  SORT   \|/
      *
-     * @Rest\QueryParam(
-     *  name="sortBy",
-     *  default="id",
-     *  description="define the sort"
-     * )
-     * @Rest\QueryParam(
-     *  name="sortOrder",
-     *  default="desc",
-     *  description="define the order of the sort"
-     * )
+     * @Rest\QueryParam(name="sortBy", default="id", description="define the sort")
+     * @Rest\QueryParam(name="sortOrder", default="desc", description="define the order of the sort")
+     * @Rest\QueryParam(name="textSearch", description="search by keywords")
      *
      *  \|/  PAGINATION \|/
      *
@@ -72,7 +66,7 @@ class ImgController extends DefaultController
      * @param ParamFetcher $paramFetcher
      * @return Pagination
      */
-    public function getImg(ParamFetcher $paramFetcher)
+    public function getImgs(ParamFetcher $paramFetcher)
     {
         return $this->paginate($this->createQB($paramFetcher),
             $paramFetcher->get('limit'),
@@ -91,7 +85,7 @@ class ImgController extends DefaultController
      * @param $id
      * @return object|null
      */
-    public function getOneImg($id)
+    public function getImg($id)
     {
         return $this->getOne($id);
     }
@@ -123,7 +117,7 @@ class ImgController extends DefaultController
      * @param Request $request
      * @return object|FormInterface|null
      */
-    public function put(Request $request)
+    public function putImg(Request $request)
     {
         return $this->update($request, true);
     }
@@ -139,7 +133,7 @@ class ImgController extends DefaultController
      * @param Request $request
      * @return object|FormInterface|null
      */
-    public function patch(Request $request)
+    public function patchImg(Request $request)
     {
         return $this->update($request, false);
     }
@@ -155,7 +149,7 @@ class ImgController extends DefaultController
      * @param $id
      * @return mixed|void
      */
-    public function delete($id)
+    public function deleteImg($id)
     {
         return $this->delete($id);
     }

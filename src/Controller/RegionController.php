@@ -16,7 +16,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class RegionController extends DefaultController
 {
-    protected $entity = 'App\Entity\Region';
+    protected $entity = 'App:Region';
+    protected $namespaceEntity = 'App\Entity\Region';
     protected $namespaceType = 'App\Form\RegionType';
 
     /**
@@ -76,7 +77,7 @@ class RegionController extends DefaultController
      * @param ParamFetcher $paramFetcher
      * @return \App\Representation\Pagination
      */
-    public function getRegion(ParamFetcher $paramFetcher)
+    public function getRegions(ParamFetcher $paramFetcher)
     {
         return $this->paginate($this->createQB($paramFetcher),
             $paramFetcher->get('limit'),
@@ -95,7 +96,7 @@ class RegionController extends DefaultController
      * @param $id
      * @return object|null
      */
-    public function getOneRegion($id)
+    public function getRegion($id)
     {
         return $this->getOne($id);
     }

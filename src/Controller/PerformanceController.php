@@ -18,7 +18,8 @@ use Swagger\Annotations as SWG;
  */
 class PerformanceController extends DefaultController
 {
-    protected $entity = 'App\Entity\Performance';
+    protected $entity = 'App:Performance';
+    protected $namespaceEntity = 'App\Entity\Performance';
     protected $namespaceType = 'App\Form\PerformanceType';
 
     /**
@@ -86,20 +87,12 @@ class PerformanceController extends DefaultController
      * @param ParamFetcher $paramFetcher
      * @return
      */
-    public function getPerformance(ParamFetcher $paramFetcher)
+    public function getPerformances(ParamFetcher $paramFetcher)
     {
         return $this->paginate($this->createQB($paramFetcher),
             $paramFetcher->get('limit'),
             $paramFetcher->get('page')
         );
-    }
-
-    /**
-     * Return Error in case of a not found.
-     */
-    protected function resourceNotFound()
-    {
-        throw new NotFoundHttpException('Resource not found or empty');
     }
 
     /**
@@ -113,7 +106,7 @@ class PerformanceController extends DefaultController
      * @param $id
      * @return object|null
      */
-    public function getOnePerformance($id)
+    public function getPerformance($id)
     {
         return $this->getOne($id);
     }
@@ -145,7 +138,7 @@ class PerformanceController extends DefaultController
      * @param Request $request
      * @return \App\Entity\Performance|object|\Symfony\Component\Form\FormInterface|null
      */
-    public function put(Request $request)
+    public function putPerformance(Request $request)
     {
         return $this->update($request, true);
     }
@@ -161,7 +154,7 @@ class PerformanceController extends DefaultController
      * @param Request $request
      * @return object|\Symfony\Component\Form\FormInterface|null
      */
-    public function patch(Request $request)
+    public function patchPerformance(Request $request)
     {
         return $this->update($request, false);
     }
@@ -177,7 +170,7 @@ class PerformanceController extends DefaultController
      * @param $id
      * @return mixed|void
      */
-    public function delete($id)
+    public function deletePerformance($id)
     {
         return $this->delete($id);
     }

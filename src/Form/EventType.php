@@ -14,7 +14,7 @@ class EventType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('lieu')
+            ->add('city')
             ->add('beginTime', DateType::class,['widget' => 'single_text','format' => 'yyyy-MM-dd HH:mm:ss'])
             ->add('endDate', DateType::class,['widget' => 'single_text','format' => 'yyyy-MM-dd HH:mm:ss'])
             ->add('horaire')

@@ -15,7 +15,8 @@ use Swagger\Annotations as SWG;
  */
 class RelationStatusController extends DefaultController
 {
-    protected $entity = 'App\Entity\RelationStatus';
+    protected $entity = 'App:RelationStatus';
+    protected $namespaceEntity = 'App\Entity\RelationStatus';
     protected $namespaceType = 'App\Form\RelationStatusType';
 
     /**
@@ -52,7 +53,7 @@ class RelationStatusController extends DefaultController
      * @param ParamFetcher $paramFetcher
      * @return Pagination
      */
-    public function getRelationStatus(ParamFetcher $paramFetcher)
+    public function getRelationStatuses(ParamFetcher $paramFetcher)
     {
         return $this->getAll($paramFetcher);
     }
@@ -68,7 +69,7 @@ class RelationStatusController extends DefaultController
      * @param $id
      * @return object|null
      */
-    public function getOneRelationStatus($id)
+    public function getRelationStatus($id)
     {
         return $this->getOne($id);
     }

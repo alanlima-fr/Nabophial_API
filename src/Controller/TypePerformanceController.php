@@ -15,7 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class TypePerformanceController extends DefaultController
 {
-    protected $entity = 'App\Entity\TypePerformance';
+    protected $entity = 'App:TypePerformance';
+    protected $namespaceEntity = 'App\Entity\TypePerformance';
     protected $namespaceType = 'App\Form\TypePerformanceType';
 
     /**
@@ -75,7 +76,7 @@ class TypePerformanceController extends DefaultController
      * )
      */
 
-    public function getTypePerformance(ParamFetcher $paramFetcher)
+    public function getTypePerformances(ParamFetcher $paramFetcher)
     {
         return $this->paginate($this->createQB($paramFetcher),
             $paramFetcher->get('limit'),
@@ -94,7 +95,7 @@ class TypePerformanceController extends DefaultController
      * @param $id
      * @return object|null
      */
-    public function getOneTypePerformance($id)
+    public function getTypePerformance($id)
     {
         return $this->getOne($id);
     }

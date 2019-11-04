@@ -14,19 +14,19 @@
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/apache-pack": "^1.0",
         "symfony/asset": "4.3.*",
-        "symfony/console": "4.2.*",
-        "symfony/dotenv": "4.2.*",
+        "symfony/console": "^4.3",
+        "symfony/dotenv": "^4.3",
         "symfony/flex": "^1.1",
-        "symfony/form": "4.2.*",
-        "symfony/framework-bundle": "4.2.*",
+        "symfony/form": "^4.3",
+        "symfony/framework-bundle": "^4.3",
         "symfony/maker-bundle": "^1.11",
         "symfony/orm-pack": "^1.0",
         "symfony/security-bundle": "^4.2",
-        "symfony/security-guard": "4.2.*",
-        "symfony/serializer": "4.2.*",
+        "symfony/security-guard": "^4.3",
+        "symfony/serializer": "^4.3",
         "symfony/twig-bundle": "^4.2",
-        "symfony/validator": "4.2.*",
-        "symfony/yaml": "4.2.*",
+        "symfony/validator": "^4.3",
+        "symfony/yaml": "^4.3",
         "white-october/pagerfanta-bundle": "^1.2"
     },
     "config": {
@@ -76,6 +76,6 @@
     },
     "require-dev": {
         "symfony/profiler-pack": "^1.0",
-        "symfony/web-server-bundle": "4.2.*"
+        "symfony/web-server-bundle": "^4.3"
     }
 }

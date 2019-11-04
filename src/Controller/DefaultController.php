@@ -107,6 +107,7 @@ class DefaultController extends AbstractController
         $form = $this->createForm($this->namespaceType, $resource);
         $form->submit($request->request->all());
 
+        
         if ($form->isValid() && $form->isSubmitted()) {
             if ($resource)
                 $em = $this->getDoctrine()->getManager();

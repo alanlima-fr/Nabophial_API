@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,41 +14,34 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AppUser implements UserInterface
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $lastName;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $firstName;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $birthday;
-
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     */
-    private $email;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="password", type="string", nullable=true)
      */
     protected $password;
-
     protected $plainPassword;
-
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lastName;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $firstName;
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $birthday;
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $email;
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -95,16 +89,34 @@ class AppUser implements UserInterface
         return array_unique($roles);
     }
 
+    public function setRoles(?array $roles): self
+    {
+        $this->roles = $roles;
+
+        if (!$this->roles) {
+            $this->roles[] = 'ROLE_USER';
+        }
+
+        return $this;
+    }
+
     /**
      * @return string
      */
     public function getPassword()
     {
-        return (string) $this->password;
+        return (string)$this->password;
+    }
+
+    public function setPassword(?string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     /**
-     * @return string|null
+     * @return void
      */
     public function getSalt()
     {
@@ -120,7 +132,7 @@ class AppUser implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return void
      */
     public function eraseCredentials()
     {
@@ -157,12 +169,12 @@ class AppUser implements UserInterface
         return $this;
     }
 
-    public function getBirthday(): ?\DateTimeInterface
+    public function getBirthday(): ?DateTimeInterface
     {
         return $this->birthday;
     }
 
-    public function setBirthday(?\DateTimeInterface $birthday): self
+    public function setBirthday(?DateTimeInterface $birthday): self
     {
         $this->birthday = $birthday;
 
@@ -181,13 +193,6 @@ class AppUser implements UserInterface
         return $this;
     }
 
-    public function setPassword(?string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
     public function getNumber(): ?string
     {
         return $this->number;
@@ -196,17 +201,6 @@ class AppUser implements UserInterface
     public function setNumber(?string $number): self
     {
         $this->number = $number;
-
-        return $this;
-    }
-
-    public function setRoles(?array $roles): self
-    {
-        $this->roles = $roles;
-
-        if (!$this->roles) {
-            $this->roles[] = 'ROLE_USER';
-        }
 
         return $this;
     }

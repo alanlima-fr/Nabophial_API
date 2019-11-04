@@ -77,7 +77,7 @@ class CityController extends DefaultController
      * @param ParamFetcher $paramFetcher
      * @return Pagination
      */
-    public function getCity(ParamFetcher $paramFetcher)
+    public function getCities(ParamFetcher $paramFetcher)
     {
         return $this->paginate($this->createQB($paramFetcher),
             $paramFetcher->get('limit'),
@@ -99,7 +99,7 @@ class CityController extends DefaultController
      * @param $id
      * @return object|null
      */
-    public function getOneCity($id)
+    public function getCity($id)
     {
         return $this->getOne($id);
     }

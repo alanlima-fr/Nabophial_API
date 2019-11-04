@@ -22,11 +22,6 @@ class Event
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $lieu;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $beginTime;
@@ -61,6 +56,11 @@ class Event
      */
     private $status;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\City")
+     */
+    private $city;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,18 +74,6 @@ class Event
     public function setName(?string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getLieu(): ?string
-    {
-        return $this->lieu;
-    }
-
-    public function setLieu(?string $lieu): self
-    {
-        $this->lieu = $lieu;
 
         return $this;
     }
@@ -170,6 +158,18 @@ class Event
     public function setStatus(?int $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }

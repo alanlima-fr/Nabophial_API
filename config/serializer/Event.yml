@@ -4,7 +4,7 @@ App\Entity\Event:
       groups: ['all']
     name:
       groups: ['all']
-    lieu:
+    city:
       groups: ['all']
     beginTime:
       groups: ['all']
