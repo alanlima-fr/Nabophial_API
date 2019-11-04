@@ -9,6 +9,7 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ImgController

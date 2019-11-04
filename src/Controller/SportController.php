@@ -17,9 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SportController extends DefaultController
 {
-    protected $entity = 'App:SportController';
-    protected $namespaceEntity = 'App\Entity\SportController';
-    protected $namespaceType = 'App\Form\SportControllerType';
+    protected $entity = 'App:Sport';
+    protected $namespaceEntity = 'App\Entity\Sport';
+    protected $namespaceType = 'App\Form\SportType';
 
     /**
      * Retrieve all data from one table
