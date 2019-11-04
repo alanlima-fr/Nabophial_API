@@ -1,0 +1,1703 @@
+{
+	"info": {
+		"_postman_id": "67d72978-71dd-49df-9cb3-c23e4872a32c",
+		"name": "Nabophial API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "/login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "eb7b2f05-8279-4d3f-992b-c8d9431e11b8",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"token\", jsonData.token)",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "alan@hypecode.com",
+									"type": "text"
+								},
+								{
+									"key": "plainPassword",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/login",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f72135c3-399f-4455-a862-5e6e66a76131",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d36aef7e-46e7-4b0f-906e-46516258bbb6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "/user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/user",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/signup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 201\", function() {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"check presence of an id\", function() {",
+									"   pm.response.to.have.jsonBody(\"id\");",
+									"   postman.setEnvironmentVariable(\"id\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"lastName\": \"fctTest\",\n    \"firstName\": \"fctTest\",\n\t\"birthday\": \"1954-03-13\",\n\t\"email\": \"fctTest@fctTest.fctTest\",\n\t\"plainPassword\": \"fctTest\",\n\t\"number\": \"fctTest\",\n\t\"male\": false,\n\t\"preference\": [\n\t\t1\n\t]\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/signup",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that ID match\", function () {",
+									"    pm.expect(jsonData.id)",
+									"        .to.eql(postman.getEnvironmentVariable(\"id\").toNumber());",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/user/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"user",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"lastName\": \"fctTest\",\n    \"firstName\": \"fctTest\",\n\t\"birthday\": \"1954-10-21\",\n\t\"email\": \"fctTest@fctTest.fctTest\",\n\t\"plainPassword\": \"fctTest\",\n\t\"number\": \"0123456789\",\n\t\"male\": true,\n\t\"preference\": [\n\t\t5\n\t]\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/user/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"user",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"if (pm.response.to.have.status(204)) {",
+									"  pm.environment.unset(\"id\");  ",
+									"} "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/user/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"user",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Event",
+			"item": [
+				{
+					"name": "/event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/event",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/event",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 201\", function() {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"check presence of an id\", function() {",
+									"   pm.response.to.have.jsonBody(\"id\");",
+									"   postman.setEnvironmentVariable(\"id\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"fctTest\",\n    \"city\": 94300,\n    \"beginTime\": null,\n    \"endDate\": null,\n    \"horaire\": null,\n    \"nbrMax\": 22,\n    \"description\": \"This event is a test\",\n    \"privateEvent\": true,\n    \"status\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/event",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/event/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that ID match\", function () {",
+									"    pm.expect(jsonData.id)",
+									"        .to.eql(postman.getEnvironmentVariable(\"id\").toNumber());",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/event/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"event",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/event/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"fctTest PATCH\",\n    \"city\": 94300,\n    \"beginTime\": null,\n    \"endDate\": null,\n    \"horaire\": null,\n    \"nbrMax\": 22,\n    \"description\": \"This event is a test\",\n    \"privateEvent\": true,\n    \"status\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/event/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"event",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/event/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"if (pm.response.to.have.status(204)) {",
+									"  pm.environment.unset(\"id\");  ",
+									"} "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/event/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"event",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Img",
+			"item": [
+				{
+					"name": "/img",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/img",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"img"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/img",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 201\", function() {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"check presence of an id\", function() {",
+									"   pm.response.to.have.jsonBody(\"id\");",
+									"   postman.setEnvironmentVariable(\"id\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"photo\": \"TEST\",\n\t\"user\": 5\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/img",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"img"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/img/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that ID match\", function () {",
+									"    pm.expect(jsonData.id)",
+									"        .to.eql(postman.getEnvironmentVariable(\"id\").toNumber());",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/img/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"img",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/img/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"photo\": \"NewTEST\"\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/img/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"img",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/img/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"if (pm.response.to.have.status(204)) {",
+									"  pm.environment.unset(\"id\");  ",
+									"} "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/img/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"img",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Performance",
+			"item": [
+				{
+					"name": "/performance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/performance",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"performance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/performance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 201\", function() {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"check presence of an id\", function() {",
+									"   pm.response.to.have.jsonBody(\"id\");",
+									"   postman.setEnvironmentVariable(\"id\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\" : \"value of the performance\",\n\t\"typePerformance\": 1,\n\t\"sport\": 1\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/performance",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"performance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/performance/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that ID match\", function () {",
+									"    pm.expect(jsonData.id)",
+									"        .to.eql(postman.getEnvironmentVariable(\"id\").toNumber());",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/performance/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"performance",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/performance/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\" : \"value of the patch\",\n\t\"typePerformance\": 1,\n\t\"sport\": 1\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/performance/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"performance",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/performance/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"if (pm.response.to.have.status(204)) {",
+									"  pm.environment.unset(\"id\");  ",
+									"} "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/performance/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"performance",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Place",
+			"item": [
+				{
+					"name": "/place",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/place",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"place"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/place",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 201\", function() {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"check presence of an id\", function() {",
+									"   pm.response.to.have.jsonBody(\"id\");",
+									"   postman.setEnvironmentVariable(\"id\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"positionGps\": \"5 Avenue de Paris\",\n\t\"adresse\": \"5 Avenue de paris\",\n\t\"ville\": 94300\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/place",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"place"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/place/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that ID match\", function () {",
+									"    pm.expect(jsonData.id)",
+									"        .to.eql(postman.getEnvironmentVariable(\"id\").toNumber());",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/place/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"place",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/place/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.test(\"status Code is 200\", function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"positionGps\": \"7 Avenue de Paris\",\n\t\"adresse\": \"7 Avenue de paris\",\n\t\"ville\": 94300\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/place/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"place",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/place/{{id}}",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"if (pm.response.to.have.status(204)) {",
+									"  pm.environment.unset(\"id\");  ",
+									"} "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/place/{{id}}",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"place",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Read Only",
+			"item": [
+				{
+					"name": "/city",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/city",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"city"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/departement",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/departement",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"departement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/region",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/region",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"region"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/relationStatus",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{http}}{{host}}/relationStatus",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"relationStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/status",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/sport",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{http}}{{host}}/sport",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"sport"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/typePerformance",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a3e2034-46fc-46eb-9c53-078bfe956cea",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\" : \"value of the performance\",\n\t\"typePerformance\": 1,\n\t\"sport\": 1\n}"
+						},
+						"url": {
+							"raw": "{{http}}{{host}}/typePerformance",
+							"host": [
+								"{{http}}{{host}}"
+							],
+							"path": [
+								"typePerformance"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "268ef9e2-987e-4f17-a7e6-65c4ac00c9e6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "29d07b57-179d-46a2-b303-7f5824d25ea3",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function() {",
+							"   pm.response.to.have.status(200); ",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 2000ms\", function() {",
+							"   pm.expect(pm.response.responseTime).to.be.below(2000); ",
+							"});",
+							"",
+							"pm.test(\"check presence of data array\", function() {",
+							"   pm.response.to.have.jsonBody(\"data\"); ",
+							"});"
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "0470043b-1bac-4051-8c76-5d77e6f46e97",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b6d1d249-bb3c-4923-8065-c0a4566ec35d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
