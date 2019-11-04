@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use phpDocumentor\Reflection\Types\Boolean;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Performance;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class PerformanceController
@@ -116,11 +116,11 @@ class PerformanceController extends DefaultController
      *
      * @SWG\Response(response=201, description="return the Performance created")
      *
-     * @Rest\View(serializerGroups={"all", "performance"})
+     * @Rest\View(serializerGroups={"all", "performance"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/performance")
      *
      * @param Request $request
-     * @return \Symfony\Component\Form\FormInterface
+     * @return FormInterface
      */
     public function postPerformance(Request $request)
     {
@@ -136,7 +136,7 @@ class PerformanceController extends DefaultController
      * @Rest\Put("/performance/{id}")
      *
      * @param Request $request
-     * @return \App\Entity\Performance|object|\Symfony\Component\Form\FormInterface|null
+     * @return Performance|object|FormInterface|null
      */
     public function putPerformance(Request $request)
     {
@@ -152,7 +152,7 @@ class PerformanceController extends DefaultController
      * @Rest\Patch("/performance/{id}")
      *
      * @param Request $request
-     * @return object|\Symfony\Component\Form\FormInterface|null
+     * @return object|FormInterface|null
      */
     public function patchPerformance(Request $request)
     {

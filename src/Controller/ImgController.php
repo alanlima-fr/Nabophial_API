@@ -95,7 +95,7 @@ class ImgController extends DefaultController
      *
      * @SWG\Response(response=201, description="return the Img created")
      *
-     * @Rest\View(serializerGroups={"all", "img"})
+     * @Rest\View(serializerGroups={"all", "img"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/img")
      *
      * @param Request $request

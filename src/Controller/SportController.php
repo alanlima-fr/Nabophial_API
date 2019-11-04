@@ -8,6 +8,7 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SportController
@@ -107,7 +108,7 @@ class SportController extends DefaultController
      *
      * @SWG\Response(response=201, description="return the Sport created")
      *
-     * @Rest\View(serializerGroups={"all", "sport"})
+     * @Rest\View(serializerGroups={"all", "sport"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/sport")
      *
      * @param Request $request

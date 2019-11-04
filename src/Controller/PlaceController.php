@@ -10,6 +10,7 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class PlaceController
@@ -108,7 +109,7 @@ class PlaceController extends DefaultController
      *
      * @SWG\Response(response=201, description="return the Place created")
      *
-     * @Rest\View(serializerGroups={"all", "place"})
+     * @Rest\View(serializerGroups={"all", "place"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/place")
      *
      * @param Request $request
