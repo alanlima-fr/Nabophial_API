@@ -11,80 +11,72 @@ class Relation
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\AppUser", inversedBy="relations")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $id;
+    private $firstUser;
+
+    /**
+     * @ORM\Id()
+     * @ORM\ManyToOne(targetEntity="App\Entity\AppUser")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $SecondUser;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $idUser1;
-    
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $idUser2;
+    private $initiator;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\RelationStatus")
      */
-    private $status;
+    private $relationStatus;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $userAction;
-
-    public function getId(): ?int
+    public function getFirstUser(): ?AppUser
     {
-        return $this->id;
+        return $this->firstUser;
     }
 
-    public function getIdUser1(): ?int
+    public function setFirstUser(?AppUser $firstUser): self
     {
-        return $this->idUser1;
-    }
-
-    public function setIdUser1(?int $idUser1): self
-    {
-        $this->idUser1 = $idUser1;
+        $this->firstUser = $firstUser;
 
         return $this;
     }
 
-    public function getIdUser2(): ?int
+    public function getSecondUser(): ?AppUser
     {
-        return $this->idUser2;
+        return $this->SecondUser;
     }
 
-    public function setIdUser2(?int $idUser2): self
+    public function setSecondUser(?AppUser $SecondUser): self
     {
-        $this->idUser2 = $idUser2;
+        $this->SecondUser = $SecondUser;
 
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getInitiator(): ?int
     {
-        return $this->status;
+        return $this->initiator;
     }
 
-    public function setStatus(?int $status): self
+    public function setInitiator(?int $initiator): self
     {
-        $this->status = $status;
+        $this->initiator = $initiator;
 
         return $this;
     }
 
-    public function getUserAction(): ?int
+    public function getRelationStatus(): ?RelationStatus
     {
-        return $this->userAction;
+        return $this->relationStatus;
     }
 
-    public function setUserAction(?int $userAction): self
+    public function setRelationStatus(?RelationStatus $relationStatus): self
     {
-        $this->userAction = $userAction;
+        $this->relationStatus = $relationStatus;
 
         return $this;
     }

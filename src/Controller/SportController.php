@@ -16,8 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SportController extends DefaultController
 {
-    protected $entity = 'App\Entity\Sport';
-    protected $namespaceType = 'App\Form\SportType';
+    protected $entity = 'App:SportController';
+    protected $namespaceEntity = 'App\Entity\SportController';
+    protected $namespaceType = 'App\Form\SportControllerType';
 
     /**
      * Retrieve all data from one table
@@ -77,7 +78,7 @@ class SportController extends DefaultController
      * @param ParamFetcher $paramFetcher
      * @return
      */
-    public function getSport(ParamFetcher $paramFetcher)
+    public function getSports(ParamFetcher $paramFetcher)
     {
         return $this->paginate($this->createQB($paramFetcher),
             $paramFetcher->get('limit'),
@@ -96,7 +97,7 @@ class SportController extends DefaultController
      * @param $id
      * @return object|null
      */
-    public function getOneSport($id)
+    public function getSport($id)
     {
         return $this->getOne($id);
     }
@@ -128,7 +129,7 @@ class SportController extends DefaultController
      * @param Request $request
      * @return object|FormInterface|null
      */
-    public function put(Request $request)
+    public function putSport(Request $request)
     {
         return $this->update($request, true);
     }
@@ -144,7 +145,7 @@ class SportController extends DefaultController
      * @param Request $request
      * @return object|FormInterface|null
      */
-    public function patch(Request $request)
+    public function patchSport(Request $request)
     {
         return $this->update($request, false);
     }
@@ -160,7 +161,7 @@ class SportController extends DefaultController
      * @param $id
      * @return mixed|void
      */
-    public function delete($id)
+    public function deleteSport($id)
     {
         return $this->delete($id);
     }

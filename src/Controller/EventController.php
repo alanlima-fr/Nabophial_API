@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcher;
 use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,7 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class EventController extends DefaultController
 {
-    protected $entity = 'App\Entity\Event';
+    protected $entity = 'App:Event';
+    protected $namespaceEntity = 'App\Entity\Event';
     protected $namespaceType = 'App\Form\EventType';
 
     /**
@@ -95,7 +97,7 @@ class EventController extends DefaultController
      * @param ParamFetcher $paramFetcher
      * @return Object
      */
-    public function getEvent(ParamFetcher $paramFetcher)
+    public function getEvents(ParamFetcher $paramFetcher)
     {
         $repository = $this->getDoctrine()->getRepository($this->entity); // On récupère le repository ou nos fonctions sql sont rangées
         $qb = $repository->findAllSortBy($paramFetcher->get('sortBy'), $paramFetcher->get('sortOrder')); // On récupère la QueryBuilder instancié dans la fonctions
@@ -132,7 +134,7 @@ class EventController extends DefaultController
      * @param Int $id
      * @return object|null
      */
-    public function getOneEvent(Int $id)
+    public function getEvent(Int $id)
     {
         return $this->getOne($id);
     }
@@ -142,7 +144,7 @@ class EventController extends DefaultController
      *
      * @SWG\Response(response=201, description="return the Event created")
      *
-     * @Rest\View(serializerGroups={"all", "event"})
+     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"all", "event"}, )
      * @Rest\Post("/event")
      *
      * @param Request $request
@@ -164,7 +166,7 @@ class EventController extends DefaultController
      * @param Request $request
      * @return object|FormInterface|null
      */
-    public function patch(Request $request)
+    public function patchEvent(Request $request)
     {
         return $this->update($request, false);
     }
@@ -176,8 +178,10 @@ class EventController extends DefaultController
      *
      * @Rest\View(serializerGroups={"all", "event"})
      * @Rest\Delete("/event/{id}")
+     * @param $id
+     * @return void
      */
-    public function delete($id)
+    public function deleteEvent($id)
     {
         return $this->delete($id);
     }

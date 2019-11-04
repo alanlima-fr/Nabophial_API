@@ -1,0 +1,6 @@
+App\Entity\Status:
+  attributes:
+    id:
+      groups: ['all']
+    name:
+      groups: ['all']

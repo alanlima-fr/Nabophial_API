@@ -18,7 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PlaceController extends DefaultController
 {
-    protected $entity = 'App\Entity\Place';
+    protected $entity = 'App:Place';
+    protected $namespaceEntity = 'App\Entity\Place';
     protected $namespaceType = 'App\Form\PlaceType';
 
     /**
@@ -78,7 +79,7 @@ class PlaceController extends DefaultController
      * @param ParamFetcher $paramFetcher
      * @return Pagination
      */
-    public function getPlace(ParamFetcher $paramFetcher)
+    public function getPlaces(ParamFetcher $paramFetcher)
     {
         return $this->paginate($this->createQB($paramFetcher),
             $paramFetcher->get('limit'),
@@ -97,7 +98,7 @@ class PlaceController extends DefaultController
      * @param $id
      * @return object|null
      */
-    public function getOnePlace($id)
+    public function getPlace($id)
     {
         return $this->getOne($id);
     }
@@ -129,7 +130,7 @@ class PlaceController extends DefaultController
      * @param Request $request
      * @return object|FormInterface|null
      */
-    public function put(Request $request)
+    public function putPlace(Request $request)
     {
         return $this->update($request, true);
     }
@@ -145,7 +146,7 @@ class PlaceController extends DefaultController
      * @param Request $request
      * @return Place|object|FormInterface|null
      */
-    public function patch(Request $request)
+    public function patchPlace(Request $request)
     {
         return $this->update($request, false);
     }
@@ -161,7 +162,7 @@ class PlaceController extends DefaultController
      * @param $id
      * @return mixed|void
      */
-    public function delete($id)
+    public function deletePlace($id)
     {
         return $this->delete($id);
     }

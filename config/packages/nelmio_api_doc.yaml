@@ -1,6 +1,6 @@
 nelmio_api_doc:
     documentation:
-        host: http://localhost:8000
+        host: localhost:8000
         schemes: [http]
         info:
             title: Nabophial API
