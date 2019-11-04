@@ -9,6 +9,7 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ImgController
@@ -95,7 +96,7 @@ class ImgController extends DefaultController
      *
      * @SWG\Response(response=201, description="return the Img created")
      *
-     * @Rest\View(serializerGroups={"all", "img"})
+     * @Rest\View(serializerGroups={"all", "img"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/img")
      *
      * @param Request $request

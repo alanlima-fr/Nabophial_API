@@ -8,6 +8,7 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SportController
@@ -16,9 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class SportController extends DefaultController
 {
-    protected $entity = 'App:SportController';
-    protected $namespaceEntity = 'App\Entity\SportController';
-    protected $namespaceType = 'App\Form\SportControllerType';
+    protected $entity = 'App:Sport';
+    protected $namespaceEntity = 'App\Entity\Sport';
+    protected $namespaceType = 'App\Form\SportType';
 
     /**
      * Retrieve all data from one table
@@ -107,7 +108,7 @@ class SportController extends DefaultController
      *
      * @SWG\Response(response=201, description="return the Sport created")
      *
-     * @Rest\View(serializerGroups={"all", "sport"})
+     * @Rest\View(serializerGroups={"all", "sport"}, statusCode=Response::HTTP_CREATED)
      * @Rest\Post("/sport")
      *
      * @param Request $request
