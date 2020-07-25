@@ -13,6 +13,8 @@ class Relation
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="App\Entity\AppUser", inversedBy="relations")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @var AppUser
      */
     private $firstUser;
 
@@ -20,16 +22,22 @@ class Relation
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="App\Entity\AppUser")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @var AppUser
      */
     private $SecondUser;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     *
+     * @var int
      */
     private $initiator;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\RelationStatus")
+     *
+     * @var RelationStatus
      */
     private $relationStatus;
 
@@ -80,6 +88,4 @@ class Relation
 
         return $this;
     }
-
-
 }

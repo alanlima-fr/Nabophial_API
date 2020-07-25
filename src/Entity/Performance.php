@@ -13,21 +13,29 @@ class Performance
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $id;
-  
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TypePerformance")
+     *
+     * @var TypePerformance
      */
     private $typePerformance;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Sport")
+     *
+     * @var Sport
      */
     private $sport;
 
@@ -48,12 +56,12 @@ class Performance
         return $this;
     }
 
-    public function gettypePerformance(): ?typePerformance
+    public function getTypePerformance(): ?TypePerformance
     {
         return $this->typePerformance;
     }
 
-    public function settypePerformance(?typePerformance $typePerformance): self
+    public function setTypePerformance(?TypePerformance $typePerformance): self
     {
         $this->typePerformance = $typePerformance;
 
@@ -71,5 +79,4 @@ class Performance
 
         return $this;
     }
-
 }

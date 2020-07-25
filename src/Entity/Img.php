@@ -13,16 +13,22 @@ class Img
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string
      */
     private $photo;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\AppUser")
+     *
+     * @var AppUser
      */
     private $user;
 
@@ -54,5 +60,4 @@ class Img
 
         return $this;
     }
-
 }

@@ -1,0 +1,31 @@
+grumphp:
+    tasks:
+        git_blacklist:
+            keywords:
+                - "die("
+                - "var_dump("
+                - "print_f("
+                - "dump("
+                - "exit;"
+            triggered_by: ["php"]
+        git_commit_message:
+            case_insensitive: true
+            multiline: true
+            additional_modifiers: ''
+        phpcsfixer2:
+            allow_risky: true
+            cache_file: ~
+            config: .php_cs.dist
+            rules: []
+            using_cache: false
+            verbose: true
+            triggered_by: ['php']
+        phpunit: ~
+        phpversion:
+            project: "7.2"
+        phpstan:
+            level: 7
+            ignore_patterns: ['/^(?!src).*/']
+            triggered_by: ['php']
+    testsuites: []
+    extensions: []

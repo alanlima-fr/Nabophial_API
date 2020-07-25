@@ -29,3 +29,14 @@ services:
     jwt_token_authenticator:
         class: App\Security\JWTokenAuthenticator
         autowire: true
+
+    App\EventListener\ExceptionListener:
+        class: App\EventListener\ExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    App\EventListener\EntityHistoryListener:
+        class: App\EventListener\EntityHistoryListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }

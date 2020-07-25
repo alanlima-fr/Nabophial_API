@@ -7,65 +7,106 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AppUserRepository")
  */
-class AppUser implements UserInterface
+class AppUser implements UserInterface, HistoryEntityInterface
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", nullable=true)
-     */
-    protected $password;
-    protected $plainPassword;
+    use HistoryEntityTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Annotation\Groups({"id", "app_user"})
+     *
+     * @var int
      */
     private $id;
     /**
+     * @ORM\Column(name="password", type="string", nullable=true)
+     * @Annotation\Groups({"null"})
+     *
+     * @var string
+     */
+    protected $password;
+
+    /** @var ?string */
+    protected $plainPassword;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Annotation\Groups({"app_user"})
+     *
+     * @var string
      */
     private $lastName;
+
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Annotation\Groups({"app_user"})
+     *
+     * @var string
      */
     private $firstName;
+
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date")
+     * @Annotation\Groups({"app_user"})
+     *
+     * @var DateTimeInterface
      */
     private $birthday;
+
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     * @Annotation\Groups({"app_user"})
+     *
+     * @var string
      */
     private $email;
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=10, nullable=true)
+     * @Annotation\Groups({"app_user"})
+     *
+     * @var string
      */
     private $number;
 
     /**
      * True = male
-     * False = female
-     * @ORM\Column(type="boolean", nullable=true)
+     * False = female.
+     *
+     * @ORM\Column(type="boolean")
+     * @Annotation\Groups({"app_user"})
+     *
+     * @var bool
      */
     private $male;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Sport")
+     * @Annotation\Groups({"app_user"})
+     *
+     * @var Collection<int, Sport>
      */
     private $preference;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="array")
+     * @Annotation\Groups({"null"})
+     *
+     * @var array<int, string>
      */
-    private $roles = array();
+    private $roles = [];
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Relation", mappedBy="firstUser")
+     * @Annotation\Groups({"app_user"})
+     *
+     * @var Collection<int, Relation>
      */
     private $relations;
 
@@ -89,7 +130,12 @@ class AppUser implements UserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(?array $roles): self
+    /**
+     * @param array<string> $roles
+     *
+     * @return $this
+     */
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -100,43 +146,30 @@ class AppUser implements UserInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getPassword()
+    public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
 
-    public function setPassword(?string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    /**
-     * @return void
-     */
-    public function getSalt()
+    public function getSalt(): ?string
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
-    /**
-     * @return string
-     */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->email;
     }
 
-    /**
-     * @return void
-     */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
         $this->plainPassword = null;
     }
 
@@ -169,12 +202,12 @@ class AppUser implements UserInterface
         return $this;
     }
 
-    public function getBirthday(): ?DateTimeInterface
+    public function getBirthday(): DateTimeInterface
     {
         return $this->birthday;
     }
 
-    public function setBirthday(?DateTimeInterface $birthday): self
+    public function setBirthday(DateTimeInterface $birthday): self
     {
         $this->birthday = $birthday;
 
@@ -206,7 +239,7 @@ class AppUser implements UserInterface
     }
 
     /**
-     * @return Collection|Sport[]
+     * @return Collection<int, Sport>
      */
     public function getPreference(): Collection
     {
@@ -243,7 +276,7 @@ class AppUser implements UserInterface
         return $this;
     }
 
-    public function getMale(): ?bool
+    public function isMale(): ?bool
     {
         return $this->male;
     }
@@ -256,7 +289,7 @@ class AppUser implements UserInterface
     }
 
     /**
-     * @return Collection|Relation[]
+     * @return Collection<int, Relation>
      */
     public function getRelations(): Collection
     {
@@ -284,5 +317,10 @@ class AppUser implements UserInterface
         }
 
         return $this;
+    }
+
+    public function isNew(): bool
+    {
+        return null === $this->getId();
     }
 }

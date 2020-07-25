@@ -5,8 +5,8 @@ namespace App\Repository;
 use App\Entity\AppUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
-use phpDocumentor\Reflection\Types\Integer;
 
 /**
  * @method AppUser|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,7 +16,18 @@ use phpDocumentor\Reflection\Types\Integer;
  */
 class AppUserRepository extends ServiceEntityRepository
 {
-    private $entity = 'App:AppUser';
+    /** @var string */
+    private $entity = AppUser::class;
+    /** @var string[] */
+    private const SORT_BY_PARAM = [
+        'id' => 'a.id',
+        'lastName' => 'a.lastName',
+        'firstName' => 'a.firstName',
+        'birthday' => 'a.birthday',
+        'email' => 'a.email',
+        'number' => 'a.number',
+        'male' => 'a.male',
+    ];
 
     public function __construct(ManagerRegistry $registry)
     {
@@ -24,41 +35,41 @@ class AppUserRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $sortBy
-     * @param string $sortOrder
-     * @return QueryBuilder
+     * @param array<string> $queryParams
      */
-    public function findAllSortBy($sortBy = 'id', $sortOrder = 'desc') // par defaut on trie par id par ordre décroissant
+    public function findAllAppUser(array $queryParams): QueryBuilder
     {
-        $qb = $this->getEntityManager()->createQueryBuilder(); // Instanciation de la QueryBuilder
-        $qb->select('entity')->from($this->entity, 'entity');  // SELECT FROM, basic simple
+        $queryBuilder = $this->createQueryBuilder('a');
 
-        // en fonction de ce avec quoi on trie
-        switch ($sortBy)
-        {
-            default:
-                $qb->orderBy('entity.'.$sortBy, $sortOrder); // On effectue le trie
-                break;
+        if (isset($queryParams['sortBy'])) {
+            $this->sortBy($queryBuilder, $queryParams);
         }
-        return $qb; // On renvoie la QueryBuilder
+
+        return $queryBuilder;
     }
 
     /**
-     * @param QueryBuilder $qb
-     * @param String $textSearch
-     * @return QueryBuilder
+     * @param array<string> $queryParams
      */
-    public function prepTextSearch(QueryBuilder $qb, String $textSearch)
+    private function sortBy(QueryBuilder $queryBuilder, array $queryParams): void
     {
-        //Cherche également dans departement et region
-        $qb->leftJoin('entity.departement', 'tsDepartement')
-            ->leftJoin('tsDepartement.region', 'tsRegion');
+        $order = null;
+        if (isset($queryParams['sortBy'], $queryParams['sortOrder']) && 'desc' === $queryParams['sortOrder']) {
+            $order = $queryParams['sortOrder'];
+        }
 
+        $queryBuilder->addOrderBy(self::SORT_BY_PARAM[$queryParams['sortBy']], $order);
+    }
 
-        return $qb = $this->textSearch($qb,
-            array('entity.id', 'entity.name', 'tsDepartement.name', 'tsRegion.name'),
-            $textSearch
-        );
+    /**
+     * @throws ORMException
+     */
+    public function save(AppUser $appUser): void
+    {
+        if ($appUser->isNew()) {
+            $this->getEntityManager()->persist($appUser);
+        }
 
+        $this->getEntityManager()->flush();
     }
 }
