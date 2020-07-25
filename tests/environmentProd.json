@@ -1,0 +1,24 @@
+{
+	"id": "ec2229de-6abb-4a50-8908-c284fef1a73f",
+	"name": "Nabophial",
+	"values": [
+		{
+			"key": "http",
+			"value": "https://",
+			"enabled": true
+		},
+		{
+			"key": "host",
+			"value": "nabophial.herokuapp.com",
+			"enabled": true
+		},
+		{
+			"key": "token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NzI4NjYxOTAsImVtYWlsIjoiYWxhbkBoeXBlY29kZS5jb20iLCJleHAiOjE1NzI5NTI1OTAsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpZCI6MTB9.P0HaVw7mk5jxmtL51BIWotlc-J72LMUcm5i7jdXHlJduDTiOlRM9MmRFoEQ8BqvnqNOgJ0TGcYdBxbwngCtEi-yFgn658AHNLXtWD_RFyv0aLLvlGxhMFZ0BNVpIfcztsY7cbTebUKiUlxC_Izow8jIHFo-7RJT1DhIm_YZ34MqjJO4z6WJcN2jYDJAPtqWu0gceRKtjHBbSluY8ezVMN6AT6vlMAHRJIvKL9xmlKCbQryw5mVVZqthX1Q142tz5XbAcfBXi3oKSxfh4IWwADHvxQVmmN8m27IyXwhlwhPcGiNyaExFPrPizAnZttOXEAm4E9CBgMZS_qOSUjtHcTgjVt9KL9tO0cDdYeoMaC92dlxRvxhcvS1OBEXiVZzhse9oaNAhX-SlOikoBxx5LGd4f0fVocxbEC2QXlJDJB3ejFdINoJEbvwl9dvdVvqvGcyjojVFQBsi3FlWZZFCDw_xlzusObi4E8jZakFdlsR5HLuczlBc9y_FJfxoBRtrUzht_EJjlNaayHGJCp_yYBN6hjCs32s7_enXi7ux0y1Msbnd1dSq_rdvqzCAnaL8maHYW5JPyuUjORtcyjkcHyB3v5y3TcZnirpePJ4UdiQTF_HdJIxTL8_mA1oZDLxKyDt1xmfle5PHlWycZodE6oi49k3Cs3WC8JJb9bxEyIFg",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2019-11-04T11:17:32.466Z",
+	"_postman_exported_using": "Postman/7.10.0"
+}
