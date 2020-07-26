@@ -18,7 +18,7 @@ Si ce n'est pas le cas (sur windows), installer Wamp ou Xamp ou équivalent qui 
 ```
 php bin/console make:entity
 ```
-Attention, l'attribut ID est automatiquement créer par symofny.
+Attention, l'attribut ID est automatiquement créer par symfony.
 par défaut, l'ID 
 
 
@@ -75,7 +75,7 @@ Pour les **modifications, mise a jour de la base donnée** :
 ```
 php bin/console doctrine:migration:diff
 ```
-Il n'y a plus qu'a suivre le prompt.
+Il n'y a plus qu'à suivre le prompt.
 
  ---
 
@@ -86,48 +86,33 @@ Il n'y a plus qu'a suivre le prompt.
 POST https://nabophial.herokuapp.com/signup
 ```JSON
     {
-        "firstname": "your_firstname",
-        "lastname": "your_lastname",
         "email" : "your_email",
-        "plainPassword": "your_password",
-        "number": "your_telephone_number",
-        "gender": "true = male, false = femelle",
-        "preferance": "donne les IDs des sports favoris"
+        "plainPassword": "your_password"
     }
 ```
 ## Connexion
 
-POST  https://nabophial.herokuapp.com/signin
+POST  https://nabophial.herokuapp.com/login
 ```JSON
     {
-        "login" : "your_email",
+        "email" : "your_email",
         "password": "your_password"
     }
 ```
 RESPONSE : 
 ```JSON
     {
-        "id": 13,
-        "value": "KwKqTr8iNKBJTKDu1yCuxZpgSHP39s+pYYizCeqEjb/f1tp681Uho8P8VUuBACNky88=",
-        "createdAt": "2019-07-24T07:43:11+00:00",
-        "user": {
-            "id": 1,
-            "email": "alanlima898@gmail.com"
-        }
+        "token": "KwKqTr8iNKBJTKDu1yCuxZpgSHP39s+pYYizCeqEjb/f1tp681Uho8P8VUuBACNky88="
     }
 ```
-Le contenue de "value" se place dans le header de chacune de vos requête avec comme key "x-auth-token". Ce token est valable 24h.
-## Deconnexion
-
-POST https://nabophial.herokuapp.com/logout/{TOKEN_ID}
-
-Code response expected is 204
+la valeur du token à stocker dans le header tel que `header['Authorization' => 'Bearer {token}']`
 
 # NORME
- 
-## Code :
+
+## CamelCase pour le code
+
 ```php
-    class City  // 1ere lettre en majuscule = PASCAL CASE
+    class City  // 1ere lettre en majuscule = CamelCase
 {
     private $id;
     private $name;
@@ -135,7 +120,8 @@ Code response expected is 204
     private $exampleAttributEnCamelCase; /* 1ere lettre en minuscule puis majuscule pour séparer les mots = CAMEL CASE*/
 }
 ```
-## Base de donnée :
+
+### et snake_case en base de données :
 ```sql
-    example_attribut -- Tout en minuscule et _ pour séparer les mots = SNAKE CASE
+    example_attribut -- Tout en minuscule et _ pour séparer les mots = snake_case
 ```

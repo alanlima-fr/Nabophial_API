@@ -323,4 +323,14 @@ class AppUser implements UserInterface, HistoryEntityInterface
     {
         return null === $this->getId();
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->isGranted('ROLE_ADMIN');
+    }
+
+    public function isGranted(string $role): bool
+    {
+        return in_array($role, $this->roles, true);
+    }
 }

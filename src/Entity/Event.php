@@ -2,64 +2,66 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  */
-class Event
+class Event implements HistoryEntityInterface
 {
+    use HistoryEntityTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=45, nullable=true)
+     * @ORM\Column(type="string", length=45)
+     *
+     * @var string
      */
     private $name;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
+     *
+     * @var DateTimeInterface
      */
-    private $beginTime;
+    private $beginAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
+     *
+     * @var DateTimeInterface
      */
-    private $endDate;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $horaire;
+    private $endAt;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     *
+     * @var int
      */
-    private $nbrMax;
+    private $maxParticipant;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @var string
      */
     private $description;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean")
+     *
+     * @var bool
      */
     private $privateEvent;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $status;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\City")
-     */
-    private $city;
 
     public function getId(): ?int
     {
@@ -71,59 +73,39 @@ class Event
         return $this->name;
     }
 
-    public function setName(?string $name): self
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
-    public function getBeginTime(): ?\DateTimeInterface
+    public function getBeginAt(): DateTimeInterface
     {
-        return $this->beginTime;
+        return $this->beginAt;
     }
 
-    public function setBeginTime(?\DateTimeInterface $beginTime): self
+    public function setBeginAt(DateTimeInterface $beginAt): void
     {
-        $this->beginTime = $beginTime;
-
-        return $this;
+        $this->beginAt = $beginAt;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEndAt(): DateTimeInterface
     {
-        return $this->endDate;
+        return $this->endAt;
     }
 
-    public function setEndDate(?\DateTimeInterface $endDate): self
+    public function setEndAt(DateTimeInterface $endAt): void
     {
-        $this->endDate = $endDate;
-
-        return $this;
+        $this->endAt = $endAt;
     }
 
-    public function getHoraire(): ?string
+    public function getMaxParticipant(): ?int
     {
-        return $this->horaire;
+        return $this->maxParticipant;
     }
 
-    public function setHoraire(string $horaire): self
+    public function setMaxParticipant(?int $maxParticipant): void
     {
-        $this->horaire = $horaire;
-
-        return $this;
-    }
-
-    public function getNbrMax(): ?int
-    {
-        return $this->nbrMax;
-    }
-
-    public function setNbrMax(?bool $nbrMax): self
-    {
-        $this->nbrMax = $nbrMax;
-
-        return $this;
+        $this->maxParticipant = $maxParticipant;
     }
 
     public function getDescription(): ?string
@@ -131,11 +113,9 @@ class Event
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
     public function getPrivateEvent(): ?bool
@@ -143,34 +123,8 @@ class Event
         return $this->privateEvent;
     }
 
-    public function setPrivateEvent(?int $privateEvent): self
+    public function setPrivateEvent(?bool $privateEvent): void
     {
         $this->privateEvent = $privateEvent;
-
-        return $this;
-    }
-
-    public function getStatus(): ?int
-    {
-        return $this->status;
-    }
-
-    public function setStatus(?int $status): self
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): self
-    {
-        $this->city = $city;
-
-        return $this;
     }
 }

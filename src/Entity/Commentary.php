@@ -7,85 +7,72 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentaryRepository")
  */
-class Commentary
+class Commentary implements HistoryEntityInterface
 {
+    use HistoryEntityTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Event")
+     *
+     * @var Event
      */
     private $event;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\AppUser")
+     *
+     * @var AppUser
      */
     private $user;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
+     *
+     * @var string
      */
-    private $commentaire;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $dateHoraire;
+    private $payload;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEvent(): ?int
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    public function setEvent(int $event): self
+    public function setEvent(Event $event): void
     {
         $this->event = $event;
-
-        return $this;
     }
 
-    public function getUser(): ?int
+    public function getUser(): AppUser
     {
         return $this->user;
     }
 
-    public function setUser(int $user): self
+    public function setUser(AppUser $user): void
     {
         $this->user = $user;
-
-        return $this;
     }
 
-    public function getCommentaire(): ?string
+    public function getPayload(): string
     {
-        return $this->commentaire;
+        return $this->payload;
     }
 
-    public function setCommentaire(?string $commentaire): self
+    public function setPayload(string $payload): void
     {
-        $this->commentaire = $commentaire;
-
-        return $this;
-    }
-
-    public function getDateHoraire(): ?\DateTimeInterface
-    {
-        return $this->dateHoraire;
-    }
-
-    public function setDateHoraire(\DateTimeInterface $dateHoraire): self
-    {
-        $this->dateHoraire = $dateHoraire;
-
-        return $this;
+        $this->payload = $payload;
     }
 }

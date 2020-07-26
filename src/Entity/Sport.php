@@ -7,8 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SportRepository")
  */
-class Sport
+class Sport implements HistoryEntityInterface
 {
+    use HistoryEntityTrait;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
