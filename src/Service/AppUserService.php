@@ -42,4 +42,29 @@ class AppUserService
 
         return $appUser;
     }
+
+    /**
+     * @param array<string, mixed> $submittedData
+     */
+    public function create(array $submittedData): AppUser // Todo Finish this part
+    {
+        return new AppUser();
+    }
+
+    /**
+     * @throws NotFoundException
+     *
+     * @param array<string, mixed> $submittedData
+     *
+     * TODO : Finish this part
+     */
+    public function update(array $submittedData, int $appUserId): AppUser
+    {
+        $appUser = $this->appUserRepository->find($appUserId);
+        if (!$appUser instanceof AppUser) {
+            throw new NotFoundException(ExceptionMessageValueObject::NOT_FOUND);
+        }
+
+        return $appUser;
+    }
 }
