@@ -25,9 +25,7 @@ class AppUserService
      */
     public function getAll(array $queryParams = ['limit' => 25, 'page' => 1]): Pagination
     {
-        $appUserListQueryBuilder = $this->appUserRepository->findAllAppUser($queryParams);
-
-        return PaginatorService::paginate($appUserListQueryBuilder, $queryParams);
+        return $this->appUserRepository->findAllAppUser($queryParams);
     }
 
     /**

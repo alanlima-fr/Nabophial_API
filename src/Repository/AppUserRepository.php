@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\AppUser;
+use App\Representation\Pagination;
+use App\Service\PaginatorService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\ORMException;
@@ -37,7 +39,7 @@ class AppUserRepository extends ServiceEntityRepository
     /**
      * @param array<string> $queryParams
      */
-    public function findAllAppUser(array $queryParams): QueryBuilder
+    public function findAllAppUser(array $queryParams): Pagination
     {
         $queryBuilder = $this->createQueryBuilder('a');
 
@@ -45,7 +47,7 @@ class AppUserRepository extends ServiceEntityRepository
             $this->sortBy($queryBuilder, $queryParams);
         }
 
-        return $queryBuilder;
+        return PaginatorService::paginate($queryBuilder, $queryParams);
     }
 
     /**
