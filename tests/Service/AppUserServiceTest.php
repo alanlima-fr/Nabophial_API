@@ -8,7 +8,6 @@ use App\Repository\AppUserRepository;
 use App\Representation\Pagination;
 use App\Service\AppUserService;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
