@@ -62,6 +62,18 @@ class AppUserServiceTest extends TestCase
         $this->service->getUser(0);
     }
 
+    public function test_update_not_found_exception(): void
+    {
+        $this->appUserRepositoryProphecy
+            ->find(Argument::type('int'))
+            ->shouldBeCalledOnce()
+            ->willReturn(null);
+
+        $this->expectException(NotFoundException::class);
+
+        $this->service->update([], 0);
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
