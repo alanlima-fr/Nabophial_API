@@ -74,6 +74,19 @@ class AppUserServiceTest extends TestCase
         $this->service->update([], 0);
     }
 
+    /**
+     * @throws NotFoundException
+     */
+    public function test_update_normal_way(): void
+    {
+        $this->appUserRepositoryProphecy
+            ->find(Argument::type('int'))
+            ->shouldBeCalledOnce()
+            ->willReturn($this->appUserProphecy->reveal());
+
+        $this->service->update([], 0);
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
