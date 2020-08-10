@@ -16,4 +16,5 @@ class ExceptionMessageValueObject
 
     public const EMPTY_BODY = 'empty body given';
     public const INVALID_BODY = 'this key is invalid : ';
+    public const MISSING_KEY_IN_BODY = 'this key is missing : ';
 }
