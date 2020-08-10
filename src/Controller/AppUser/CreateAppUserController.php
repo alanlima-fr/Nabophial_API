@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller\AppUser;
 
+use App\Exception\InvalidBodyException;
 use App\Service\AppUserService;
+use App\Validator\AppUserValidator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,9 +22,11 @@ class CreateAppUserController
 
     /**
      * @throws ExceptionInterface
+     * @throws InvalidBodyException
      */
     public function __invoke(Request $request, NormalizerInterface $normalizer, AppUserService $appUserService): JsonResponse
     {
+        AppUserValidator::validCreation($request->request->all());
         $appUser = $appUserService->create($request->request->all());
 
         return new JsonResponse($normalizer->normalize($appUser, 'json', self::SERIALIZATION_GROUPS), Response::HTTP_CREATED);
