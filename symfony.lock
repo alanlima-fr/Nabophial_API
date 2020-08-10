@@ -199,6 +199,9 @@
             "config/packages/nelmio_cors.yaml"
         ]
     },
+    "nikic/php-parser": {
+        "version": "v4.8.0"
+    },
     "ocramius/proxy-manager": {
         "version": "2.2.3"
     },
@@ -256,9 +259,6 @@
     "phpunit/php-timer": {
         "version": "5.0.1"
     },
-    "phpunit/php-token-stream": {
-        "version": "4.0.3"
-    },
     "phpunit/phpunit": {
         "version": "4.7",
         "recipe": {
@@ -291,6 +291,9 @@
     "sebastian/comparator": {
         "version": "4.0.3"
     },
+    "sebastian/complexity": {
+        "version": "2.0.0"
+    },
     "sebastian/diff": {
         "version": "4.0.2"
     },
@@ -302,6 +305,9 @@
     },
     "sebastian/global-state": {
         "version": "4.0.0"
+    },
+    "sebastian/lines-of-code": {
+        "version": "1.0.0"
     },
     "sebastian/object-enumerator": {
         "version": "4.0.2"
