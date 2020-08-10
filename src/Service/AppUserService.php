@@ -44,9 +44,24 @@ class AppUserService
     /**
      * @param array<string, mixed> $submittedData
      */
-    public function create(array $submittedData): AppUser // Todo Finish this part
+    public function create(array $submittedData): AppUser
     {
-        return new AppUser();
+        $appUser = new AppUser();
+
+        $appUser->setEmail($submittedData['email'])
+            ->setPlainPassword($submittedData['plainPassword']);
+        unset($submittedData['email'], $submittedData['plainPassword']);
+
+        foreach ($submittedData as $attribute => $value) {
+            $method = 'set'.ucfirst($attribute);
+            if (!method_exists($appUser, $method)) {
+                continue;
+            }
+
+            $appUser->{$method}($value);
+        }
+
+        return $appUser;
     }
 
     /**
