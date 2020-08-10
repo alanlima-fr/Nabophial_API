@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -332,5 +333,13 @@ class AppUser implements UserInterface, HistoryEntityInterface
     public function isGranted(string $role): bool
     {
         return in_array($role, $this->roles, true);
+    }
+
+    /**
+     * @Annotation\Groups({"app_user"})
+     */
+    public function getAge(): int
+    {
+        return $this->birthday->diff(new DateTime('now'))->y;
     }
 }
